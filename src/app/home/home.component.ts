@@ -6,7 +6,13 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  latitude: number | undefined;
+  longitude: number | undefined;
   ngOnInit(): void {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+    })
   }
 
 }
