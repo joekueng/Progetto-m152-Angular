@@ -75,4 +75,5 @@ export class DetailComponent implements OnInit{
   deg2rad(deg: number) {
     return deg * (Math.PI/180)
   }
+  ///
 }
