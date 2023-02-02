@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Translate } from '@google-cloud/translate/build/src/v2';
+//import { Translate } from '@google-cloud/translate/build/src/v2';
 
 
 @Injectable({
@@ -7,15 +7,15 @@ import { Translate } from '@google-cloud/translate/build/src/v2';
 })
 export class TranslateService {
 
-  private translate: Translate;
+  //private translate: Translate;
 
-  constructor() {
-    this.translate = new Translate({projectId: 'Modulo-152'});
-  }
+ // constructor() {
+   // this.translate = new Translate({projectId: 'Modulo-152'});
+  //}
 
-  async translateText(text: string, target: string): Promise<string> {
-    const [translation] = await this.translate.translate(text, target);
-    return translation;
-  }
+  //async translateText(text: string, target: string): Promise<string> {
+    //const [translation] = await this.translate.translate(text, target);
+  //return translation;
+  //}
 
 }
