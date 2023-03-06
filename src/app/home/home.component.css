@@ -1,14 +1,21 @@
-input{
-  width: 500px;
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+input {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  right: 50%;
-  bottom: 50%;
-  transform: translate(-50%, -50%);
+}
+
+.list {
+  width: 500px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 .bg-image {
@@ -17,4 +24,9 @@ input{
   background-repeat: no-repeat;
   background-position: center center;
   height: 100vh;
+}
+
+.sun {
+  width: 10%;
+  height: auto;
 }
