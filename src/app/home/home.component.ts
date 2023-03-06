@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {debounceTime, distinctUntilChanged, fromEvent, Subject} from "rxjs";
 
 interface Luogo {
   nome: string;
@@ -11,7 +12,10 @@ interface Luogo {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
+
+  luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
+
   latitude: number | undefined;
   longitude: number | undefined;
   backgroundColor: string | undefined;
