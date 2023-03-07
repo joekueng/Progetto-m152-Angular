@@ -1,5 +1,6 @@
-import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {debounceTime, distinctUntilChanged, fromEvent, Subject} from "rxjs";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
+import {ReadjsonService} from "../service/readjson.service";
 
 interface Luogo {
   nome: string;
@@ -12,8 +13,7 @@ interface Luogo {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
-
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
 
   latitude: number | undefined;
@@ -34,6 +34,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('myInput') myInput?: ElementRef;
 
+
+  constructor(private service: ReadjsonService) {}
+
+  ngOnInit(): void {
+    this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe())
+  }
+
   ngAfterViewInit() {
     fromEvent(this.myInput?.nativeElement, 'input')
       .pipe(
@@ -44,24 +55,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     })
   }
 
-
   cercaLuogo(nome: string){
-
-
-
     setTimeout(() => {
-
     }, 1000);
     this.luoghiFiltrati = this.luoghi.filter((l: Luogo) => l.nome.toLowerCase().startsWith(nome.toLowerCase()));
     if (this.luoghiFiltrati.length > 0) {
       this.suggerimentoAttivo = true;
       this.suggerimento = this.luoghiFiltrati[0].nome;
       this.completamento = stringDifference(nome, this.suggerimento);
-
     } else {
       this.suggerimentoAttivo = false;
       this.suggerimento = '';
     }
+    this.myInput?.nativeElement.focus();
   }
 
   consigliaSuggerimento(nome: string) {
@@ -79,12 +85,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
-  ngOnInit(): void {
-
-  }
-
-
 }
 
 function stringDifference(str1: string, str2: string): string {
