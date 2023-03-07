@@ -19,7 +19,7 @@ input {
 }
 
 .bg-image {
-  background-image: url('/assets/mountains.png');
+  background-image: url('/src/assets/img/mountains.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
