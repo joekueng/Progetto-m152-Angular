@@ -13,7 +13,7 @@ export class DetailComponent implements OnInit {
 
   test = {
     name: 'SPAI',
-    cordinates: "46.165262,8.791225",
+    cordinates: "46.15187077044123, 8.799829438699243",
     description: "Lorem ipsum"
   }
 
@@ -23,7 +23,8 @@ export class DetailComponent implements OnInit {
   }
 
   showNav = true;
-  distance = 0;
+  distance: number | undefined;
+  displayedDistance = 0;
 
   getLocation() {
     console.log("get location");
@@ -49,6 +50,11 @@ export class DetailComponent implements OnInit {
       if (this.showNav) {
         this.distance = this.getDistanceBetweenCoordinates(lat1, lon1, +lat2, +lon2);
         console.log(this.distance);
+        if (this.distance == 0) {
+          this.showNav = false;
+          this.displayedDistance = Math.round(this.distance * 100) / 100;
+        }
+
         if (this.distance < 0.05) {
           this.showNav = false;
           clearInterval(intervalID);
