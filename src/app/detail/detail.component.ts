@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-detail',
@@ -6,8 +7,19 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+  private location: string | undefined;
+  private id: number | undefined;
+
+  constructor(private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.location = params['location'];
+      this.id = params['id'];
+    })
+    console.log(this.location);
+    console.log(this.id);
     this.getLocation();
   }
 
@@ -69,7 +81,7 @@ export class DetailComponent implements OnInit {
       Math.sin(dLon / 2) * Math.sin(dLon / 2)
     ;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-     // Distance in km
+    // Distance in km
     return earthRadius * c;
   }
 
