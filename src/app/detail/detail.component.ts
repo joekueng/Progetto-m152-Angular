@@ -25,9 +25,13 @@ export class DetailComponent implements OnInit {
 
   test = {
     name: 'SPAI',
-    cordinates: "46.15187077044123, 8.799829438699243",
+    cordinates: '46.15187077044123,8.799829438699243',
+    lat: 46.15187077044123,
+    lng: 8.799829438699243,
     description: "Lorem ipsum"
   }
+
+  embed = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&q=${this.test.lat},${this.test.lng}`
 
   cord = {
     lat: 0,
@@ -39,6 +43,7 @@ export class DetailComponent implements OnInit {
   displayedDistance = 0;
 
   getLocation() {
+    console.log(this.embed)
     console.log("get location");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {

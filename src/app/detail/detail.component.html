@@ -3,6 +3,15 @@
   <p>{{test.description}}</p>
   <p ng-model="showNav" *ngIf="showNav">Distanza: {{distance}}</p>
   <div id="nav" ng-model="showNav" *ngIf="showNav">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1708.0829920038827!2d8.790506152417485!3d46.16602530670125!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4785c833c36e0bd5%3A0x427d483133d7c1a0!2sCPT%20Locarno%20(SPAI%20%E2%80%93%20MPT)%20-%20Centro%20professionale%20tecnico%20Locarno!5e0!3m2!1sit!2sch!4v1675246087183!5m2!1sit!2sch" width="650" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <!--<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1708.0829920038827!2d8.790506152417485!3d46.16602530670125!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4785c833c36e0bd5%3A0x427d483133d7c1a0!2sCPT%20Locarno%20(SPAI%20%E2%80%93%20MPT)%20-%20Centro%20professionale%20tecnico%20Locarno!5e0!3m2!1sit!2sch!4v1675246087183!5m2!1sit!2sch" width="650" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d912.8193347586248!2d8.796584272413714!3d46.158022715772375!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sit!2sch!4v1678192674449!5m2!1sit!2sch" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>-->
+    <iframe
+      width="450"
+      height="250"
+      frameborder="0" style="border:0"
+      referrerpolicy="no-referrer-when-downgrade"
+      [src]='embed | safe'
+      allowfullscreen>
+    </iframe>
   </div>
 </div>
