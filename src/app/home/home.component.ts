@@ -16,6 +16,8 @@ interface Luogo {
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
 
+  subs: Subscription[] = []
+
   latitude: number | undefined;
   longitude: number | undefined;
   backgroundColor: string | undefined;
