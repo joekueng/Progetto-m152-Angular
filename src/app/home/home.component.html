@@ -1,4 +1,14 @@
-<div class="bg-image">
-  <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-xs" />
-</div>
+<div [ngClass]="{'background-color': backgroundColor}">
+  <div class="bg-image">
+    <div class="search">
+      <input #myInput type="text" [(ngModel)]="luogoSelezionato" (keyup)="cercaLuogo(myInput.value)"
+             (keydown)="selezionaSuggerimento($event)" placeholder="Type here"
+             class="input input-bordered input-primary w-full max-w-xs">
 
+      <ul class="list">
+        <li *ngFor="let luogo of luoghiPopup | async">{{luogo.nome}}</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
