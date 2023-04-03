@@ -1,5 +1,6 @@
 import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {debounceTime, distinctUntilChanged, fromEvent, Subject} from "rxjs";
+import * as QRCode from 'qrcode';
 
 interface Luogo {
   nome: string;
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   latitude: number | undefined;
   longitude: number | undefined;
   backgroundColor: string | undefined;
+  qrCodeImage: string | undefined;
 
   luoghi: Luogo[] = [
     {nome: 'Locarno', latitudine: 46.1704, longitudine: 8.7931},
@@ -30,11 +32,37 @@ export class HomeComponent implements OnInit, AfterViewInit {
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
-  completamento: string = 'ciao';
+  completamento: string = '';
 
   @ViewChild('myInput') myInput?: ElementRef;
+  @ViewChild('canvas') canvasRef: ElementRef | undefined;
+  canvas: any;
+  ctx: any;
+  img: any;
 
   ngAfterViewInit() {
+
+    this.canvas = this.canvasRef?.nativeElement;
+    this.ctx = this.canvas.getContext('2d');
+
+    this.img = new Image();
+    this.img.onload = () => {
+      this.ctx.drawImage(this.img, 0, 0);
+      const qrCode = new Image();
+      if (typeof this.qrCodeImage === "string") {
+        qrCode.src = this.qrCodeImage;
+      }
+      qrCode.onload = () => {
+        const qrCodeSize = 100;
+        const margin = 20;
+        const x = this.canvas.width - qrCodeSize - margin;
+        const y = this.canvas.height - qrCodeSize - margin;
+        this.ctx.drawImage(qrCode, x, y, qrCodeSize, qrCodeSize);
+      }
+    }
+    this.img.src = 'src/assets/img/mountains.png';
+
+
     fromEvent(this.myInput?.nativeElement, 'input')
       .pipe(
         // debounceTime(500), decommentarlo se bisogna fare una chiamata http
@@ -56,7 +84,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.luoghiFiltrati.length > 0) {
       this.suggerimentoAttivo = true;
       this.suggerimento = this.luoghiFiltrati[0].nome;
-      this.completamento = stringDifference(nome, this.suggerimento);
 
     } else {
       this.suggerimentoAttivo = false;
@@ -81,19 +108,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
+    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
+    QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
+      this.qrCodeImage = url;
+    });
   }
 
 
-}
-
-function stringDifference(str1: string, str2: string): string {
-  let diff = '';
-  for (let i = 0; i < str2.length; i++) {
-    if (str1[i] !== str2[i]) {
-      diff += str2[i];
-    }
+  luoghiNear() {
+    return null;
   }
-  return diff;
 }
-
