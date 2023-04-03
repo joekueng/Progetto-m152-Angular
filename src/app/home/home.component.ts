@@ -47,6 +47,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
+    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
+    QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
+      this.qrCodeImage = url;
+    });
   }
 
   ngOnDestroy() {
@@ -121,12 +125,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
-    QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
-      this.qrCodeImage = url;
-    });
-  }
 
   luoghiNear() {
     return null;
