@@ -3,6 +3,10 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 input {
@@ -11,11 +15,17 @@ input {
   align-items: center;
 }
 
-.list {
+#list {
   width: 500px;
   justify-content: center;
   align-items: center;
   align-content: center;
+  margin-top: 10px;
+
+}
+
+#list > li {
+
 }
 
 .bg-image {

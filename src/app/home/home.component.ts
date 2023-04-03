@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import {distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
+import * as QRCode from 'qrcode';
 
 interface Luogo {
   location: string;
@@ -25,12 +26,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   latitude: number | undefined;
   longitude: number | undefined;
   backgroundColor: string | undefined;
+  qrCodeImage: string | undefined;
   locations: Locations[] = [
     {location: 'Locarno', region: 'Ticino', lat: 46.1704, lon: 8.7931},
     {location: 'Lugano', region: 'Ticino', lat: 46.0037, lon: 8.9511},
     {location: 'Luzern', region: 'Luzern', lat: 47.0502, lon: 8.3093},
     {location: 'Lauterbrunnen', region: 'Bern', lat: 46.5939, lon: 7.9085}
   ];
+
 
   luoghi: Luogo[] = [
     {location: 'Locarno', lat: 46.1704, lon: 8.7931},
@@ -45,12 +48,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   suggerimento: string = '';
   completamento: string = 'ciao';
 
-  constructor(private service: ReadjsonService) {
-  }
+  @ViewChild('myInput') myInput?: ElementRef;
+  @ViewChild('canvas') canvasRef: ElementRef | undefined;
+  canvas: any;
+  ctx: any;
+  img: any;
+
+
+  constructor(private service: ReadjsonService) {}
+
 
   ngOnInit(): void {
     console.log("home init");
     this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
+    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
+    QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
+      this.qrCodeImage = url;
+    });
   }
 
   ngAfterViewInit() {
@@ -66,6 +80,28 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((val: any) => {
       this.luoghiPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())
       ))})
+
+
+    this.canvas = this.canvasRef?.nativeElement;
+    this.ctx = this.canvas.getContext('2d');
+
+    this.img = new Image();
+    this.img.onload = () => {
+      this.ctx.drawImage(this.img, 0, 0);
+      const qrCode = new Image();
+      if (typeof this.qrCodeImage === "string") {
+        qrCode.src = this.qrCodeImage;
+      }
+      qrCode.onload = () => {
+        const qrCodeSize = 100;
+        const margin = 20;
+        const x = this.canvas.width - qrCodeSize - margin;
+        const y = this.canvas.height - qrCodeSize - margin;
+        this.ctx.drawImage(qrCode, x, y, qrCodeSize, qrCodeSize);
+      }
+    }
+    this.img.src = 'src/assets/img/mountains.png';
+
 
     fromEvent(this.myInput?.nativeElement, 'input')
       .pipe(
@@ -124,6 +160,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.suggerimentoAttivo = false;
       this.suggerimento = '';
     }
+    this.myInput?.nativeElement.focus();
   }
 
   consigliaSuggerimento(locations: string) {
@@ -142,6 +179,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   }
+
+
+  luoghiNear() {
+    return null;
+  }
+
 }
 
 function stringDifference(str1: string, str2: string): string {
