@@ -1,5 +1,6 @@
-import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {debounceTime, distinctUntilChanged, fromEvent, Subject} from "rxjs";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
+import {ReadjsonService} from "../service/readjson.service";
 import * as QRCode from 'qrcode';
 
 interface Luogo {
@@ -13,9 +14,10 @@ interface Luogo {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
-
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
+
+  subs: Subscription[] = []
 
   latitude: number | undefined;
   longitude: number | undefined;
@@ -32,13 +34,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
-  completamento: string = '';
+  completamento: string = 'ciao';
 
   @ViewChild('myInput') myInput?: ElementRef;
   @ViewChild('canvas') canvasRef: ElementRef | undefined;
   canvas: any;
   ctx: any;
   img: any;
+
+
+  constructor(private service: ReadjsonService) {}
+
+  ngOnInit(): void {
+    this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe())
+  }
 
   ngAfterViewInit() {
 
@@ -84,11 +97,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.luoghiFiltrati.length > 0) {
       this.suggerimentoAttivo = true;
       this.suggerimento = this.luoghiFiltrati[0].nome;
-
+      this.completamento = stringDifference(nome, this.suggerimento);
     } else {
       this.suggerimentoAttivo = false;
       this.suggerimento = '';
     }
+    this.myInput?.nativeElement.focus();
   }
 
   consigliaSuggerimento(nome: string) {
@@ -114,8 +128,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   luoghiNear() {
     return null;
   }
+
 }
+
+function stringDifference(str1: string, str2: string): string {
+  let diff = '';
+  for (let i = 0; i < str2.length; i++) {
+    if (str1[i] !== str2[i]) {
+      diff += str2[i];
+    }
+  }
+  return diff;
+}
+

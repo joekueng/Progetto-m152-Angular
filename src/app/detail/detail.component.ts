@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-detail',
@@ -6,16 +7,31 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+  private location: string | undefined;
+  private id: number | undefined;
+
+  constructor(private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.location = params['location'];
+      this.id = params['id'];
+    })
+    console.log(this.location);
+    console.log(this.id);
     this.getLocation();
   }
 
   test = {
     name: 'SPAI',
-    cordinates: "46.165262,8.791225",
+    cordinates: '46.15187077044123,8.799829438699243',
+    lat: 46.15187077044123,
+    lng: 8.799829438699243,
     description: "Lorem ipsum"
   }
+
+  embed = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&q=${this.test.lat},${this.test.lng}`
 
   cord = {
     lat: 0,
@@ -23,9 +39,11 @@ export class DetailComponent implements OnInit {
   }
 
   showNav = true;
-  distance = 0;
+  distance: number | undefined;
+  displayedDistance = 0;
 
   getLocation() {
+    console.log(this.embed)
     console.log("get location");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -49,6 +67,11 @@ export class DetailComponent implements OnInit {
       if (this.showNav) {
         this.distance = this.getDistanceBetweenCoordinates(lat1, lon1, +lat2, +lon2);
         console.log(this.distance);
+        if (this.distance == 0) {
+          this.showNav = false;
+          this.displayedDistance = Math.round(this.distance * 100) / 100;
+        }
+
         if (this.distance < 0.05) {
           this.showNav = false;
           clearInterval(intervalID);
@@ -69,7 +92,7 @@ export class DetailComponent implements OnInit {
       Math.sin(dLon / 2) * Math.sin(dLon / 2)
     ;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-     // Distance in km
+    // Distance in km
     return earthRadius * c;
   }
 
