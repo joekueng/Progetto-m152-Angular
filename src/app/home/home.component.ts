@@ -1,12 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
+import {Locations} from "../interface/data";
 import * as QRCode from 'qrcode';
 
 interface Luogo {
-  nome: string;
-  latitudine: number;
-  longitudine: number;
+  location: string;
+  lat: number;
+  lon: number;
 }
 
 @Component({
@@ -15,6 +16,9 @@ interface Luogo {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('myInput') myInput?: ElementRef;
+  @ViewChild('myCanvas') myCanvas?: ElementRef<HTMLCanvasElement>;
+
   luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
 
   subs: Subscription[] = []
@@ -23,13 +27,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   longitude: number | undefined;
   backgroundColor: string | undefined;
   qrCodeImage: string | undefined;
+  locations: Locations[] = [
+    {location: 'Locarno', region: 'Ticino', lat: 46.1704, lon: 8.7931},
+    {location: 'Lugano', region: 'Ticino', lat: 46.0037, lon: 8.9511},
+    {location: 'Luzern', region: 'Luzern', lat: 47.0502, lon: 8.3093},
+    {location: 'Lauterbrunnen', region: 'Bern', lat: 46.5939, lon: 7.9085}
+  ];
+
 
   luoghi: Luogo[] = [
-    {nome: 'Locarno', latitudine: 46.1704, longitudine: 8.7931},
-    {nome: 'Lugano', latitudine: 46.0037, longitudine: 8.9511},
-    {nome: 'Luzern', latitudine: 47.0502, longitudine: 8.3093},
-    {nome: 'Lauterbrunnen', latitudine: 46.5939, longitudine: 7.9085}
+    {location: 'Locarno', lat: 46.1704, lon: 8.7931},
+    {location: 'Lugano', lat: 46.0037, lon: 8.9511},
+    {location: 'Luzern', lat: 47.0502, lon: 8.3093},
+    {location: 'Lauterbrunnen', lat: 46.5939, lon: 7.9085}
   ];
+  locationsFiltrati: Locations[] = [];
   luoghiFiltrati: Luogo[] = [];
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
@@ -45,7 +57,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private service: ReadjsonService) {}
 
+
   ngOnInit(): void {
+    console.log("home init");
     this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
     const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
     QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
@@ -53,11 +67,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.subs.forEach(sub => sub.unsubscribe())
-  }
-
   ngAfterViewInit() {
+    console.log("canvas", this.myCanvas?.nativeElement);
+    const canvas = this.myCanvas?.nativeElement;
+    console.log("canvas 2", canvas);
+    if (canvas)
+      this.animateClouds(canvas);
+
+    fromEvent(this.myInput?.nativeElement, 'focus').pipe(
+      // debounceTime(500), decommentarlo se bisogna fare una chiamata http
+      distinctUntilChanged()
+    ).subscribe((val: any) => {
+      this.luoghiPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())
+      ))})
+
 
     this.canvas = this.canvasRef?.nativeElement;
     this.ctx = this.canvas.getContext('2d');
@@ -85,23 +108,54 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         // debounceTime(500), decommentarlo se bisogna fare una chiamata http
         distinctUntilChanged()
       ).subscribe((val: any) => {
-      this.luoghiPopup.next(this.luoghi.filter(l => l.nome.toLowerCase().startsWith(val.target.value.toLowerCase())))
+      this.luoghiPopup.next(this.luoghi.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
     })
   }
 
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe())
+  }
 
-  cercaLuogo(nome: string){
+  animateClouds(canvas: HTMLCanvasElement): void {
+    console.log("animating clouds")
+    let x = -200;
+    let y = 100;
+    let speed = 2;
+    let rand = 30;
+    let ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    setInterval(() => {
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.drawCloud(x, y, ctx);
+        x += speed;
+        if (x > canvas.width + 200) {
+          x = -200;
+        }
+      }
+      rand = Math.round(Math.random() * (10 - 500)) + 10
+    }, rand);
+  }
 
+  drawCloud(x: number, y: number, ctx: CanvasRenderingContext2D) {
+    console.log("xy:"+ x, y)
+    ctx.beginPath();
+    ctx.arc(x, y, 50, 0, 2 * Math.PI);
+    ctx.arc(x + 25, y - 25, 50, 0, 2 * Math.PI);
+    ctx.arc(x + 75, y - 25, 50, 0, 2 * Math.PI);
+    ctx.arc(x + 50, y, 50, 0, 2 * Math.PI);
+    ctx.fillStyle = "#87CEEB";
+    ctx.fill();
+  }
 
-
-    setTimeout(() => {
-
+  cercaLuogo(locations: string){
+    setTimeout(()=>{
     }, 1000);
-    this.luoghiFiltrati = this.luoghi.filter((l: Luogo) => l.nome.toLowerCase().startsWith(nome.toLowerCase()));
-    if (this.luoghiFiltrati.length > 0) {
+    this.locationsFiltrati = this.locations.filter((l: Locations) => l.location.toLowerCase().startsWith(locations.toLowerCase()));
+    if(this.locationsFiltrati.length > 0){
       this.suggerimentoAttivo = true;
-      this.suggerimento = this.luoghiFiltrati[0].nome;
-      this.completamento = stringDifference(nome, this.suggerimento);
+      this.suggerimento = this.locationsFiltrati[0].location;
+      this.completamento = stringDifference(locations, this.suggerimento);
     } else {
       this.suggerimentoAttivo = false;
       this.suggerimento = '';
@@ -109,12 +163,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.myInput?.nativeElement.focus();
   }
 
-  consigliaSuggerimento(nome: string) {
+  consigliaSuggerimento(locations: string) {
     if (this.suggerimentoAttivo) {
-      this.luogoSelezionato = nome + "-"+this.completamento;
+      this.luogoSelezionato = locations + "-" + this.completamento;
       this.suggerimento = '';
     }
   }
+
   selezionaSuggerimento(event: KeyboardEvent) {
     if (event.key === 'Tab' || event.key === 'Enter') {
       if (this.suggerimentoAttivo) {

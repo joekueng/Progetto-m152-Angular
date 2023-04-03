@@ -1,4 +1,7 @@
 <div [ngClass]="{'background-color': backgroundColor}">
+  <div class="canvas nuvola">
+    <canvas #myCanvas width="100vw" class="canvas"></canvas>
+  </div>
   <div class="bg-image">
     <div class="search">
       <input #myInput type="text" [(ngModel)]="luogoSelezionato" (keyup)="cercaLuogo(myInput.value)"
@@ -27,6 +30,5 @@
         </ul>
       </ng-container>
     </div>
-    <img [src]="qrCodeImage" alt="QR Code">
   </div>
 </div>
