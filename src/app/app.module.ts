@@ -11,12 +11,13 @@ import {HttpClientModule} from "@angular/common/http";
 import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    ListComponent,
-    DetailComponent
-  ],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        ListComponent,
+        DetailComponent,
+        SafePipe
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
