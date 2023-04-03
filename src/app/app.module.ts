@@ -15,12 +15,14 @@ import { SafePipe } from './pipes/safe.pipe';
     AppComponent,
     HomeComponent,
     ListComponent,
-    DetailComponent
+    DetailComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
