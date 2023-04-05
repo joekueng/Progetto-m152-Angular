@@ -8,15 +8,15 @@
              (keydown)="selezionaSuggerimento($event)" placeholder="Type here"
              class="input input-bordered input-primary w-full max-w-xs">
 
-      <ng-container *ngIf="luoghiPopup | async as luoghi;">
-        <ul *ngIf="luoghi.length > 0" class="menu bg-base-200 !w-fit p-2 rounded-box" id="list">
+      <ng-container *ngIf="locationsPopup | async as locations;">
+        <ul *ngIf="locations.length > 0" class="menu bg-base-200 !w-fit p-2 rounded-box" id="list">
 
           <li class="menu-title">
             <span>Places</span>
           </li>
 
-          <li *ngFor="let luogo of luoghi">
-            {{luogo.nome}}
+          <li *ngFor="let luogo of locations" (click)="luogoSelezionato=luogo.location; cercaLuogo(luogo.location)" >
+            {{luogo.location}}
           </li>
 
           <li class="menu-title">

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
+import {distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
 import * as QRCode from 'qrcode';
@@ -19,105 +19,100 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myInput') myInput?: ElementRef;
   @ViewChild('myCanvas') myCanvas?: ElementRef<HTMLCanvasElement>;
 
-  luoghiPopup: Subject<Luogo[]> = new Subject<Luogo[]>()
+  public locationsPopup: Subject<Locations[]> = new Subject<Locations[]>()
 
   subs: Subscription[] = []
 
-  latitude: number | undefined;
-  longitude: number | undefined;
+
   backgroundColor: string | undefined;
   qrCodeImage: string | undefined;
-  locations: Locations[] = [
-    {location: 'Locarno', region: 'Ticino', lat: 46.1704, lon: 8.7931},
-    {location: 'Lugano', region: 'Ticino', lat: 46.0037, lon: 8.9511},
-    {location: 'Luzern', region: 'Luzern', lat: 47.0502, lon: 8.3093},
-    {location: 'Lauterbrunnen', region: 'Bern', lat: 46.5939, lon: 7.9085}
-  ];
+  locations: Locations[] = [];
 
-
-  luoghi: Luogo[] = [
-    {location: 'Locarno', lat: 46.1704, lon: 8.7931},
-    {location: 'Lugano', lat: 46.0037, lon: 8.9511},
-    {location: 'Luzern', lat: 47.0502, lon: 8.3093},
-    {location: 'Lauterbrunnen', lat: 46.5939, lon: 7.9085}
-  ];
   locationsFiltrati: Locations[] = [];
-  luoghiFiltrati: Luogo[] = [];
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
   completamento: string = 'ciao';
 
-  @ViewChild('myInput') myInput?: ElementRef;
   @ViewChild('canvas') canvasRef: ElementRef | undefined;
   canvas: any;
   ctx: any;
   img: any;
 
 
-  constructor(private service: ReadjsonService) {}
-
-
-  ngOnInit(): void {
-    console.log("home init");
-    this.subs.push(this.service.getLocation("Lugano").subscribe(val => console.log(val)))
-    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
-    QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (err, url) => {
-      this.qrCodeImage = url;
-    });
+  constructor(private readjsonService: ReadjsonService) {
   }
 
-  ngAfterViewInit() {
-    console.log("canvas", this.myCanvas?.nativeElement);
-    const canvas = this.myCanvas?.nativeElement;
-    console.log("canvas 2", canvas);
-    if (canvas)
-      this.animateClouds(canvas);
-
-    fromEvent(this.myInput?.nativeElement, 'focus').pipe(
-      // debounceTime(500), decommentarlo se bisogna fare una chiamata http
-      distinctUntilChanged()
-    ).subscribe((val: any) => {
-      this.luoghiPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())
-      ))})
-
-
-    this.canvas = this.canvasRef?.nativeElement;
-    this.ctx = this.canvas.getContext('2d');
-
-    this.img = new Image();
-    this.img.onload = () => {
-      this.ctx.drawImage(this.img, 0, 0);
-      const qrCode = new Image();
-      if (typeof this.qrCodeImage === "string") {
-        qrCode.src = this.qrCodeImage;
+  ngOnInit(): void {
+    this.readjsonService.getLocations().subscribe(data => {
+      for (let i = 0; i < data.length; i++) {
+        this.locations.push(<Locations>data[i])
+        console.log(data[i])
       }
-      qrCode.onload = () => {
-        const qrCodeSize = 100;
-        const margin = 20;
-        const x = this.canvas.width - qrCodeSize - margin;
-        const y = this.canvas.height - qrCodeSize - margin;
-        this.ctx.drawImage(qrCode, x, y, qrCodeSize, qrCodeSize);
-      }
-    }
-    this.img.src = 'src/assets/img/mountains.png';
+    });
 
 
-    fromEvent(this.myInput?.nativeElement, 'input')
-      .pipe(
-        // debounceTime(500), decommentarlo se bisogna fare una chiamata http
-        distinctUntilChanged()
-      ).subscribe((val: any) => {
-      this.luoghiPopup.next(this.luoghi.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
-    })
+    console.log("home init");
+    this.subs.push(this.readjsonService.getLocation("Lugano").subscribe(val => console.log(val)))
+    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
+    QRCode.toDataURL(text, {errorCorrectionLevel: 'H'}, (err, url) => {
+      this.qrCodeImage = url;
+    });
   }
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe())
   }
 
+
+  ngAfterViewInit() {
+    const canvas = this.myCanvas?.nativeElement;
+    if (canvas)
+      this.animateClouds(canvas);
+
+    if (this.locations != undefined) {
+      fromEvent(this.myInput?.nativeElement, 'focus').pipe(
+        // debounceTime(500), decommentarlo se bisogna fare una chiamata http
+        distinctUntilChanged()
+      ).subscribe((val: any) => {
+        this.locationsPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
+      })
+    }
+
+
+    this.canvas = this.canvasRef?.nativeElement;
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+
+      this.img = new Image();
+      this.img.onload = () => {
+        this.ctx.drawImage(this.img, 0, 0);
+        const qrCode = new Image();
+        if (typeof this.qrCodeImage === "string") {
+          qrCode.src = this.qrCodeImage;
+        }
+        qrCode.onload = () => {
+          const qrCodeSize = 100;
+          const margin = 20;
+          const x = this.canvas.width - qrCodeSize - margin;
+          const y = this.canvas.height - qrCodeSize - margin;
+          this.ctx.drawImage(qrCode, x, y, qrCodeSize, qrCodeSize);
+        }
+      }
+
+      this.img.src = 'src/assets/img/mountains.png';
+    }
+
+    fromEvent(this.myInput?.nativeElement, 'input')
+      .pipe(
+        // debounceTime(500), decommentarlo se bisogna fare una chiamata http
+        distinctUntilChanged()
+      ).subscribe((val: any) => {
+      this.locationsPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
+    })
+  }
+
   animateClouds(canvas: HTMLCanvasElement): void {
-    console.log("animating clouds")
     let x = -200;
     let y = 100;
     let speed = 2;
@@ -138,7 +133,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   drawCloud(x: number, y: number, ctx: CanvasRenderingContext2D) {
-    console.log("xy:"+ x, y)
     ctx.beginPath();
     ctx.arc(x, y, 50, 0, 2 * Math.PI);
     ctx.arc(x + 25, y - 25, 50, 0, 2 * Math.PI);
@@ -148,11 +142,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     ctx.fill();
   }
 
-  cercaLuogo(locations: string){
-    setTimeout(()=>{
+  cercaLuogo(locations: string) {
+    setTimeout(() => {
     }, 1000);
     this.locationsFiltrati = this.locations.filter((l: Locations) => l.location.toLowerCase().startsWith(locations.toLowerCase()));
-    if(this.locationsFiltrati.length > 0){
+    if (this.locationsFiltrati.length > 0) {
       this.suggerimentoAttivo = true;
       this.suggerimento = this.locationsFiltrati[0].location;
       this.completamento = stringDifference(locations, this.suggerimento);
@@ -161,13 +155,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.suggerimento = '';
     }
     this.myInput?.nativeElement.focus();
-  }
-
-  consigliaSuggerimento(locations: string) {
-    if (this.suggerimentoAttivo) {
-      this.luogoSelezionato = locations + "-" + this.completamento;
-      this.suggerimento = '';
-    }
   }
 
   selezionaSuggerimento(event: KeyboardEvent) {
@@ -185,6 +172,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+  protected readonly Event = Event;
 }
 
 function stringDifference(str1: string, str2: string): string {
@@ -196,4 +184,3 @@ function stringDifference(str1: string, str2: string): string {
   }
   return diff;
 }
-
