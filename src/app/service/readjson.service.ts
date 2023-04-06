@@ -38,16 +38,18 @@ export class ReadjsonService{
       tap(data => console.log("data requested", data))
     );
   }
+/*
+  getWaypoints(location: string, id: number): Observable<waypoint[]> {
+    return this.locations.pipe(
+      map((locations) => {
+        const foundLocation: Locations | undefined = locations.find((loc: Locations) => loc.location === location);
+        return foundLocation ? foundLocation.waypoints.filter((way: waypoint) => way.id === id) : [];
+      }),
+      tap(data => console.log("data requested", data))
+    );
+  }
 
+ */
 
-//  getWaypoints(location: string, id: number): Observable<waypoint[]> {
-//    return this.locations.pipe(
-//      map((locations) => {
-//        const foundLocation: Locations | undefined = locations.find((loc: Locations) => loc.location === location);
-//        return foundLocation ? foundLocation.waypoints.filter((way: waypoint) => way.id === id) : [];
-//      }),
-//      tap(data => console.log("data requested", data))
-//    );
-//  }
 
 }
