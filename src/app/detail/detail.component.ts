@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {CalculateDistanceService} from "../service/calculateDistance.service";
+import {positionService} from "../service/position.service";
 
 @Component({
   selector: 'app-detail',
@@ -10,19 +10,6 @@ import {CalculateDistanceService} from "../service/calculateDistance.service";
 export class DetailComponent implements OnInit {
   private location: string | undefined;
   private id: number | undefined;
-
-  constructor(private route: ActivatedRoute , private calculateDistanceService: CalculateDistanceService) {
-  }
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.location = params['location'];
-      this.id = params['id'];
-    })
-    console.log(this.location);
-    console.log(this.id);
-    this.getLocation();
-  }
 
   test = {
     name: 'SPAI',
@@ -34,45 +21,38 @@ export class DetailComponent implements OnInit {
 
   embed = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&q=${this.test.lat},${this.test.lng}`
 
-  cord = {
-    lat: 0,
-    lng: 0
-  }
+  cord: any;
 
   showNav = true;
   distance: number | undefined;
   displayedDistance = 0;
 
-  getLocation() {
-    console.log(this.embed)
-    console.log("get location");
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.cord.lat = position.coords.latitude;
-        this.cord.lng = position.coords.longitude;
-        console.log(this.cord);
-        this.checkDistanceTimer();
-      })
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
+  constructor(private route: ActivatedRoute , private positionService: positionService) {}
+
+  async ngOnInit(){
+    this.route.params.subscribe(params => {
+      this.location = params['location'];
+      this.id = params['id'];
+    })
+    console.log(this.location);
+    console.log(this.id);
+    console.log(this.embed);
+    this.cord = await this.positionService.getLocation();
+    this.checkDistanceTimer();
   }
 
   checkDistanceTimer() {
     //set interval
-    let lat1 = this.cord.lat;
-    let lon1 = this.cord.lng;
     let lat2 = this.test.cordinates.split(",")[0];
     let lon2 = this.test.cordinates.split(",")[1];
     let intervalID = setInterval(() => {
       if (this.showNav) {
-        this.distance = this.calculateDistanceService.getDistanceBetweenCoordinates(lat1, lon1, +lat2, +lon2);
+        this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord.lat, this.cord.lat, +lat2, +lon2);
         console.log(this.distance);
         if (this.distance == 0) {
           this.showNav = false;
           this.displayedDistance = Math.round(this.distance * 100) / 100;
         }
-
         if (this.distance < 0.05) {
           this.showNav = false;
           clearInterval(intervalID);
@@ -82,6 +62,4 @@ export class DetailComponent implements OnInit {
       }
     }, 1000);
   }
-
-  ///
 }
