@@ -38,6 +38,7 @@ export class ReadjsonService{
       tap(data => console.log("data requested", data))
     );
   }
+
 /*
   getWaypoints(location: string, id: number): Observable<waypoint[]> {
     return this.locations.pipe(

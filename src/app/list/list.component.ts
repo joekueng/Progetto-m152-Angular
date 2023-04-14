@@ -3,6 +3,8 @@ import {Locations} from "../interface/data";
 import {ReadjsonService} from "../service/readjson.service";
 import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
+import {Cord} from "../interface/cord";
+import {positionService} from "../service/position.service";
 
 @Component({
   selector: 'app-list',
@@ -16,25 +18,27 @@ export class ListComponent implements OnInit {
 
   isNear: boolean = true;
 
+  positionCord: any;
 
-  constructor(private route: ActivatedRoute ,private readjsonService: ReadjsonService) {}
+  distance: number = 0;
 
-  ngOnInit(): void {
+  constructor(private route: ActivatedRoute ,private readjsonService: ReadjsonService, private positionService: positionService) {}
+
+  async ngOnInit() {
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
-
     this.readjsonService.getLocations().subscribe(locations => {
       this.locations = locations;
-      this.checkDataPopulated();
+      if (this.locationParams != null) {
+        this.readjsonService.getLocation(this.locationParams).subscribe(location => {
+          this.location = location;
+          this.checkDataPopulated();
+        });
+      }
     });
-
-    if (this.locationParams != null) {
-      this.readjsonService.getLocation(this.locationParams).subscribe(location => {
-        this.location = location;
-        this.checkDataPopulated();
-      });
-    }
+    this.positionCord = await this.readjsonService.getLocations();
+    this.setDistance();
   }
 
   private checkDataPopulated(): void {
@@ -50,5 +54,10 @@ export class ListComponent implements OnInit {
       }
     }
   }
-
+  private setDistance(): void{
+    if (this.location && this.isNear){
+      this.distance = this.positionService.getDistanceBetweenCoordinates(this.location.lat, this.location.lon, this.positionCord.lat, this.positionCord.lon);
+      console.log("Distanza: " + this.distance + " km");
+    }
+  }
 }

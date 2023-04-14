@@ -3,6 +3,7 @@ export interface Locations {
   region: string;
   lat: number;
   lon: number;
+  distance?: number;
   waypoints?: waypoint[];
 }
 
