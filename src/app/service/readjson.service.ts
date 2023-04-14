@@ -10,10 +10,10 @@ import {BehaviorSubject, map, Observable, tap} from "rxjs";
 export class ReadjsonService{
   private locations: BehaviorSubject<Locations[]> = new BehaviorSubject<Locations[]>([]);
 
-
   constructor(private http: HttpClient) {
     this.http.get<Locations[]>('assets/data.json').subscribe(data => {
       this.locations.next(data)
+      console.log("data loaded", data)
     });
   }
   getLocations(): Observable<Partial<Locations>[]> {

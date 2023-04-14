@@ -8,8 +8,8 @@ import {ListComponent} from "./list/list.component";
 @NgModule({
   imports: [RouterModule.forRoot([
     {path: 'home', component: HomeComponent},
-    {path: ':location', component: ListComponent},
-    {path: ':location/detail/:id', component: DetailComponent},
+    {path: 'location/:location', component: ListComponent},
+    {path: 'location/:location/:id', component: DetailComponent},
     {path: '**', redirectTo: 'home'}
   ])],
   exports: [RouterModule],
