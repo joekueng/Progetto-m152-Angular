@@ -28,6 +28,14 @@ input {
 
 }
 
+.inputElements{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 20px;
+}
+
 .bg-image {
   background-image: url('src/assets/img/mountains.png');
   background-size: cover;
