@@ -4,6 +4,7 @@ import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
 import * as QRCode from 'qrcode';
 import {Router} from "@angular/router";
+import {DeepLService} from "../service/deepL.service";
 
 interface Luogo {
   location: string;
@@ -32,14 +33,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
   completamento: string = 'ciao';
-
-  @ViewChild('canvas') canvasRef: ElementRef | undefined;
-  canvas: any;
-  ctx: any;
-  img: any;
+  input: string = 'How are you?';
+  output: string = '';
 
 
-  constructor(private readjsonService: ReadjsonService, private router: Router) {
+  constructor(private readjsonService: ReadjsonService, private router: Router, private deepLService: DeepLService) {
   }
 
   ngOnInit(): void {
@@ -51,11 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.allert = false;
     console.log("home init");
-    this.subs.push(this.readjsonService.getLocation("Lugano").subscribe(val => console.log(val)))
-    const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
-    QRCode.toDataURL(text, {errorCorrectionLevel: 'H'}, (err, url) => {
-      this.qrCodeImage = url;
-    });
+    //this.subs.push(this.readjsonService.getLocation("Lugano").subscribe(val => console.log(val)))
   }
 
   ngOnDestroy() {
@@ -75,30 +69,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       ).subscribe((val: any) => {
         this.locationsPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
       })
-    }
-
-
-    this.canvas = this.canvasRef?.nativeElement;
-    if (this.canvas) {
-      this.ctx = this.canvas.getContext('2d');
-
-      this.img = new Image();
-      this.img.onload = () => {
-        this.ctx.drawImage(this.img, 0, 0);
-        const qrCode = new Image();
-        if (typeof this.qrCodeImage === "string") {
-          qrCode.src = this.qrCodeImage;
-        }
-        qrCode.onload = () => {
-          const qrCodeSize = 100;
-          const margin = 20;
-          const x = this.canvas.width - qrCodeSize - margin;
-          const y = this.canvas.height - qrCodeSize - margin;
-          this.ctx.drawImage(qrCode, x, y, qrCodeSize, qrCodeSize);
-        }
-      }
-
-      this.img.src = 'src/assets/img/mountains.png';
     }
 
     fromEvent(this.myInput?.nativeElement, 'input')
@@ -172,20 +142,25 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSearch(): void {
     if (this.luogoSelezionato === '') {
-      this.allert=true;
+      this.allert = true;
       setTimeout(() => {
-        this.allert=false;
+        this.allert = false;
       }, 8000);
       return;
-    }else{
+    } else {
       const nomeLocation = encodeURIComponent(this.luogoSelezionato);
       this.router.navigate(['/location', nomeLocation]);
     }
   }
 
+  translate() {
+    this.deepLService.translate(this.input, 'DE')
+      .subscribe(response => console.log(response.translations[0].text));
+
+  }
+
   protected readonly Event = Event;
 }
-
 
 
 function stringDifference(str1: string, str2: string): string {

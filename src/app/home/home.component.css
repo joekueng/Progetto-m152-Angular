@@ -16,12 +16,15 @@ input {
 }
 
 #list {
-  width: 500px;
+  position: absolute;
+  top: 46%;
+  left: 44%;
+  transform: translate(-50%, -50%);
   justify-content: center;
   align-items: center;
   align-content: center;
   margin-top: 10px;
-
+  margin-left: 0;
 }
 
 #list > li {
@@ -44,3 +47,6 @@ input {
   height: 100vh;
 }
 
+#translate{
+  margin: 100px 10px 10px 10px;
+}
