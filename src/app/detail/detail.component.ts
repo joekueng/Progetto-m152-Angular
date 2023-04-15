@@ -38,6 +38,7 @@ export class DetailComponent implements OnInit {
     console.log(this.id);
     console.log(this.embed);
     this.cord = await this.positionService.getLocation();
+    console.log(this.cord);
     this.checkDistanceTimer();
   }
 

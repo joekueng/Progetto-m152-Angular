@@ -7,7 +7,7 @@ import{Cord} from "../interface/cord";
 export class positionService{
   cord: Cord = { lat: 0, lon: 0 };
 
-  getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number) {
+  /*getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number) {
     if (lat1 === undefined || lon1 === undefined) {
       console.log('lat1 or lon1 is undefined')
       return 0;
@@ -24,7 +24,20 @@ export class positionService{
       // Distance in km
       return earthRadius * c;
     }
+  }*/
+
+  getDistanceBetweenCoordinates(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const earthRadius = 6371; // Raggio della Terra in km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = earthRadius * c; // Distanza in km
+    return distance;
   }
+
 
   deg2rad(deg: number) {
     return deg * (Math.PI / 180)
