@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import{Cord} from "../interface/cord";
+import {Cord} from "../interface/cord";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class positionService{
     }
   }*/
 
-  getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number) {
+  getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number): number{
     if (lat1 === undefined || lon1 === undefined) {
       console.log('lat1 or lon1 is undefined')
       return 0;
@@ -38,8 +38,7 @@ export class positionService{
       Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = earthRadius * c; // Distanza in km
-    return distance;
+    return earthRadius * c;
   }
 
 

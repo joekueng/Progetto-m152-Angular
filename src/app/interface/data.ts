@@ -4,7 +4,7 @@ export interface Locations {
   lat: number;
   lon: number;
   distance?: number;
-  waypoints?: waypoint[];
+  waypoints: waypoint[];
 }
 
 export interface waypoint {

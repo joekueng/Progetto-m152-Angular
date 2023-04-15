@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Locations} from "../interface/data";
 import {ReadjsonService} from "../service/readjson.service";
-import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {Cord} from "../interface/cord";
 import {positionService} from "../service/position.service";
 
 @Component({
@@ -16,13 +14,14 @@ export class ListComponent implements OnInit {
   locations: Partial<Locations>[] | undefined;
   location: Partial<Locations> | undefined;
 
-  isNear: boolean = true;
-
   positionCord: any;
+
+  isNear: boolean = true;
 
   distance: number = 0;
 
-  constructor(private route: ActivatedRoute ,private readjsonService: ReadjsonService, private positionService: positionService) {}
+  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService) {
+  }
 
   async ngOnInit() {
     this.route.params.subscribe(params => {
@@ -37,7 +36,6 @@ export class ListComponent implements OnInit {
         });
       }
     });
-    this.positionCord = await this.readjsonService.getLocations();
     this.setDistance();
   }
 
@@ -48,16 +46,29 @@ export class ListComponent implements OnInit {
         if (this.locations[i].location === this.locationParams) {
           this.location = this.locations[i];
           console.log("Location trovata:", this.location);
-          this.isNear= false;
+          this.isNear = false;
           break;
         }
       }
     }
   }
-  private setDistance(): void{
-    if (this.location && this.isNear){
+
+  private setDistance(): void {
+    if (this.location && this.isNear) {
       this.distance = this.positionService.getDistanceBetweenCoordinates(this.location.lat, this.location.lon, this.positionCord.lat, this.positionCord.lon);
       console.log("Distanza: " + this.distance + " km");
     }
   }
+
+  getDistance(latLocation: number | undefined, lonLocation: number | undefined): any {
+    setInterval(async () => {
+      this.positionCord = await this.positionService.getLocation();
+      if (this.location) {
+        return this.positionService.getDistanceBetweenCoordinates(latLocation, lonLocation, this.positionCord.lat, this.positionCord.lon);
+      } else {
+        return 0;
+      }
+    }, 1000);
+  }
+
 }
