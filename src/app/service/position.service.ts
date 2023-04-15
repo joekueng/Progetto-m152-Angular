@@ -26,7 +26,11 @@ export class positionService{
     }
   }*/
 
-  getDistanceBetweenCoordinates(lat1: number, lon1: number, lat2: number, lon2: number) {
+  getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number) {
+    if (lat1 === undefined || lon1 === undefined) {
+      console.log('lat1 or lon1 is undefined')
+      return 0;
+    }
     const earthRadius = 6371; // Raggio della Terra in km
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
