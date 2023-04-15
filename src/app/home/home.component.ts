@@ -3,6 +3,7 @@ import {distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from
 import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
 import * as QRCode from 'qrcode';
+import {Router} from "@angular/router";
 
 interface Luogo {
   location: string;
@@ -21,13 +22,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public locationsPopup: Subject<Locations[]> = new Subject<Locations[]>()
 
-  subs: Subscription[] = []
-
-
+  subs: Subscription[] = [];
   backgroundColor: string | undefined;
   qrCodeImage: string | undefined;
   locations: Locations[] = [];
-
+  allert: boolean = false;
   locationsFiltrati: Locations[] = [];
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
@@ -40,7 +39,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   img: any;
 
 
-  constructor(private readjsonService: ReadjsonService) {
+  constructor(private readjsonService: ReadjsonService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -50,8 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(data[i])
       }
     });
-
-
+    this.allert = false;
     console.log("home init");
     this.subs.push(this.readjsonService.getLocation("Lugano").subscribe(val => console.log(val)))
     const text = 'https://aramisgrata.ch'; // sostituisci con la tua stringa
@@ -172,8 +170,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+  onSearch(): void {
+    if (this.luogoSelezionato === '') {
+      this.allert=true;
+      setTimeout(() => {
+        this.allert=false;
+      }, 8000);
+      return;
+    }else{
+      const nomeLocation = encodeURIComponent(this.luogoSelezionato);
+      this.router.navigate(['/location', nomeLocation]);
+    }
+  }
+
   protected readonly Event = Event;
 }
+
+
 
 function stringDifference(str1: string, str2: string): string {
   let diff = '';
