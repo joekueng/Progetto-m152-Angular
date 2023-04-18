@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.allert = true;
       setTimeout(() => {
         this.allert = false;
-      }, 8000);
+      }, 3000);
       return;
     } else {
       const nomeLocation = encodeURIComponent(this.luogoSelezionato);
