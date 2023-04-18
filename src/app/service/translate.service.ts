@@ -1,21 +1,16 @@
-import { Injectable } from '@angular/core';
-//import { Translate } from '@google-cloud/translate/build/src/v2';
-
+import {DeepLService} from "./deepL.service";
+import {Injectable} from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslateService {
+  constructor(private deepLService: DeepLService) {
 
-  //private translate: Translate;
+  }
 
- // constructor() {
-   // this.translate = new Translate({projectId: 'Modulo-152'});
-  //}
-
-  //async translateText(text: string, target: string): Promise<string> {
-    //const [translation] = await this.translate.translate(text, target);
-  //return translation;
-  //}
-
+  async getData(input: string, lang: string): Promise<string> {
+    const response = await this.deepLService.translate(input, lang).toPromise();
+    return response.translations[0].text;
+  }
 }

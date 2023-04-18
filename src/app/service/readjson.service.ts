@@ -53,8 +53,4 @@ export class ReadjsonService{
       tap(data => console.log("data requested", data))
     );
   }
-
-
-
-
 }

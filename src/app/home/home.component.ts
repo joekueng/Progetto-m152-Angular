@@ -1,16 +1,13 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
+import {BehaviorSubject, distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
-import * as QRCode from 'qrcode';
 import {Router} from "@angular/router";
-import {DeepLService} from "../service/deepL.service";
+import { TranslateService } from '../service/translate.service';
+import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
+import {translations} from "../interface/translations";
 
-interface Luogo {
-  location: string;
-  lat: number;
-  lon: number;
-}
+
 
 @Component({
   selector: 'app-home',
@@ -19,37 +16,39 @@ interface Luogo {
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myInput') myInput?: ElementRef;
-  @ViewChild('myCanvas') myCanvas?: ElementRef<HTMLCanvasElement>;
 
   public locationsPopup: Subject<Locations[]> = new Subject<Locations[]>()
 
   subs: Subscription[] = [];
   backgroundColor: string | undefined;
-  qrCodeImage: string | undefined;
   locations: Locations[] = [];
   allert: boolean = false;
   locationsFiltrati: Locations[] = [];
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
-  completamento: string = 'ciao';
+  completamento: string = '';
   input: string = 'How are you?';
-  output: string = '';
+  translations: translations = {} as translations;
 
 
-  constructor(private readjsonService: ReadjsonService, private router: Router, private deepLService: DeepLService) {
+  constructor(private readjsonService: ReadjsonService, private router: Router, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
   ngOnInit(): void {
+    this.translations = this.readTranslationJsonService.getData();
+    console.log("translations loaded", this.translations)
+
     this.readjsonService.getLocations().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         this.locations.push(<Locations>data[i])
         console.log(data[i])
       }
     });
+
+
     this.allert = false;
     console.log("home init");
-    //this.subs.push(this.readjsonService.getLocation("Lugano").subscribe(val => console.log(val)))
   }
 
   ngOnDestroy() {
@@ -58,9 +57,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
-    const canvas = this.myCanvas?.nativeElement;
-    if (canvas)
-      this.animateClouds(canvas);
 
     if (this.locations != undefined) {
       fromEvent(this.myInput?.nativeElement, 'focus').pipe(
@@ -78,36 +74,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       ).subscribe((val: any) => {
       this.locationsPopup.next(this.locations.filter(l => l.location.toLowerCase().startsWith(val.target.value.toLowerCase())))
     })
-  }
-
-  animateClouds(canvas: HTMLCanvasElement): void {
-    let x = -200;
-    let y = 100;
-    let speed = 2;
-    let rand = 30;
-    let ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    setInterval(() => {
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.drawCloud(x, y, ctx);
-        x += speed;
-        if (x > canvas.width + 200) {
-          x = -200;
-        }
-      }
-      rand = Math.round(Math.random() * (10 - 500)) + 10
-    }, rand);
-  }
-
-  drawCloud(x: number, y: number, ctx: CanvasRenderingContext2D) {
-    ctx.beginPath();
-    ctx.arc(x, y, 50, 0, 2 * Math.PI);
-    ctx.arc(x + 25, y - 25, 50, 0, 2 * Math.PI);
-    ctx.arc(x + 75, y - 25, 50, 0, 2 * Math.PI);
-    ctx.arc(x + 50, y, 50, 0, 2 * Math.PI);
-    ctx.fillStyle = "#87CEEB";
-    ctx.fill();
   }
 
   cercaLuogo(locations: string) {
@@ -153,13 +119,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  translate() {
-    this.deepLService.translate(this.input, 'DE')
-      .subscribe(response => console.log(response.translations[0].text));
-
+  async switchLanguage(lang: string) {
+    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
+    this.translations.menuPlaces = await this.translateService.getData(this.translations.menuPlaces, lang);
+    this.translations.alertMessage = await this.translateService.getData(this.translations.alertMessage, lang);
+    this.translations.searchPlaceholder = await this.translateService.getData(this.translations.searchPlaceholder, lang);
+    this.translations.menuNear = await this.translateService.getData(this.translations.menuNear, lang);
+    this.translations.searchButton = await this.translateService.getData(this.translations.searchButton, lang);
   }
-
-  protected readonly Event = Event;
 }
 
 
