@@ -14,7 +14,6 @@
   <h1>
     {{location.location}}
   </h1>
-  {{location.waypoints[0].name}}
   <div *ngFor="let waypoinst of location.waypoints, let i = index">
     <h3>
       <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
