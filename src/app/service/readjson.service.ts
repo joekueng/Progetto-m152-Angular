@@ -40,17 +40,32 @@ export class ReadjsonService{
   }
 
 
-  getWaypoints(location: string, id: number): Observable<waypoint[]> {
+  getWaypoint(location: string, id: number): Observable<waypoint[]> {
     return this.locations.pipe(
       map((locations) => {
         const foundLocation: Locations | undefined = locations.find((loc: Locations) => loc.location === location);
         if (foundLocation?.waypoints) {
           return foundLocation ? foundLocation.waypoints.filter((way: waypoint) => way.id === id) : [];
         } else {
-          return [];
+          return []
         }
       }),
       tap(data => console.log("data requested", data))
     );
   }
+
+  getWaypoints(location: string): Observable<waypoint[]> {
+    return this.locations.pipe(
+      map((locations) => {
+        const foundLocation: Locations | undefined = locations.find((loc: Locations) => loc.location === location);
+        if (foundLocation?.waypoints) {
+          return foundLocation ? foundLocation.waypoints : [];
+        } else {
+          return []
+        }
+      }),
+      tap(data => console.log("data requested", data))
+    );
+  }
+
 }

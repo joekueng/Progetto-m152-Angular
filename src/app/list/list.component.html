@@ -1,21 +1,25 @@
 <div *ngIf="isNear">
-
+  <h1>
+    Posizione {{locationParams}} non trovata
+  </h1>
+  <div *ngFor="let locations of locations, let i = index">
+    <h3>
+      <a href="location/{{locations.location}}">{{locations.location}}</a>
+    </h3>
+    <h4>Distance: {{distance[i]}}</h4>
+  </div>
 </div>
 
-<div *ngIf="!isNear && location">
+<div *ngIf="!isNear && location && location.waypoints">
   <h1>
     {{location.location}}
   </h1>
-  <div *ngFor="let waypoinst of location.waypoints">
+  {{location.waypoints[0].name}}
+  <div *ngFor="let waypoinst of location.waypoints, let i = index">
     <h3>
-      {{waypoinst.name}}
+      <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
     </h3>
-    <h4>Distance: {{getDistance(waypoinst.lat, location.lon)}}</h4>
+    <h4>Distance: {{distance[i]}}</h4>
   </div>
 
 </div>
-
-
-<h1></h1>
-
-<h3></h3>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, SimpleChanges, OnChanges} from '@angular/core';
 import {Locations} from "../interface/data";
 import {ReadjsonService} from "../service/readjson.service";
 import {ActivatedRoute} from "@angular/router";
@@ -9,8 +9,8 @@ import {positionService} from "../service/position.service";
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
-  private locationParams: string | undefined
+export class ListComponent implements OnInit, OnChanges {
+  locationParams: string | undefined
   locations: Partial<Locations>[] | undefined;
   location: Partial<Locations> | undefined;
 
@@ -18,7 +18,8 @@ export class ListComponent implements OnInit {
 
   isNear: boolean = true;
 
-  distance: number = 0;
+  distance: number[] = [];
+
 
   constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService) {
   }
@@ -30,14 +31,27 @@ export class ListComponent implements OnInit {
     this.readjsonService.getLocations().subscribe(locations => {
       this.locations = locations;
       if (this.locationParams != null) {
-        this.readjsonService.getLocation(this.locationParams).subscribe(location => {
+        this.readjsonService.getLocation(this.locationParams ?? "").subscribe(async location => {
           this.location = location;
-          this.checkDataPopulated();
+          this.readjsonService.getWaypoints(this.locationParams ?? "").subscribe(waypoints => {
+            if (this.location) {
+              this.location.waypoints = waypoints ?? []
+            }
+          });
+          await this.checkDataPopulated();
         });
       }
     });
-    this.setDistance();
+
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['positionCord'] && (changes['positionCord'])) {
+      console.log("onChanges")
+      this.setDistance();
+    }
+  }
+
 
   private checkDataPopulated(): void {
     if (this.locations && this.location) {
@@ -47,6 +61,7 @@ export class ListComponent implements OnInit {
           this.location = this.locations[i];
           console.log("Location trovata:", this.location);
           this.isNear = false;
+          this.setDistance();
           break;
         }
       }
@@ -54,10 +69,20 @@ export class ListComponent implements OnInit {
   }
 
   private setDistance(): void {
-    if (this.location && this.isNear) {
-      this.distance = this.positionService.getDistanceBetweenCoordinates(this.location.lat, this.location.lon, this.positionCord.lat, this.positionCord.lon);
-      console.log("Distanza: " + this.distance + " km");
-    }
+
+    const intervalId = setInterval(() => {
+      if (this.location) {
+        if (this.location?.waypoints) {
+          console.log("setDistance"+this.location);
+          for (let i = 0; i < this.location.waypoints.length; i++) {
+            console.log("for")
+            this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location?.lon, this.positionCord.lat, this.positionCord.lon));
+          }
+          clearInterval(intervalId);
+        }
+        console.log("ciao" + this.distance[0])
+      }}, 1000);
+    //da aggiungere il cambiamento in tutti i punti, forse fatto ma sono stanco
   }
 
   getDistance(latLocation: number | undefined, lonLocation: number | undefined): any {
@@ -70,5 +95,6 @@ export class ListComponent implements OnInit {
       }
     }, 1000);
   }
+
 
 }

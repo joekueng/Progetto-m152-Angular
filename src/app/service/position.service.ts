@@ -46,7 +46,7 @@ export class positionService{
     return deg * (Math.PI / 180)
   }
 
-  async getLocation() {
+  async getLocation(): Promise<any> {
     console.log('get location');
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -64,5 +64,6 @@ export class positionService{
       }
     });
   }
+
 
 }

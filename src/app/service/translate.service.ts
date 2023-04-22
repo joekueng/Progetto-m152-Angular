@@ -5,9 +5,7 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 export class TranslateService {
-  constructor(private deepLService: DeepLService) {
-
-  }
+  constructor(private deepLService: DeepLService) {}
 
   async getData(input: string, lang: string): Promise<string> {
     const response = await this.deepLService.translate(input, lang).toPromise();
