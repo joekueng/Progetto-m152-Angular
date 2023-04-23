@@ -3,6 +3,9 @@ import {Locations} from "../interface/data";
 import {ReadjsonService} from "../service/readjson.service";
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../service/position.service";
+import {listTranslations} from "../interface/translations";
+import {TranslateService} from "../service/translate.service";
+import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
 
 @Component({
   selector: 'app-list',
@@ -20,11 +23,13 @@ export class ListComponent implements OnInit, OnChanges {
 
   distance: number[] = [];
 
+  translations: listTranslations = {} as listTranslations
 
-  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService) {
+  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
   async ngOnInit() {
+    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
@@ -96,6 +101,13 @@ export class ListComponent implements OnInit, OnChanges {
       this.positionCord = await this.positionService.getLocation();
       this.setDistance();
     }, 2000);
+  }
+
+  async switchLanguage(lang: string) {
+    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
+    this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
+    this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
+
   }
 
 

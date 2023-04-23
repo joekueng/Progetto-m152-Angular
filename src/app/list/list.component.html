@@ -1,13 +1,21 @@
+<div class="dropdown dropdown-hover">
+  <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100">{{translations.translate}}</label>
+  <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52">
+    <li (click)="switchLanguage('DE')"><a>DE</a></li>
+    <li (click)="switchLanguage('FR')"><a>FR</a></li>
+    <li (click)="switchLanguage('IT')"><a>IT</a></li>
+  </ul>
+</div>
 <div *ngIf="isNear">
   <h1>
-    Posizione {{locationParams}} non trovata
+    {{translations.locationName}}{{locationParams}}
   </h1>
   <div *ngFor="let locations of locations, let i = index">
     <h3>
       <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
     </h3>
     <div *ngIf="distance[i]">
-      <h4>Distance: {{distance[i]}} km</h4>
+      <h4>{{translations.distance}}{{distance[i]}} km</h4>
     </div>
   </div>
 </div>
@@ -21,7 +29,7 @@
       <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
     </h3>
     <div *ngIf="distance[i]">
-      <h4>Distance: {{distance[i]}} km</h4>
+      <h4>{{translations.distance}}{{distance[i]}} km</h4>
     </div>
 
   </div>

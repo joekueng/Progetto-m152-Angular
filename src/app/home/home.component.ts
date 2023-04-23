@@ -5,7 +5,7 @@ import {Locations} from "../interface/data";
 import {Router} from "@angular/router";
 import { TranslateService } from '../service/translate.service';
 import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
-import {translations} from "../interface/translations";
+import {homeTranslations} from "../interface/translations";
 
 
 
@@ -28,15 +28,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
   completamento: string = '';
-  input: string = 'How are you?';
-  translations: translations = {} as translations;
+  translations: homeTranslations = {} as homeTranslations;
 
 
   constructor(private readjsonService: ReadjsonService, private router: Router, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
   ngOnInit(): void {
-    this.translations = this.readTranslationJsonService.getData();
+    this.translations = this.readTranslationJsonService.getHomeTranslations();
     console.log("translations loaded", this.translations)
 
     this.readjsonService.getLocations().subscribe(data => {
@@ -124,7 +123,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.translations.menuPlaces = await this.translateService.getData(this.translations.menuPlaces, lang);
     this.translations.alertMessage = await this.translateService.getData(this.translations.alertMessage, lang);
     this.translations.searchPlaceholder = await this.translateService.getData(this.translations.searchPlaceholder, lang);
-    this.translations.menuNear = await this.translateService.getData(this.translations.menuNear, lang);
     this.translations.searchButton = await this.translateService.getData(this.translations.searchButton, lang);
   }
 }

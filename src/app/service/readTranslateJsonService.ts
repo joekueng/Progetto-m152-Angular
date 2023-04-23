@@ -1,27 +1,38 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {translations} from "../interface/translations";
+import {homeTranslations} from "../interface/translations";
+import {listTranslations} from "../interface/translations";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReadTranslateJsonService {
-  private translationData: translations = {} as translations;
+  private homeTranslations: homeTranslations = {} as homeTranslations;
+  private listTranslation: listTranslations = {} as listTranslations;
 
   constructor(private http: HttpClient) {
-    this.http.get<translations>('assets/i18n/en.json').subscribe(data => {
-      this.translationData.alertMessage = data.alertMessage;
-      this.translationData.translate = data.translate;
-      this.translationData.searchButton = data.searchButton;
-      this.translationData.searchPlaceholder = data.searchPlaceholder;
-      this.translationData.menuPlaces = data.menuPlaces;
-      this.translationData.menuNear = data.menuNear;
-      console.log("data loaded", this.translationData)
+    this.http.get<homeTranslations>('assets/i18n/home/en.json').subscribe(data => {
+      this.homeTranslations.alertMessage = data.alertMessage;
+      this.homeTranslations.translate = data.translate;
+      this.homeTranslations.searchButton = data.searchButton;
+      this.homeTranslations.searchPlaceholder = data.searchPlaceholder;
+      this.homeTranslations.menuPlaces = data.menuPlaces;
+      console.log("data loaded", this.homeTranslations)
+    });
+
+    this.http.get<listTranslations>('assets/i18n/list/en.json').subscribe(data => {
+      this.listTranslation.translate = data.translate;
+      this.listTranslation.distance = data.distance;
+      this.listTranslation.locationName = data.locationName;
+      console.log("data loaded", this.homeTranslations)
     });
   }
 
-  getData(): translations {
-    console.log("data loaded", this.translationData)
-    return this.translationData;
+  getHomeTranslations(): homeTranslations {
+    return this.homeTranslations;
+  }
+
+  getListTransaltions(): listTranslations {
+    return this.listTranslation;
   }
 }

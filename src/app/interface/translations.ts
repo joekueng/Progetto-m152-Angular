@@ -1,9 +1,14 @@
-export interface translations {
+export interface homeTranslations {
   alertMessage: string;
   translate: string;
   searchButton: string;
   searchPlaceholder: string;
   menuPlaces: string;
-  menuNear: string;
+}
+
+export interface listTranslations {
+  translate: string;
+  locationName: string;
+  distance: string;
 }
 
