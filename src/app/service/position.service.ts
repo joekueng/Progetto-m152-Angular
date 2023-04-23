@@ -47,18 +47,20 @@ export class positionService{
   }
 
   async getLocation(): Promise<any> {
-    console.log('get location');
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
+        const options = {
+          enableHighAccuracy: true
+        };
         navigator.geolocation.getCurrentPosition((position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
           this.cord = { lat, lon };
-          console.log(this.cord);
+          console.log("cordinate: ", this.cord);
           resolve(this.cord);
         }, (error) => {
           reject(error);
-        });
+        }, options);
       } else {
         reject('Geolocation is not supported by this browser.');
       }
