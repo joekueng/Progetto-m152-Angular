@@ -4,9 +4,11 @@
   </h1>
   <div *ngFor="let locations of locations, let i = index">
     <h3>
-      <a href="location/{{locations.location}}">{{locations.location}}</a>
+      <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
     </h3>
-    <h4>Distance: {{distance[i]}}</h4>
+    <div *ngIf="distance[i]">
+      <h4>Distance: {{distance[i]}} km</h4>
+    </div>
   </div>
 </div>
 
@@ -18,7 +20,10 @@
     <h3>
       <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
     </h3>
-    <h4>Distance: {{distance[i]}}</h4>
+    <div *ngIf="distance[i]">
+      <h4>Distance: {{distance[i]}} km</h4>
+    </div>
+
   </div>
 
 </div>
