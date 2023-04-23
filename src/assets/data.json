@@ -2,22 +2,22 @@
   {
     "location": "Biasca",
     "region": "ticino",
-    "lat": 46.123,
-    "lon": 8.123,
+    "lat": 46.361184,
+    "lon": 8.970937,
     "waypoints": [
       {
         "id": 1,
-        "name": "Punto 1",
-        "lat": 46.123,
-        "lon": 8.123,
-        "description": "Descrizione del punto 1",
+        "name": "Cascata Santa Petronilla",
+        "lat": 46.35328215446709,
+        "lon": 8.97758397155138,
+        "description": "",
         "img": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
       },
       {
         "id": 2,
-        "name": "Punto 2",
-        "lat": 46.123,
-        "lon": 8.123,
+        "name": "Casa Küng",
+        "lat": 46.363570208549994,
+        "lon": 8.963464722308554,
         "description": "Descrizione del punto 2",
         "img": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
       },
@@ -34,8 +34,8 @@
   {
     "location": "Lugano",
     "region": "TI",
-    "lat": 46.123,
-    "lon": 8.123,
+    "lat": 46.0036778,
+    "lon": 8.951052,
     "waypoints": [
       {
         "id": 4,

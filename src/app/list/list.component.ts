@@ -42,7 +42,7 @@ export class ListComponent implements OnInit, OnChanges {
         });
       }
     });
-
+    this.getPosition();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,31 +69,33 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   private setDistance(): void {
-
-    const intervalId = setInterval(() => {
-      if (this.location) {
-        if (this.location?.waypoints) {
-          console.log("setDistance"+this.location);
-          for (let i = 0; i < this.location.waypoints.length; i++) {
-            console.log("for")
-            this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location?.lon, this.positionCord.lat, this.positionCord.lon));
-          }
-          clearInterval(intervalId);
+    if (this.locations && this.location){
+      if (this.isNear){
+        console.log("location lenght " + this.locations.length);
+        for (let i = 0; i < this.locations.length; i++) {
+          console.log("for"+i);
+          console.log("lat" + this.locations[i].lat);
+          this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon));
         }
+      } else{
+        if (this.location?.waypoints) {
+          console.log("waypoints lenght " + this.location.waypoints.length);
+          for (let i = 0; i < this.location.waypoints.length; i++) {
+            console.log("for"+i);
+            console.log("lat" + this.location.waypoints[i].lat);
+            this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon));
+          }
+        }
+      }
+    }
         console.log("ciao" + this.distance[0])
-      }}, 1000);
-    //da aggiungere il cambiamento in tutti i punti, forse fatto ma sono stanco
   }
 
-  getDistance(latLocation: number | undefined, lonLocation: number | undefined): any {
+  getPosition(): any {
     setInterval(async () => {
       this.positionCord = await this.positionService.getLocation();
-      if (this.location) {
-        return this.positionService.getDistanceBetweenCoordinates(latLocation, lonLocation, this.positionCord.lat, this.positionCord.lon);
-      } else {
-        return 0;
-      }
-    }, 1000);
+      this.setDistance();
+    }, 2000);
   }
 
 
