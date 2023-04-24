@@ -2,9 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../service/position.service";
 import { getDistance } from 'geolib';
-// @ts-ignore
-import * as sharp from 'sharp';
-// @ts-ignore
 
 
 @Component({
@@ -65,23 +62,24 @@ export class DetailComponent implements OnInit {
     }, 1000);
   }
 
-//  async generateQRCodeImage(url: string): Promise<Buffer> {
+  /*
+  async generateQRCodeImage(url: string): Promise<Buffer> {
     // Crea il QR code
-  //  const qrCode = await qrcode.toDataURL(url, { errorCorrectionLevel: "H" });
+    const qrCode = await qrcode.toDataURL(url, { errorCorrectionLevel: "H" });
 
     // Crea il canvas
-    //const canvasInstance = canvas.createCanvas(300, 300);
-    //const ctx = canvasInstance.getContext("2d");
+    const canvasInstance = canvas.createCanvas(300, 300);
+    const ctx = canvasInstance.getContext("2d");
 
     // Carica il QR code nell'immagine
-  //  const qrCodeImage = await canvas.loadImage(qrCode);
+    const qrCodeImage = await canvas.loadImage(qrCode);
 
     // Disegna il QR code nell'immagine
-    //ctx.drawImage(qrCodeImage, 0, 0, 300, 300);
+    ctx.drawImage(qrCodeImage, 0, 0, 300, 300);
 
     // Ritorna l'immagine come buffer
-   // return canvasInstance.toBuffer();
- // }
+    return canvasInstance.toBuffer();
+  }*/
 
   /*generateQR() {
     console.log("generating QR code");
