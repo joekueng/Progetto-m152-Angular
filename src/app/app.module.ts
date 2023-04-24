@@ -6,17 +6,23 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
+import {FormsModule} from "@angular/forms";
+import { HttpClientModule} from "@angular/common/http";
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ListComponent,
-    DetailComponent
+    DetailComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
