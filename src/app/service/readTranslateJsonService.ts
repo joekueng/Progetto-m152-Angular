@@ -24,6 +24,7 @@ export class ReadTranslateJsonService {
       this.listTranslation.translate = data.translate;
       this.listTranslation.distance = data.distance;
       this.listTranslation.locationName = data.locationName;
+      this.listTranslation.positionNotFoundErrorMessage = data.positionNotFoundErrorMessage;
       console.log("data loaded", this.homeTranslations)
     });
   }

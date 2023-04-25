@@ -10,5 +10,6 @@ export interface listTranslations {
   translate: string;
   locationName: string;
   distance: string;
+  positionNotFoundErrorMessage: string;
 }
 

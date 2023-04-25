@@ -121,6 +121,6 @@ export class ListComponent implements OnInit, OnChanges {
     this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
     this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
     this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
-
+    this.translations.positionNotFoundErrorMessage = await this.translateService.getData(this.translations.positionNotFoundErrorMessage, lang);
   }
 }

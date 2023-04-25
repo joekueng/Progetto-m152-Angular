@@ -32,7 +32,7 @@
     </h3>
     <div class="distance">
       <h4 *ngIf="distance[i]">{{translations.distance}}{{distance[i]}} km</h4>
-      <h4 *ngIf="positionNotFound">could not retrieve distance</h4>
+      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
 
   </div>

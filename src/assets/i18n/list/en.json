@@ -1,5 +1,6 @@
 {
   "translate": "Translate",
   "locationName": "Position not found: ",
-  "distance": "Distance: "
+  "distance": "Distance: ",
+  "positionNotFoundErrorMessage": "Could not retrieve position"
 }
