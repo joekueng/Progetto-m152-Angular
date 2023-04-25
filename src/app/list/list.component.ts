@@ -25,6 +25,8 @@ export class ListComponent implements OnInit, OnChanges {
 
   translations: listTranslations = {} as listTranslations
 
+  positionNotFound: boolean = false;
+
   constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
@@ -48,6 +50,18 @@ export class ListComponent implements OnInit, OnChanges {
       }
     });
     this.getPosition();
+    this.positionNotFoundFunction();
+  }
+
+  positionNotFoundFunction() {
+    if (!this.positionNotFound) {
+      setTimeout(() => {
+        if (!this.distance[0]) {
+          this.positionNotFound = true;
+
+        }
+      }, 5000);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,26 +88,26 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   private setDistance(): void {
-    if (this.locations && this.location){
-      if (this.isNear){
+    if (this.locations && this.location) {
+      if (this.isNear) {
         console.log("location lenght " + this.locations.length);
         for (let i = 0; i < this.locations.length; i++) {
-          console.log("for"+i);
+          console.log("for" + i);
           console.log("lat" + this.locations[i].lat);
           this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon));
         }
-      } else{
+      } else {
         if (this.location?.waypoints) {
           console.log("waypoints lenght " + this.location.waypoints.length);
           for (let i = 0; i < this.location.waypoints.length; i++) {
-            console.log("for"+i);
+            console.log("for" + i);
             console.log("lat" + this.location.waypoints[i].lat);
             this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon));
           }
         }
       }
     }
-        console.log("ciao" + this.distance[0])
+    console.log("ciao" + this.distance[0])
   }
 
   getPosition(): any {
@@ -109,6 +123,4 @@ export class ListComponent implements OnInit, OnChanges {
     this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
 
   }
-
-
 }
