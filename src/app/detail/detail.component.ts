@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../service/position.service";
-import { getDistance } from 'geolib';
-// @ts-ignore
-import * as sharp from 'sharp';
 import * as qrcode from 'qrcode';
-import * as canvas from 'canvas';
 
 @Component({
   selector: 'app-detail',
@@ -34,11 +30,16 @@ export class DetailComponent implements OnInit {
   distance: number | undefined;
   displayedDistance = 0;
 
+  img: any;
+
   constructor(private route: ActivatedRoute , private positionService: positionService) {}
 
   async ngOnInit(){
-     this.URLParams = this.route.snapshot.url.slice(-2).map(segment => segment.path);
-    console.log(this.URLParams); // ["lugnao", "1"]
+    this.URLParams = this.route.params
+
+    console.log(this.URLParams.location); // {location: "lugano", id: "1"}
+
+    //this.URLParams = this.route.snapshot.url.slice(-2).map(segment => segment.path);
     console.log("getting your location: wait...");
     this.cord = await this.positionService.getLocation();
     console.log("location: ", this.cord);
@@ -65,30 +66,79 @@ export class DetailComponent implements OnInit {
     }, 1000);
   }
 
-  async generateQRCodeImage(url: string): Promise<Buffer> {
-    // Crea il QR code
-    const qrCode = await qrcode.toDataURL(url, { errorCorrectionLevel: "H" });
-
-    // Crea il canvas
-    const canvasInstance = canvas.createCanvas(300, 300);
-    const ctx = canvasInstance.getContext("2d");
-
-    // Carica il QR code nell'immagine
-    const qrCodeImage = await canvas.loadImage(qrCode);
-
-    // Disegna il QR code nell'immagine
-    ctx.drawImage(qrCodeImage, 0, 0, 300, 300);
-
-    // Ritorna l'immagine come buffer
-    return canvasInstance.toBuffer();
+  async generateQRCode(url: string) {
+    try {
+      const string = await qrcode.toString(url, { errorCorrectionLevel: 'H', margin: 1, color: { dark: '#000000FF', light: '#FFFFFFFF' } });
+      return string;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error generating QR code');
+    }
   }
 
-  /*generateQR() {
+   addSvgToImage(imageUrl: string, svgString: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.src = imageUrl;
+
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+      const svgUrl = URL.createObjectURL(svgBlob);
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(image, 0, 0);
+          const svgImage = new Image();
+          svgImage.src = svgUrl;
+
+          svgImage.onload = () => {
+            if (ctx && svgImage) {
+              ctx.drawImage(svgImage, image.width - svgImage.width, image.height - svgImage.height);
+              const outputImageUrl = canvas.toDataURL('image/png');
+              resolve(outputImageUrl);
+            } else {
+              reject('Error loading SVG');
+            }
+          };
+
+          svgImage.onerror = () => {
+            reject('Error loading SVG');
+          };
+        } else {
+          reject('Error creating canvas context');
+        }
+      };
+
+      image.onerror = () => {
+        reject('Error loading image');
+      };
+    });
+  }
+
+
+
+  async generateQR() {
     console.log("generating QR code");
-    let url = `http://localhost:4200/location/${this.URLParams[0]}/${this.URLParams[1]}`;
-    //this.addQRCodeToImage(url, `assets/testDetail/img.png`, `assets/images/${url}.png`);
-    console.log(url)
-  }*/
+    let url = `http://localhost:4200/location/${this.URLParams.location}/${this.URLParams.id}`;
+
+    let qrCode = await this.generateQRCode(url);
+
+    console.log(qrCode);
+
+    const imageUrl = 'assets/testDetail/img.png';
+
+    this.addSvgToImage(imageUrl, qrCode).then((outputImageUrl) => {
+      this.img = outputImageUrl // Output the URL of the output image
+      console.log(outputImageUrl);
+    }).catch((error) => {
+      console.error(error); // Handle any errors that occur
+    });
+
+  }
 
   /*async addQRCodeToImage(url: string, imagePath: string, outputPath: string): Promise<void> {
     // Generate QR code
