@@ -3,6 +3,9 @@ import {Locations} from "../interface/data";
 import {ReadjsonService} from "../service/readjson.service";
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../service/position.service";
+import {listTranslations} from "../interface/translations";
+import {TranslateService} from "../service/translate.service";
+import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
 
 @Component({
   selector: 'app-list',
@@ -20,11 +23,15 @@ export class ListComponent implements OnInit, OnChanges {
 
   distance: number[] = [];
 
+  translations: listTranslations = {} as listTranslations
 
-  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService) {
+  positionNotFound: boolean = false;
+
+  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
   async ngOnInit() {
+    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
@@ -43,6 +50,18 @@ export class ListComponent implements OnInit, OnChanges {
       }
     });
     this.getPosition();
+    this.positionNotFoundFunction();
+  }
+
+  positionNotFoundFunction() {
+    if (!this.positionNotFound) {
+      setTimeout(() => {
+        if (!this.distance[0]) {
+          this.positionNotFound = true;
+
+        }
+      }, 5000);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,26 +88,26 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   private setDistance(): void {
-    if (this.locations && this.location){
-      if (this.isNear){
+    if (this.locations && this.location) {
+      if (this.isNear) {
         console.log("location lenght " + this.locations.length);
         for (let i = 0; i < this.locations.length; i++) {
-          console.log("for"+i);
+          console.log("for" + i);
           console.log("lat" + this.locations[i].lat);
           this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon));
         }
-      } else{
+      } else {
         if (this.location?.waypoints) {
           console.log("waypoints lenght " + this.location.waypoints.length);
           for (let i = 0; i < this.location.waypoints.length; i++) {
-            console.log("for"+i);
+            console.log("for" + i);
             console.log("lat" + this.location.waypoints[i].lat);
             this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon));
           }
         }
       }
     }
-        console.log("ciao" + this.distance[0])
+    console.log("ciao" + this.distance[0])
   }
 
   getPosition(): any {
@@ -98,5 +117,10 @@ export class ListComponent implements OnInit, OnChanges {
     }, 2000);
   }
 
-
+  async switchLanguage(lang: string) {
+    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
+    this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
+    this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
+    this.translations.positionNotFoundErrorMessage = await this.translateService.getData(this.translations.positionNotFoundErrorMessage, lang);
+  }
 }

@@ -17,6 +17,7 @@
       <li (click)="switchLanguage('DE')"><a>DE</a></li>
       <li (click)="switchLanguage('FR')"><a>FR</a></li>
       <li (click)="switchLanguage('IT')"><a>IT</a></li>
+      <li (click)="switchLanguage('EN')"><a>EN</a></li>
     </ul>
   </div>
 
@@ -49,14 +50,6 @@
         </li>
 
         <li *ngFor="let luogo of locations" (click)="luogoSelezionato=luogo.location; cercaLuogo(luogo.location)">
-          {{luogo.location}}
-        </li>
-
-        <li class="menu-title">
-          <span>{{translations.menuNear}}</span>
-        </li>
-
-        <li *ngFor="let luogo of luoghiNear()">
           {{luogo.location}}
         </li>
 

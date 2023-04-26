@@ -1,27 +1,38 @@
-<div *ngIf="isNear">
+  <div class="dropdown dropdown-hover" id="translate">
+    <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100" id="translateLabel">{{translations.translate}}</label>
+    <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52" id="translateUl">
+      <li (click)="switchLanguage('DE')"><a>DE</a></li>
+      <li (click)="switchLanguage('FR')"><a>FR</a></li>
+      <li (click)="switchLanguage('IT')"><a>IT</a></li>
+      <li (click)="switchLanguage('EN')"><a>EN</a></li>
+    </ul>
+  </div>
+<div *ngIf="isNear" class="container">
   <h1>
-    Posizione {{locationParams}} non trovata
+    {{translations.locationName}}{{locationParams}}
   </h1>
-  <div *ngFor="let locations of locations, let i = index">
+  <div *ngFor="let locations of locations, let i = index" class="row">
     <h3>
       <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
     </h3>
-    <div *ngIf="distance[i]">
-      <h4>Distance: {{distance[i]}} km</h4>
+    <div>
+      <h4 *ngIf="distance[i]">{{translations.distance}}{{distance[i]}} km</h4>
+      <h4 *ngIf="positionNotFound">could not retrieve distance</h4>
     </div>
   </div>
 </div>
 
-<div *ngIf="!isNear && location && location.waypoints">
+<div *ngIf="!isNear && location && location.waypoints" class="container">
   <h1>
     {{location.location}}
   </h1>
-  <div *ngFor="let waypoinst of location.waypoints, let i = index">
+  <div *ngFor="let waypoinst of location.waypoints, let i = index" class="row">
     <h3>
       <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
     </h3>
-    <div *ngIf="distance[i]">
-      <h4>Distance: {{distance[i]}} km</h4>
+    <div class="distance">
+      <h4 *ngIf="distance[i]">{{translations.distance}}{{distance[i]}} km</h4>
+      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
 
   </div>

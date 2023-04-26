@@ -1,0 +1,39 @@
+h1 {
+  font-size: 75px;
+  padding-left: 0;
+}
+
+h3 {
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+h4 {
+  color: dimgray;
+}
+
+.distance {
+  font-size: 20px;
+  border-bottom: 2px solid #E9E92D;
+  width: 35%;
+  padding-bottom: 20px;
+  height: 60px;
+}
+
+.row {
+}
+
+.container {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#translate{
+  position: absolute;
+  right: 0;
+}
+#translateUl{
+  position: absolute;
+  right: 0;
+}
