@@ -76,7 +76,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
-   addSvgToImage(imageUrl: string, svgString: string): Promise<string> {
+  addSvgToImage(imageUrl: string, svgString: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const image = new Image();
       image.src = imageUrl;
@@ -97,7 +97,9 @@ export class DetailComponent implements OnInit {
 
           svgImage.onload = () => {
             if (ctx && svgImage) {
-              ctx.drawImage(svgImage, image.width - svgImage.width, image.height - svgImage.height);
+              const x = image.width - (svgImage.width * 0.5 + 5);
+              const y = image.height - (svgImage.height * 0.5 + 5);
+              ctx.drawImage(svgImage, x, y, svgImage.width * 0.5, svgImage.height * 0.5);
               const outputImageUrl = canvas.toDataURL('image/png');
               resolve(outputImageUrl);
             } else {
@@ -121,9 +123,12 @@ export class DetailComponent implements OnInit {
 
 
 
+
+
   async generateQR() {
     console.log("generating QR code");
-    let url = `http://localhost:4200/location/${this.URLParams.location}/${this.URLParams.id}`;
+    console.log(this.URLParams.value);
+    let url = `http://localhost:4200/location/${this.URLParams.value.location}/${this.URLParams.value.id}`;
 
     let qrCode = await this.generateQRCode(url);
 
