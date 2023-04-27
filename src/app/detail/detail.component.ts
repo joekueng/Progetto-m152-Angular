@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../service/position.service";
 import * as qrcode from 'qrcode';
@@ -9,6 +9,7 @@ import * as qrcode from 'qrcode';
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+  @ViewChild('myModal', { static: true }) myModal!: ElementRef<HTMLInputElement>;
   private location: string | undefined;
   private id: number | undefined;
 
@@ -16,9 +17,9 @@ export class DetailComponent implements OnInit {
 
   test = {
     name: 'SPAI',
-    cordinates: '46.15187077044123,8.799829438699243',
-    lat: 46.15187077044123,
-    lng: 8.799829438699243,
+    cordinates: '46.16980727184211, 8.795563727809393',
+    lat: 46.16980727184211,
+    lng: 8.795563727809393,
     description: "Lorem ipsum"
   }
 
@@ -58,6 +59,9 @@ export class DetailComponent implements OnInit {
         }
         if (this.distance < 0.05) {
           this.showNav = false;
+          this.generateQR()
+          // implement this nex line in angular ts
+          this.myModal.nativeElement.checked = true;
           clearInterval(intervalID);
         }
       } else {
@@ -97,9 +101,9 @@ export class DetailComponent implements OnInit {
 
           svgImage.onload = () => {
             if (ctx && svgImage) {
-              const x = image.width - (svgImage.width * 0.5 + 5);
-              const y = image.height - (svgImage.height * 0.5 + 5);
-              ctx.drawImage(svgImage, x, y, svgImage.width * 0.5, svgImage.height * 0.5);
+              const x = image.width - (image.width * 0.2 + 5);
+              const y = image.height - (image.width * 0.2 + 5);
+              ctx.drawImage(svgImage, x, y, image.width * 0.2, image.width * 0.2);
               const outputImageUrl = canvas.toDataURL('image/png');
               resolve(outputImageUrl);
             } else {
@@ -134,7 +138,7 @@ export class DetailComponent implements OnInit {
 
     console.log(qrCode);
 
-    const imageUrl = 'assets/testDetail/img.png';
+    const imageUrl = 'assets/testDetail/img.jpg';
 
     this.addSvgToImage(imageUrl, qrCode).then((outputImageUrl) => {
       this.img = outputImageUrl // Output the URL of the output image
@@ -144,6 +148,17 @@ export class DetailComponent implements OnInit {
     });
 
   }
+
+  public downloadImage(): void {
+    const link = document.createElement('a');
+    link.download = this.test.name;
+    link.href = this.img;
+    link.click();
+  }
+
+
+
+
 
   /*async addQRCodeToImage(url: string, imagePath: string, outputPath: string): Promise<void> {
     // Generate QR code
