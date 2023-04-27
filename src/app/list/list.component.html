@@ -1,12 +1,13 @@
-  <div class="dropdown dropdown-hover" id="translate">
-    <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100" id="translateLabel">{{translations.translate}}</label>
-    <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52" id="translateUl">
-      <li (click)="switchLanguage('DE')"><a>DE</a></li>
-      <li (click)="switchLanguage('FR')"><a>FR</a></li>
-      <li (click)="switchLanguage('IT')"><a>IT</a></li>
-      <li (click)="switchLanguage('EN')"><a>EN</a></li>
-    </ul>
-  </div>
+<div class="dropdown dropdown-hover" id="translate">
+  <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100"
+         id="translateLabel">{{translations.translate}}</label>
+  <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52" id="translateUl">
+    <li (click)="switchLanguage('DE')"><a>DE</a></li>
+    <li (click)="switchLanguage('FR')"><a>FR</a></li>
+    <li (click)="switchLanguage('IT')"><a>IT</a></li>
+    <li (click)="switchLanguage('EN')"><a>EN</a></li>
+  </ul>
+</div>
 <div *ngIf="isNear" class="container">
   <h1>
     {{translations.locationName}}{{locationParams}}
@@ -16,8 +17,8 @@
       <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
     </h3>
     <div>
-      <h4 *ngIf="distance[i]">{{translations.distance}}{{distance[i]}} km</h4>
-      <h4 *ngIf="positionNotFound">could not retrieve distance</h4>
+      <h4 *ngIf="distance[i] &&! positionNotFound">{{translations.distance}}{{distance[i]}} km</h4>
+      <h4 *ngIf="positionNotFound && !distance[i]">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
   </div>
 </div>
@@ -31,8 +32,8 @@
       <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
     </h3>
     <div class="distance">
-      <h4 *ngIf="distance[i]">{{translations.distance}}{{distance[i]}} km</h4>
-      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
+      <h4 *ngIf="distance[i] && !positionNotFound">{{translations.distance}}{{distance[i]}} km</h4>
+      <h4 *ngIf="positionNotFound && !distance[i]">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
 
   </div>
