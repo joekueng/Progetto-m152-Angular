@@ -23,28 +23,40 @@
   </div>-->
 <div>
   <div class="grid grid-cols-2 gap-4">
-    <div class="p-4">
-      <h1 class="text-xl font-bold mb-2">{{test.name}}</h1>
-      <p class="text-gray-700">{{test.description}}</p>
-      <div class="mb-4">
-        <p class="text-lg font-medium">Distanza: {{distance === undefined ? '...' : distance}} Km</p>
+    <div class="card w-96 bg-base-100 shadow-xl m-4">
+      <figure><img src="assets/testDetail/img.png" [alt]="test.name"/></figure>
+      <div class="card-body">
+        <div class="flex justify-between items-center">
+          <h1 class="card-title font-extrabold">{{ test.name }}</h1>
+          <div class="font-extrabold text-end text-blue-500 flex items-center">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="19.9219" height="19.9316" *ngIf="!distance" class="mx-1">
+              <g>
+                <rect height="19.9316" opacity="0" width="19.9219" x="0" y="0"/>
+                <path d="M4.85352 11.0156L9.95117 11.0156C10.332 11.0156 10.6348 10.7227 10.6348 10.332L10.6348 3.75C10.6348 3.36914 10.332 3.07617 9.95117 3.07617C9.57031 3.07617 9.27734 3.36914 9.27734 3.75L9.27734 9.6582L4.85352 9.6582C4.46289 9.6582 4.16992 9.95117 4.16992 10.332C4.16992 10.7227 4.46289 11.0156 4.85352 11.0156ZM9.96094 19.9219C15.4102 19.9219 19.9219 15.4004 19.9219 9.96094C19.9219 4.51172 15.4004 0 9.95117 0C4.51172 0 0 4.51172 0 9.96094C0 15.4004 4.52148 19.9219 9.96094 19.9219ZM9.96094 18.2617C5.35156 18.2617 1.66992 14.5703 1.66992 9.96094C1.66992 5.35156 5.3418 1.66016 9.95117 1.66016C14.5605 1.66016 18.2617 5.35156 18.2617 9.96094C18.2617 14.5703 14.5703 18.2617 9.96094 18.2617Z" fill="currentcolor" fill-opacity="0.85"/>
+              </g>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.44 18.4" width="18" height="18" fill="currentColor"
+                 class="mx-2" *ngIf="distance">
+              <path
+                d="M1.29,9.83l7.12,0c0.15,0,0.27,0.12,0.27,0.27v6.06c0,1.46,1.76,2.15,2.42,0.81l7.22-15.54c0.66-1.34-0.49-2.52-1.85-2.08L1.08,7.49C-0.14,8.06,0.1,9.82,1.29,9.83z"/>
+            </svg>
+            {{distance === undefined ? '' : distance}} Km
+          </div>
+        </div>
+        <p>{{ test.description }}</p>
       </div>
     </div>
 
-    <div class="p-4">
-      <img class="w-full" src="assets/testDetail/img.png" alt="image">
-    </div>
-
-    <div class="p-4 col-start-1 col-span-2 lg:col-start-2 lg:col-span-1">
+    <div class="nav p-4 gr col-start-2">
       <div>
-        <iframe class="w-full" height="300" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" [src]='embed | safe' allowfullscreen></iframe>
+        <iframe class="w-full" height="300" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade"
+                [src]='embed | safe' allowfullscreen></iframe>
       </div>
     </div>
   </div>
 
 
-
-<!-- Put this part before </body> tag -->
+  <!-- Put this part before </body> tag -->
   <input type="checkbox" id="my-modal-6" class="modal-toggle" #myModal/>
 
   <div class="modal modal-bottom sm:modal-middle" *ngIf="img">
@@ -52,7 +64,7 @@
       <h3 class="font-bold text-lg">Congratulations you have discovred {{ test.name }}!</h3>
       <img class="xl:max-w-md max-h-screen py-4 m-auto" [src]="img" *ngIf="img">
       <div class="modal-action">
-        <label for="my-modal-6" class="btn bg-white hover:bg-blue-700" (click)="downloadImage()">
+        <label for="my-modal-6" class="btn bg-white hover:bg-blue-400" (click)="downloadImage()">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                width="17.334" height="23.4863">
             <g>

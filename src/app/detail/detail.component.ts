@@ -18,8 +18,8 @@ export class DetailComponent implements OnInit {
   test = {
     name: 'SPAI',
     cordinates: '50.16980727184211, 10.795563727809393',
-    lat: 50.16980727184211,
-    lng: 9.795563727809393,
+    lat: 46.16243997917877,
+    lng: 8.787662959380318,
     description: "Lorem ipsum"
   }
 
