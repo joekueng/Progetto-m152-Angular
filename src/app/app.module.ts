@@ -9,13 +9,14 @@ import { DetailComponent } from './detail/detail.component';
 import {FormsModule} from "@angular/forms";
 import { HttpClientModule} from "@angular/common/http";
 import { SafePipe } from './pipes/safe.pipe';
-
+import { ManagementComponent } from './management/management.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ListComponent,
     DetailComponent,
+    ManagementComponent,
     SafePipe,
   ],
   imports: [
