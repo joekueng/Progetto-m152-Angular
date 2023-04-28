@@ -36,7 +36,7 @@
         <input type="text" id="name" name="name" [(ngModel)]="newUser.name">
       </div>
       <div>
-        <label for="username">Email:</label>
+        <label for="username">Username:</label>
         <input type="text" id="username" name="username" [(ngModel)]="newUser.username">
       </div>
       <div>
@@ -135,32 +135,32 @@
     <form (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.image, newWaypoint.locationName)">
       <div>
         <label for="waypointName">Waypoint:</label>
-        <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newLocation.location">
+        <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newWaypoint.name">
       </div>
 
       <div>
         <label for="waypointLat">Latitude:</label>
-        <input type="text" id="waypointLat" name="waypointLat" [(ngModel)]="newLocation.location">
+        <input type="text" id="waypointLat" name="waypointLat" [(ngModel)]="newWaypoint.lat">
       </div>
 
       <div>
         <label for="waypointLon">Longitude:</label>
-        <input type="text" id="waypointLon" name="waypointLon" [(ngModel)]="newLocation.location">
+        <input type="text" id="waypointLon" name="waypointLon" [(ngModel)]="newWaypoint.lon">
       </div>
 
       <div>
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" [(ngModel)]="newLocation.location">
+        <input type="text" id="description" name="description" [(ngModel)]="newWaypoint.description">
       </div>
 
       <div>
         <label for="image">Image (Base64):</label>
-        <input type="text" id="image" name="image" [(ngModel)]="newLocation.location">
+        <input type="text" id="image" name="image" [(ngModel)]="newWaypoint.image">
       </div>
 
       <div>
         <label for="locationName">Location Name:</label>
-        <select [(ngModel)]="newWaypoint.locationName" id="locationName">
+        <select [(ngModel)]="newWaypoint.locationName" id="locationName" name="locationName">
           <option *ngFor="let location of locationList" [value]="location.location">{{ location.location }}</option>
         </select>
       </div>

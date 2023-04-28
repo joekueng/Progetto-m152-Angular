@@ -79,18 +79,24 @@ export class ManagementComponent implements OnInit, AfterViewInit, OnDestroy {
     const newUser: User = {id, name, username: username, password: password};
     this.userList.push(newUser);
     this.showUserForm = false;
+    this.newUser = {id: 0, name: '', username: '', password: ''};
   }
 
   addLocation(name: string, region: string, lat: string, lon: string) {
     const id = this.locationList.length + 1;
     const newLocation: Location = {id, location: name, region: region, lat: lat, lon: lon};
     this.locationList.push(newLocation);
+    this.showLocationForm = false;
+    this.newLocation = {id: 0, location: '', region: '', lat: '', lon: ''};
   }
 
   addWaypoint(name: string, lat: string, lon: string, description: string, image: string, locationName: string) {
+    console.log(locationName)
     const id = this.waypointList.length + 1;
     const newWaypoint: Waypoint = {id, name, lat: lat, lon: lon, description: description, image: image, locationName: locationName};
     this.waypointList.push(newWaypoint);
+    this.showWaypointForm = false;
+    this.newWaypoint = {id: 0, name: '', lat: '', lon: '', description: '', image: '', locationName: ''};
   }
 
   openUserForm() {
