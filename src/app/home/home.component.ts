@@ -3,10 +3,9 @@ import {BehaviorSubject, distinctUntilChanged, fromEvent, Observable, Subject, S
 import {ReadjsonService} from "../service/readjson.service";
 import {Locations} from "../interface/data";
 import {Router} from "@angular/router";
-import { TranslateService } from '../service/translate.service';
+import {TranslateService} from '../service/translate.service';
 import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
 import {homeTranslations} from "../interface/translations";
-
 
 
 @Component({
@@ -14,7 +13,9 @@ import {homeTranslations} from "../interface/translations";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
+
   @ViewChild('myInput') myInput?: ElementRef;
 
   public locationsPopup: Subject<Locations[]> = new Subject<Locations[]>()
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private readjsonService: ReadjsonService, private router: Router, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
   }
 
+  // Initializes the component and loads translations and locations
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getHomeTranslations();
     console.log("translations loaded", this.translations)
@@ -55,6 +57,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+  //This method sets up event listeners for input field changes to filter locations.
   ngAfterViewInit() {
 
     if (this.locations != undefined) {
@@ -75,21 +78,30 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  // Filters locations based on user input and shows suggestions
   cercaLuogo(locations: string) {
+    // Delay for 1 second
     setTimeout(() => {
     }, 1000);
+    // Filter locations and store in a variable
     this.locationsFiltrati = this.locations.filter((l: Locations) => l.location.toLowerCase().startsWith(locations.toLowerCase()));
     if (this.locationsFiltrati.length > 0) {
+      // Show suggestion if at least one location is found
       this.suggerimentoAttivo = true;
       this.suggerimento = this.locationsFiltrati[0].location;
+      // Find the difference between user input and suggestion
       this.completamento = stringDifference(locations, this.suggerimento);
     } else {
+      // Hide suggestion if no location is found
       this.suggerimentoAttivo = false;
       this.suggerimento = '';
     }
+    // Focus on input field
     this.myInput?.nativeElement.focus();
   }
 
+  // Selects the suggestion if the user presses "Tab" or "Enter" keys and if there is an active suggestion.
+  // The selected location is then assigned to the "luogoSelezionato" variable, and the suggestion is cleared.
   selezionaSuggerimento(event: KeyboardEvent) {
     if (event.key === 'Tab' || event.key === 'Enter') {
       if (this.suggerimentoAttivo) {
@@ -100,11 +112,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
-  luoghiNear() {
-    return null;
-  }
-
+//Method to handle search functionality.
+// If the selected location is empty, an alert is displayed for 3 seconds.
+// Otherwise, the selected location is encoded and used to navigate to the corresponding location page using Angular router.
   onSearch(): void {
     if (this.luogoSelezionato === '') {
       this.allert = true;
@@ -118,6 +128,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // This async function is used to switch the language of the application.
+  // It takes a language code as input and updates the translations object with new translations for various UI elements.
+  // The getData() method of the translateService is called with the current translations and the new language code.
+  // The translateService returns the translated data which is then assigned to the corresponding properties of the translations object.
   async switchLanguage(lang: string) {
     this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
     this.translations.menuPlaces = await this.translateService.getData(this.translations.menuPlaces, lang);
@@ -128,6 +142,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 }
 
 
+/**
+ * Returns the difference between two strings, by comparing their characters one by one.
+ * @param str1 - First string to compare
+ * @param str2 - Second string to compare
+ * @returns The difference between the two strings
+ */
 function stringDifference(str1: string, str2: string): string {
   let diff = '';
   for (let i = 0; i < str2.length; i++) {
