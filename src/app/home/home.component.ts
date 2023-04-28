@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BehaviorSubject, distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
-import {Locations} from "../interface/data";
 import {Router} from "@angular/router";
 import {TranslateService} from '../service/translate.service';
 import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
 import {homeTranslations} from "../interface/translations";
+import {LocationService} from "../service/location.service";
+import {LocationEntity} from "../interface/LocationEntity";
 
 
 @Component({
@@ -18,13 +19,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('myInput') myInput?: ElementRef;
 
-  public locationsPopup: Subject<Locations[]> = new Subject<Locations[]>()
+  public locationsPopup: Subject<LocationEntity[]> = new Subject<LocationEntity[]>()
 
   subs: Subscription[] = [];
   backgroundColor: string | undefined;
-  locations: Locations[] = [];
+  locations: LocationEntity[] = [];
   allert: boolean = false;
-  locationsFiltrati: Locations[] = [];
+  locationsFiltrati: LocationEntity[] = [];
   luogoSelezionato: string = '';
   suggerimentoAttivo: boolean = false;
   suggerimento: string = '';
@@ -32,22 +33,24 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   translations: homeTranslations = {} as homeTranslations;
 
 
-  constructor(private readjsonService: ReadjsonService, private router: Router, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
+  constructor(
+    private readjsonService: ReadjsonService,
+    private router: Router,
+    private translateService: TranslateService,
+    private readTranslationJsonService: ReadTranslateJsonService,
+    private locationService: LocationService
+  ){
   }
 
   // Initializes the component and loads translations and locations
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getHomeTranslations();
     console.log("translations loaded", this.translations)
-
-    this.readjsonService.getLocations().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        this.locations.push(<Locations>data[i])
-        console.log(data[i])
-      }
-    });
-
-
+    this.locationService.getLocations()
+      .subscribe(locations => {
+        this.locations = locations;
+        console.log("locations loaded", this.locations)
+      });
     this.allert = false;
     console.log("home init");
   }
@@ -84,7 +87,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
     }, 1000);
     // Filter locations and store in a variable
-    this.locationsFiltrati = this.locations.filter((l: Locations) => l.location.toLowerCase().startsWith(locations.toLowerCase()));
+    this.locationsFiltrati = this.locations.filter((l: LocationEntity) => l.location.toLowerCase().startsWith(locations.toLowerCase()));
     if (this.locationsFiltrati.length > 0) {
       // Show suggestion if at least one location is found
       this.suggerimentoAttivo = true;
