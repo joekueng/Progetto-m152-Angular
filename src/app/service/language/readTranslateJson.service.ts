@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {homeTranslations} from "../interface/translations";
-import {listTranslations} from "../interface/translations";
+import {homeTranslations} from "../../interface/translations";
+import {listTranslations} from "../../interface/translations";
 
 @Injectable({
   providedIn: 'root'
