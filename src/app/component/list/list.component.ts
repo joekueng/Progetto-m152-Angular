@@ -1,11 +1,13 @@
 import {Component, OnInit, SimpleChanges, OnChanges} from '@angular/core';
-import {Locations} from "../../interface/data";
-import {ReadjsonService} from "../../service/readjson.service";
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {listTranslations} from "../../interface/translations";
 import {TranslateService} from "../../service/language/translate.service";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
+import {LocationService} from "../../service/http/location.service";
+import {LocationEntity} from "../../interface/LocationEntity";
+import {WaypointsEntity} from "../../interface/WaypointsEntity";
+import {WaypointService} from "../../service/http/waypoint.service";
 
 @Component({
   selector: 'app-list',
@@ -14,8 +16,10 @@ import {ReadTranslateJsonService} from "../../service/language/readTranslateJson
 })
 export class ListComponent implements OnInit, OnChanges {
   locationParams: string | undefined
-  locations: Partial<Locations>[] | undefined;
-  location: Partial<Locations> | undefined;
+  locations: LocationEntity[] | undefined;
+  location: LocationEntity | undefined;
+
+  waypoints: WaypointsEntity[] | undefined;
 
   positionCord: any;
 
@@ -27,7 +31,14 @@ export class ListComponent implements OnInit, OnChanges {
 
   positionNotFound: boolean = false;
 
-  constructor(private route: ActivatedRoute, private readjsonService: ReadjsonService, private positionService: positionService, private translateService: TranslateService, private readTranslationJsonService: ReadTranslateJsonService) {
+  constructor(
+    private route: ActivatedRoute,
+    private positionService: positionService,
+    private translateService: TranslateService,
+    private readTranslationJsonService: ReadTranslateJsonService,
+    private locationService: LocationService,
+    private waypointService: WaypointService,
+  ) {
   }
 
   async ngOnInit() {
@@ -35,27 +46,36 @@ export class ListComponent implements OnInit, OnChanges {
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
-    this.readjsonService.getLocations().subscribe(locations => {
-      this.locations = locations;
-      if (this.locationParams != null) {
-        this.readjsonService.getLocation(this.locationParams ?? "").subscribe(async location => {
-          this.location = location;
-          this.readjsonService.getWaypoints(this.locationParams ?? "").subscribe(waypoints => {
-            if (this.location) {
-              this.location.waypoints = waypoints ?? []
-            }
-          });
-          await this.checkDataPopulated();
+    this.locationService.getLocation(this.locationParams ?? "").subscribe(location => {
+      this.location = location;
+      console.log("location", this.location)
+      if (this.location != null) {
+        this.isNear = false;
+        this.waypointService.getWaypoints(this.location.location).subscribe(waypoints => {
+          this.waypoints = waypoints;
+          console.log("waypoints", this.waypoints)
+          this.setDistance()
+        });
+      } else {
+        this.locationService.getLocations().subscribe(locations => {
+          this.locations = locations;
+          console.log("locations", this.locations)
+          this.setDistance()
         });
       }
     });
     this.getPosition();
-    this.positionNotFoundFunction();
+    //this.positionNotFoundFunction();
   }
 
+/*
   positionNotFoundFunction() {
     if (!this.positionNotFound) {
       setTimeout(() => {
+        if (this.waypoints||this.locations) {
+          if (!this.waypoints[0].distance||!this.locations[0].distance) {
+          }
+        }
         if (!this.distance[0]) {
           this.positionNotFound = true;
 
@@ -63,7 +83,7 @@ export class ListComponent implements OnInit, OnChanges {
       }, 5000);
     }
   }
-
+*/
   ngOnChanges(changes: SimpleChanges) {
     if (changes['positionCord'] && (changes['positionCord'])) {
       console.log("onChanges")
@@ -88,26 +108,25 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   private setDistance(): void {
-    if (this.locations && this.location) {
-      if (this.isNear) {
+    if (this.waypoints){
+      console.log("setDistance")
+      console.log("waypoints lenght " + this.waypoints.length);
+      for (let i = 0; i < this.waypoints.length; i++) {
+        console.log("for" + i);
+        console.log("lat" + this.waypoints[i].lat);
+        this.waypoints[i].distance = this.positionService.getDistanceBetweenCoordinates(this.waypoints[i].lat, this.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon);
+      }
+    } else{
+      if (this.locations && this.location) {
+        console.log("setDistance")
         console.log("location lenght " + this.locations.length);
         for (let i = 0; i < this.locations.length; i++) {
           console.log("for" + i);
           console.log("lat" + this.locations[i].lat);
-          this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon));
-        }
-      } else {
-        if (this.location?.waypoints) {
-          console.log("waypoints lenght " + this.location.waypoints.length);
-          for (let i = 0; i < this.location.waypoints.length; i++) {
-            console.log("for" + i);
-            console.log("lat" + this.location.waypoints[i].lat);
-            this.distance.push(this.positionService.getDistanceBetweenCoordinates(this.location.waypoints[i].lat, this.location.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon));
-          }
+          this.locations[i].distance = this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon);
         }
       }
     }
-    console.log("ciao" + this.distance[0])
   }
 
   getPosition(): any {
