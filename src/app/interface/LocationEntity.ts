@@ -3,4 +3,5 @@ export interface LocationEntity {
   region: string;
   lat: number;
   lon: number;
+  distance?: number;
 }

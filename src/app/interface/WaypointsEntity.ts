@@ -6,4 +6,5 @@ export interface WaypointsEntity {
   description: string;
   img: string;
   locationName: string;
+  distance?: number;
 }
