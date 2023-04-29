@@ -2,10 +2,10 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import {BehaviorSubject, distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
 import {Router} from "@angular/router";
-import {TranslateService} from '../service/translate.service';
-import {ReadTranslateJsonService} from "../service/readTranslateJsonService";
+import {TranslateService} from '../service/language/translate.service';
+import {ReadTranslateJsonService} from "../service/language/readTranslateJson.service";
 import {homeTranslations} from "../interface/translations";
-import {LocationService} from "../service/location.service";
+import {LocationService} from "../service/http/location.service";
 import {LocationEntity} from "../interface/LocationEntity";
 
 
