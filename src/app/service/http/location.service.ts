@@ -2,8 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {LocationEntity} from "../../interface/LocationEntity";
 
-const BASE_URL = "localhost:8080/progetto152/";
-const LOCATION = BASE_URL + "location/";
+const BASE_URL = "progetto152";
+const LOCATION = BASE_URL + "/location";
 
 
 @Injectable({
@@ -21,7 +21,7 @@ export class LocationService {
   }
 
   getLocation(location: string) {
-    return this.http.get<LocationEntity>(LOCATION + location);
+    return this.http.get<LocationEntity>(LOCATION + "/" + location);
   }
 
   createLocation(location: LocationEntity) {

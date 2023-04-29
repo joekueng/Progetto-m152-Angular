@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
+import {catchError, throwError} from "rxjs";
 
-const BASE_URL = "localhost:8080/progetto152/";
-const WAYPOINT = BASE_URL + "waypoint/";
+const BASE_URL = "progetto152";
+const WAYPOINT = BASE_URL + "/waypoint";
 const GET_WAYPOINT_BY_ID = WAYPOINT + "id/";
 
 
@@ -11,18 +12,19 @@ const GET_WAYPOINT_BY_ID = WAYPOINT + "id/";
   providedIn: 'root',
 })
 
-export class LocationService {
+export class WaypointService {
   constructor(
     private http: HttpClient,
   ) {
   }
 
   getWaypoints(location: string) {
-    return this.http.get<WaypointsEntity[]>(WAYPOINT + location);
+    return this.http.get<WaypointsEntity[]>(WAYPOINT + "/" + location)
+
   }
 
   getWaypoint(location: string, id: number) {
-    return this.http.get<WaypointsEntity>(WAYPOINT + location + "/" + id);
+    return this.http.get<WaypointsEntity>(WAYPOINT + "/" + location + "/" + id);
   }
 
   getWaypointById(id: number) {
@@ -34,7 +36,7 @@ export class LocationService {
   }
 
   updateWaypoint(waypoint: WaypointsEntity, id: number) {
-    return this.http.put<WaypointsEntity>(WAYPOINT + id, waypoint);
+    return this.http.put<WaypointsEntity>(WAYPOINT + "/" + id, waypoint);
   }
 
   deleteWaypoint(id: number) {

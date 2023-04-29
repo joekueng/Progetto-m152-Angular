@@ -4,8 +4,8 @@ import {catchError, Observable} from "rxjs";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
 
-const BASE_URL = "localhost:8080/progetto152/";
-const WAYPOINT_VISITED = BASE_URL + "waypoint/visited/";
+const BASE_URL = "progetto152";
+const WAYPOINT_VISITED = BASE_URL + "/waypoint/visited/";
 const GET_WAYPOINT_BY_USER = WAYPOINT_VISITED + "USER/";
 
 
@@ -13,7 +13,7 @@ const GET_WAYPOINT_BY_USER = WAYPOINT_VISITED + "USER/";
   providedIn: 'root',
 })
 
-export class LocationService {
+export class WaypointVisitedService {
   constructor(
     private http: HttpClient,
   ) {
