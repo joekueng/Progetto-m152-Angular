@@ -1,11 +1,11 @@
 import {Component, OnInit, SimpleChanges, OnChanges} from '@angular/core';
-import {Locations} from "../interface/data";
-import {ReadjsonService} from "../service/readjson.service";
+import {Locations} from "../../interface/data";
+import {ReadjsonService} from "../../service/readjson.service";
 import {ActivatedRoute} from "@angular/router";
-import {positionService} from "../service/position.service";
-import {listTranslations} from "../interface/translations";
-import {TranslateService} from "../service/language/translate.service";
-import {ReadTranslateJsonService} from "../service/language/readTranslateJson.service";
+import {positionService} from "../../service/position.service";
+import {listTranslations} from "../../interface/translations";
+import {TranslateService} from "../../service/language/translate.service";
+import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
 
 @Component({
   selector: 'app-list',
