@@ -25,7 +25,6 @@ export class ListComponent implements OnInit, OnChanges {
 
   isNear: boolean = true;
 
-  distance: number[] = [];
 
   translations: listTranslations = {} as listTranslations
 
@@ -48,42 +47,52 @@ export class ListComponent implements OnInit, OnChanges {
     });
     this.locationService.getLocation(this.locationParams ?? "").subscribe(location => {
       this.location = location;
-      console.log("location", this.location)
-      if (this.location != null) {
+      if (this.location.location != null || this.location.location != undefined) {
         this.isNear = false;
         this.waypointService.getWaypoints(this.location.location).subscribe(waypoints => {
           this.waypoints = waypoints;
           console.log("waypoints", this.waypoints)
           this.setDistance()
         });
-      } else {
-        this.locationService.getLocations().subscribe(locations => {
-          this.locations = locations;
-          console.log("locations", this.locations)
-          this.setDistance()
-        });
       }
+
     });
+    this.locationService.getLocations().subscribe(locations => {
+      this.locations = locations;
+      console.log("locations", this.locations)
+      this.setDistance()
+    });
+
     this.getPosition();
-    //this.positionNotFoundFunction();
+    this.positionNotFoundFunction();
   }
 
-/*
+
   positionNotFoundFunction() {
     if (!this.positionNotFound) {
       setTimeout(() => {
-        if (this.waypoints||this.locations) {
-          if (!this.waypoints[0].distance||!this.locations[0].distance) {
-          }
-        }
-        if (!this.distance[0]) {
+        if (!this.positionCord) {
           this.positionNotFound = true;
-
+        } else {
+          if (this.waypoints) {
+            if (!this.waypoints[0].distance) {
+              this.positionNotFound = true;
+            } else {
+              this.positionNotFound = false;
+            }
+          }
+          if (this.locations) {
+            if (!this.locations[0].distance) {
+              this.positionNotFound = true;
+            } else {
+              this.positionNotFound = false;
+            }
+          }
         }
       }, 5000);
     }
   }
-*/
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['positionCord'] && (changes['positionCord'])) {
       console.log("onChanges")
@@ -108,21 +117,13 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   private setDistance(): void {
-    if (this.waypoints){
-      console.log("setDistance")
-      console.log("waypoints lenght " + this.waypoints.length);
+    if (this.waypoints) {
       for (let i = 0; i < this.waypoints.length; i++) {
-        console.log("for" + i);
-        console.log("lat" + this.waypoints[i].lat);
         this.waypoints[i].distance = this.positionService.getDistanceBetweenCoordinates(this.waypoints[i].lat, this.waypoints[i].lon, this.positionCord.lat, this.positionCord.lon);
       }
-    } else{
-      if (this.locations && this.location) {
-        console.log("setDistance")
-        console.log("location lenght " + this.locations.length);
+    } else {
+      if (this.locations) {
         for (let i = 0; i < this.locations.length; i++) {
-          console.log("for" + i);
-          console.log("lat" + this.locations[i].lat);
           this.locations[i].distance = this.positionService.getDistanceBetweenCoordinates(this.locations[i].lat, this.locations[i].lon, this.positionCord.lat, this.positionCord.lon);
         }
       }
