@@ -4,8 +4,8 @@ import {Cord} from "../interface/cord";
 @Injectable({
   providedIn: 'root'
 })
-export class positionService{
-  cord: Cord = { lat: 0, lon: 0 };
+export class positionService {
+  cord: Cord = {lat: 0, lon: 0};
 
   getDistanceBetweenCoordinates(lat1: number | undefined, lon1: number | undefined, lat2: number, lon2: number): number {
     if (lat1 === undefined || lon1 === undefined) {
@@ -37,7 +37,7 @@ export class positionService{
         navigator.geolocation.getCurrentPosition((position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
-          this.cord = { lat, lon };
+          this.cord = {lat, lon};
           console.log("cordinate: ", this.cord);
           resolve(this.cord);
         }, (error) => {
@@ -47,5 +47,15 @@ export class positionService{
         reject('Geolocation is not supported by this browser.');
       }
     });
+  }
+
+  lastCord: Cord = {lat: 0, lon: 0};
+
+  getLocationWithoutPromise(): any {
+    this.getLocation().then((cord) => {
+      this.lastCord = cord;
+      console.log("lastCord service: ", this.lastCord);
+    });
+    return this.lastCord;
   }
 }

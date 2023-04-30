@@ -17,13 +17,13 @@ export class DetailComponent implements OnInit {
 
   test = {
     name: 'SPAI',
-    cordinates: '50.16980727184211, 10.795563727809393',
-    lat: 46.16243997917877,
-    lng: 8.787662959380318,
+    cordinates: '46.2295425892837, 8.74425883677592',
+    lat: 46.2295425892837,
+    lng: 8.74425883677592,
     description: "Lorem ipsum"
   }
 
-  embed = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&q=${this.test.lat},${this.test.lng}`
+  embed: any;
 
   cord: any;
 
@@ -47,23 +47,25 @@ export class DetailComponent implements OnInit {
     this.checkDistanceTimer();
   }
 
-  checkDistanceTimer() {
+  async checkDistanceTimer() {
     //set interval
     let intervalID = setInterval(() => {
+      this.cord = this.positionService.getLocationWithoutPromise();
+      this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.test.lat},${this.test.lng}`;
       if (this.showNav) {
-        this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord.lat, this.cord.lon, this.test.lat, this.test.lng);
-        console.log(this.distance);
-        if (this.distance == 0) {
-          this.showNav = false;
-          this.displayedDistance = Math.round(this.distance * 100) / 100;
+        this.myModal.nativeElement.checked = false;
+        if (this.cord?.lat && this.cord?.lon) {
+          this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.test.lat, this.test.lng);
+          if (this.distance < 0.05) {
+            //this.showNav = false;
+            this.generateQR()
+            // implement this nex line in angular ts
+            this.myModal.nativeElement.checked = true;
+          }
+        } else {
+          this.distance = undefined;
         }
-        if (this.distance < 0.05) {
-          this.showNav = false;
-          this.generateQR()
-          // implement this nex line in angular ts
-          this.myModal.nativeElement.checked = true;
-          clearInterval(intervalID);
-        }
+
       } else {
         clearInterval(intervalID);
       }
