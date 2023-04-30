@@ -18,6 +18,10 @@ export class WaypointService {
   ) {
   }
 
+  getAllWaypoints() {
+    return this.http.get<WaypointsEntity[]>(WAYPOINT);
+  }
+
   getWaypoints(location: string) {
     return this.http.get<WaypointsEntity[]>(WAYPOINT + "/" + location)
 

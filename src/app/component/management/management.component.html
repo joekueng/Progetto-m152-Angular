@@ -15,7 +15,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let user of userList">
+  <tr *ngFor="let user of users">
     <td>{{ user.name }}</td>
     <td>{{ user.username }}</td>
     <td>{{ user.password }}</td>
@@ -24,7 +24,10 @@
 </table>
 
 <div class="button-container">
-  <button (click)="openUserForm()" class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary" style="margin: 10px 10% 0 0;">Add</button>
+  <button (click)="openUserForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
 </div>
 
 <div class="overlay" [style.display]="showUserForm ? 'block' : 'none'">
@@ -60,7 +63,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let location of locationList">
+  <tr *ngFor="let location of locations">
     <td>{{ location.location }}</td>
     <td>{{ location.region }}</td>
     <td>{{ location.lat }}</td>
@@ -70,13 +73,16 @@
 </table>
 
 <div class="button-container">
-  <button (click)="openLocationForm()" class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary" style="margin: 10px 10% 0 0;">Add</button>
+  <button (click)="openLocationForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
 </div>
 
 <div class="overlay" [style.display]="showLocationForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>Add Location</h2>
-    <form (submit)="addLocation(newLocation.location, newLocation.region, newLocation.lat, newLocation.lon)">
+    <form (submit)="addLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
       <div>
         <label for="location">Location:</label>
         <input type="text" id="location" name="location" [(ngModel)]="newLocation.location">
@@ -88,12 +94,12 @@
 
       <div>
         <label for="lat">Latitude:</label>
-        <input type="text" id="lat" name="lat" [(ngModel)]="newLocation.lat">
+        <input type="number" id="lat" name="lat" [(ngModel)]="newLocation.lat">
       </div>
 
       <div>
         <label for="lon">Longitude:</label>
-        <input type="text" id="lon" name="lon" [(ngModel)]="newLocation.lon">
+        <input type="number" id="lon" name="lon" [(ngModel)]="newLocation.lon">
       </div>
 
 
@@ -115,7 +121,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let waypoint of waypointList">
+  <tr *ngFor="let waypoint of waypoints">
     <td>{{ waypoint.name }}</td>
     <td>{{ waypoint.lat }}</td>
     <td>{{ waypoint.lon }}</td>
@@ -126,13 +132,17 @@
 </table>
 
 <div class="button-container">
-  <button (click)="openWaypointForm()" class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary" style="margin: 10px 10% 0 0;">Add</button>
+  <button (click)="openWaypointForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
 </div>
 
 <div class="overlay" [style.display]="showWaypointForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>Add Location</h2>
-    <form (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.image, newWaypoint.locationName)">
+    <form
+      (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.image, newWaypoint.locationName)">
       <div>
         <label for="waypointName">Waypoint:</label>
         <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newWaypoint.name">
@@ -140,12 +150,12 @@
 
       <div>
         <label for="waypointLat">Latitude:</label>
-        <input type="text" id="waypointLat" name="waypointLat" [(ngModel)]="newWaypoint.lat">
+        <input type="number" id="waypointLat" name="waypointLat" [(ngModel)]="newWaypoint.lat">
       </div>
 
       <div>
         <label for="waypointLon">Longitude:</label>
-        <input type="text" id="waypointLon" name="waypointLon" [(ngModel)]="newWaypoint.lon">
+        <input type="number" id="waypointLon" name="waypointLon" [(ngModel)]="newWaypoint.lon">
       </div>
 
       <div>
@@ -155,13 +165,13 @@
 
       <div>
         <label for="image">Image (Base64):</label>
-        <input type="text" id="image" name="image" [(ngModel)]="newWaypoint.image">
+        <input type="text" id="image" name="image" [(ngModel)]="newWaypoint.img">
       </div>
 
       <div>
         <label for="locationName">Location Name:</label>
         <select [(ngModel)]="newWaypoint.locationName" id="locationName" name="locationName">
-          <option *ngFor="let location of locationList" [value]="location.location">{{ location.location }}</option>
+          <option *ngFor="let location of locations" [value]="location.location">{{ location.location }}</option>
         </select>
       </div>
 

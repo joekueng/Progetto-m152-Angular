@@ -1,4 +1,4 @@
-import {Component, OnInit, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {listTranslations} from "../../interface/translations";
@@ -7,7 +7,7 @@ import {ReadTranslateJsonService} from "../../service/language/readTranslateJson
 import {LocationService} from "../../service/http/location.service";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
-import {WaypointService} from "../../service/http/waypoint.service";
+import {WaypointService} from "../../service/http/waypoint.service"
 
 @Component({
   selector: 'app-list',
@@ -100,6 +100,19 @@ export class ListComponent implements OnInit, OnChanges {
     }
   }
 
+  getPosition(): any {
+    setInterval(async () => {
+      this.positionCord = await this.positionService.getLocation();
+      this.setDistance();
+    }, 2000);
+  }
+
+  async switchLanguage(lang: string) {
+    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
+    this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
+    this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
+    this.translations.positionNotFoundErrorMessage = await this.translateService.getData(this.translations.positionNotFoundErrorMessage, lang);
+  }
 
   private checkDataPopulated(): void {
     if (this.locations && this.location) {
@@ -128,19 +141,5 @@ export class ListComponent implements OnInit, OnChanges {
         }
       }
     }
-  }
-
-  getPosition(): any {
-    setInterval(async () => {
-      this.positionCord = await this.positionService.getLocation();
-      this.setDistance();
-    }, 2000);
-  }
-
-  async switchLanguage(lang: string) {
-    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
-    this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
-    this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
-    this.translations.positionNotFoundErrorMessage = await this.translateService.getData(this.translations.positionNotFoundErrorMessage, lang);
   }
 }
