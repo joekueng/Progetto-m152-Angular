@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {positionService} from "../service/position.service";
+import {positionService} from "../../service/position.service";
 import * as qrcode from 'qrcode';
 
 @Component({

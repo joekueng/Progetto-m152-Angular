@@ -17,23 +17,23 @@
       <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
     </h3>
     <div>
-      <h4 *ngIf="distance[i] &&! positionNotFound">{{translations.distance}}{{distance[i]}} km</h4>
-      <h4 *ngIf="positionNotFound && !distance[i]">{{translations.positionNotFoundErrorMessage}}</h4>
+      <h4 *ngIf="locations.distance && !positionNotFound">{{translations.distance}}{{locations.distance}} km</h4>
+      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
   </div>
 </div>
 
-<div *ngIf="!isNear && location && location.waypoints" class="container">
+<div *ngIf="!isNear && location && waypoints" class="container">
   <h1>
     {{location.location}}
   </h1>
-  <div *ngFor="let waypoinst of location.waypoints, let i = index" class="row">
+  <div *ngFor="let waypoint of waypoints, let i = index" class="row">
     <h3>
-      <a class="link link-primary" href="location/{{location.location}}/{{waypoinst.id}}"> {{waypoinst.name}}</a>
+      <a class="link link-primary" href="location/{{location.location}}/{{waypoint.id}}"> {{waypoint.name}}</a>
     </h3>
     <div class="distance">
-      <h4 *ngIf="distance[i] && !positionNotFound">{{translations.distance}}{{distance[i]}} km</h4>
-      <h4 *ngIf="positionNotFound && !distance[i]">{{translations.positionNotFoundErrorMessage}}</h4>
+      <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}{{waypoint.distance}} km</h4>
+      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
     </div>
 
   </div>

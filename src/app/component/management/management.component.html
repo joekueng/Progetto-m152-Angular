@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Management</title>
+</head>
+<body>
+<h1>Users</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Username</th>
+    <th>Password</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <td>{{ user.name }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.password }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="button-container">
+  <button (click)="openUserForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
+</div>
+
+<div class="overlay" [style.display]="showUserForm ? 'block' : 'none'">
+  <div class="form-container">
+    <h2>Add User</h2>
+    <form (submit)="addUser(newUser.name, newUser.username, newUser.password)">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" [(ngModel)]="newUser.name">
+      </div>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" [(ngModel)]="newUser.username">
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" [(ngModel)]="newUser.password">
+      </div>
+      <button type="submit">Add User</button>
+    </form>
+    <button (click)="closeUserForm()">Close</button>
+  </div>
+</div>
+
+<h1>Locations</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Location</th>
+    <th>Region</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let location of locations">
+    <td>{{ location.location }}</td>
+    <td>{{ location.region }}</td>
+    <td>{{ location.lat }}</td>
+    <td>{{ location.lon }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="button-container">
+  <button (click)="openLocationForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
+</div>
+
+<div class="overlay" [style.display]="showLocationForm ? 'block' : 'none'">
+  <div class="form-container">
+    <h2>Add Location</h2>
+    <form (submit)="addLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
+      <div>
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" [(ngModel)]="newLocation.location">
+      </div>
+      <div>
+        <label for="region">Region:</label>
+        <input type="text" id="region" name="region" [(ngModel)]="newLocation.region">
+      </div>
+
+      <div>
+        <label for="lat">Latitude:</label>
+        <input type="number" id="lat" name="lat" [(ngModel)]="newLocation.lat">
+      </div>
+
+      <div>
+        <label for="lon">Longitude:</label>
+        <input type="number" id="lon" name="lon" [(ngModel)]="newLocation.lon">
+      </div>
+
+
+      <button type="submit">Add Location</button>
+    </form>
+    <button (click)="closeLocationForm()">Close</button>
+  </div>
+</div>
+
+<h1>Waypoints</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th>Description</th>
+    <th>Location Name</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let waypoint of waypoints">
+    <td>{{ waypoint.name }}</td>
+    <td>{{ waypoint.lat }}</td>
+    <td>{{ waypoint.lon }}</td>
+    <td>{{ waypoint.description }}</td>
+    <td>{{ waypoint.locationName }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="button-container">
+  <button (click)="openWaypointForm()"
+          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary"
+          style="margin: 10px 10% 0 0;">Add
+  </button>
+</div>
+
+<div class="overlay" [style.display]="showWaypointForm ? 'block' : 'none'">
+  <div class="form-container">
+    <h2>Add Location</h2>
+    <form
+      (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.image, newWaypoint.locationName)">
+      <div>
+        <label for="waypointName">Waypoint:</label>
+        <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newWaypoint.name">
+      </div>
+
+      <div>
+        <label for="waypointLat">Latitude:</label>
+        <input type="number" id="waypointLat" name="waypointLat" [(ngModel)]="newWaypoint.lat">
+      </div>
+
+      <div>
+        <label for="waypointLon">Longitude:</label>
+        <input type="number" id="waypointLon" name="waypointLon" [(ngModel)]="newWaypoint.lon">
+      </div>
+
+      <div>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" [(ngModel)]="newWaypoint.description">
+      </div>
+
+      <div>
+        <label for="image">Image (Base64):</label>
+        <input type="text" id="image" name="image" [(ngModel)]="newWaypoint.img">
+      </div>
+
+      <div>
+        <label for="locationName">Location Name:</label>
+        <select [(ngModel)]="newWaypoint.locationName" id="locationName" name="locationName">
+          <option *ngFor="let location of locations" [value]="location.location">{{ location.location }}</option>
+        </select>
+      </div>
+
+      <button type="submit">Add Waypoint</button>
+    </form>
+    <button (click)="closeWaypointForm()">Close</button>
+  </div>
+</div>
+</body>
+</html>
