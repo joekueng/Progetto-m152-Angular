@@ -135,6 +135,4 @@ export class ManagementComponent implements OnInit {
     this.translations.add = await this.translateService.getData(this.translations.add, lang);
     this.translations.close = await this.translateService.getData(this.translations.close, lang);
   }
-
-  protected readonly String = String;
 }
