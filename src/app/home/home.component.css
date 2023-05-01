@@ -1,12 +1,7 @@
 .search {
-  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 input {
@@ -16,10 +11,8 @@ input {
 }
 
 #list {
-  position: absolute;
-  top: 46%;
-  left: 44%;
-  transform: translate(-50%, -50%);
+  align-self: center;
+  height: auto;
   justify-content: center;
   align-items: center;
   align-content: center;
@@ -40,13 +33,13 @@ input {
 }
 
 .bg-image {
+  padding-top: 25%;
   background-image: url('src/assets/img/mountains.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  height: 100vh;
+  height: 94vh;
+  display: flex;
+  flex-direction: column;
 }
 
-#translate{
-  margin: 100px 10px 10px 10px;
-}

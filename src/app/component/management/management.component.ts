@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {LocationService} from "../../service/http/location.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointService} from "../../service/http/waypoint.service";
+import {toNumbers} from "@angular/compiler-cli/src/version_helpers";
 
 @Component({
   selector: 'app-home',
@@ -18,9 +19,9 @@ export class ManagementComponent implements OnInit {
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
 
-  newUser: UserEntity;
-  newLocation: LocationEntity;
-  newWaypoint: WaypointsEntity;
+  newUser: UserEntity = {name: "", password: "", username: ""};
+  newLocation: LocationEntity = {lat: 0, location: "", lon: 0, region: ""};
+  newWaypoint: WaypointsEntity = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
   locations: LocationEntity[] | undefined;
   waypoints: WaypointsEntity[] | undefined;
@@ -56,15 +57,15 @@ export class ManagementComponent implements OnInit {
   }
 
   addLocation(name: string, region: string, lat: number, lon: number) {
-    this.newLocation = {name: name, region: region, lat: lat, lon: lon};
+    this.newLocation = {location: name, region: region, lat: lat, lon: lon};
     this.locationService.createLocation(this.newLocation).subscribe(location => {
       this.locations?.push(location);
     });
     this.showLocationForm = false;
   }
 
-  addWaypoint(name: string, lat: string, lon: string, description: string, image: string, locationName: string) {
-    this.newWaypoint = {name: name, lat: lat, lon: lon, description: description, img: image, locationName: locationName};
+  addWaypoint(name: string, lat: number, lon: number, description: string, image: string, locationName: string) {
+    this.newWaypoint = {description: description, img: image, lat: lat, locationName: locationName, lon: lon, name: name}
     this.waypointService.createWaypoint(this.newWaypoint).subscribe(waypoint => {
       this.waypoints?.push(waypoint);
     });
@@ -94,4 +95,6 @@ export class ManagementComponent implements OnInit {
   closeWaypointForm() {
     this.showWaypointForm = false;
   }
+
+  protected readonly String = String;
 }

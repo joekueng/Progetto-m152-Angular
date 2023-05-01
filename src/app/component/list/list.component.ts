@@ -73,21 +73,6 @@ export class ListComponent implements OnInit, OnChanges {
       setTimeout(() => {
         if (!this.positionCord) {
           this.positionNotFound = true;
-        } else {
-          if (this.waypoints) {
-            if (!this.waypoints[0].distance) {
-              this.positionNotFound = true;
-            } else {
-              this.positionNotFound = false;
-            }
-          }
-          if (this.locations) {
-            if (!this.locations[0].distance) {
-              this.positionNotFound = true;
-            } else {
-              this.positionNotFound = false;
-            }
-          }
         }
       }, 5000);
     }

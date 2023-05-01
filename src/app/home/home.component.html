@@ -1,6 +1,6 @@
 <div [ngClass]="{'background-color': backgroundColor}">
 
-  <div class="alert alert-warning shadow-lg" *ngIf="allert">
+  <div class="alert alert-warning shadow-lg" *ngIf="allert" id="alert">
     <div>
       <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
            viewBox="0 0 24 24">
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="dropdown dropdown-hover">
+  <div class="dropdown dropdown-hover" id="translate">
     <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100">{{translations.translate}}</label>
     <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52">
       <li (click)="switchLanguage('DE')"><a>DE</a></li>
@@ -19,9 +19,10 @@
       <li (click)="switchLanguage('IT')"><a>IT</a></li>
       <li (click)="switchLanguage('EN')"><a>EN</a></li>
     </ul>
-  </div>
+  </div >
 
   <div class="bg-image">
+
     <div class="search">
 
       <div class="inputElements">
