@@ -32,8 +32,6 @@ export class ManagementComponent implements OnInit {
 
   translations: managementTranslations = {} as managementTranslations
 
-  protected readonly String = String;
-
   constructor(
     private route: ActivatedRoute,
     private locationService: LocationService,
