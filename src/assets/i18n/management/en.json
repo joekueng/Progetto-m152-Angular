@@ -1,0 +1,21 @@
+{
+  "users": "Users",
+  "locations": "Locations",
+  "waypoints": "Waypoints",
+  "name": "Name",
+  "username": "Username",
+  "password": "Password",
+  "location": "Location",
+  "region": "Region",
+  "lat": "Latitude",
+  "lon": "Longitude",
+  "description": "Description",
+  "locationName": "Location Name",
+  "image": "Image",
+  "translate": "Translate",
+  "addUserButton": "Add User",
+  "addLocationButton": "Add Location",
+  "addWaypointButton": "Add Waypoint",
+  "add": "Add",
+  "close": "Close"
+}
