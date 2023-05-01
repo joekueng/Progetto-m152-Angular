@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {homeTranslations} from "../../interface/translations";
+import {homeTranslations, managementTranslations} from "../../interface/translations";
 import {listTranslations} from "../../interface/translations";
 
 @Injectable({
@@ -9,6 +9,7 @@ import {listTranslations} from "../../interface/translations";
 export class ReadTranslateJsonService {
   private homeTranslations: homeTranslations = {} as homeTranslations;  // declares a private object to hold the home translations
   private listTranslation: listTranslations = {} as listTranslations;  // declares a private object to hold the list translations
+  private managementTransaltion: managementTranslations = {} as managementTranslations;  // declares a private object to hold the management translations
 
   constructor(private http: HttpClient) {
     // loads the home translations from the assets file for the English language
@@ -29,6 +30,29 @@ export class ReadTranslateJsonService {
       this.listTranslation.positionNotFoundErrorMessage = data.positionNotFoundErrorMessage;
       console.log("data loaded", this.homeTranslations)
     });
+
+    this.http.get<managementTranslations>('assets/i18n/management/en.json').subscribe(data => {
+      this.managementTransaltion.translate = data.translate;
+      this.managementTransaltion.users = data.users;
+      this.managementTransaltion.locations = data.locations;
+      this.managementTransaltion.waypoints = data.waypoints;
+      this.managementTransaltion.name = data.name;
+      this.managementTransaltion.username = data.username;
+      this.managementTransaltion.password = data.password;
+      this.managementTransaltion.location = data.location;
+      this.managementTransaltion.region = data.region;
+      this.managementTransaltion.lat = data.lat;
+      this.managementTransaltion.lon = data.lon;
+      this.managementTransaltion.description = data.description;
+      this.managementTransaltion.locationName = data.locationName;
+      this.managementTransaltion.image = data.image;
+      this.managementTransaltion.addUserButton = data.addUserButton;
+      this.managementTransaltion.addLocationButton = data.addLocationButton;
+      this.managementTransaltion.addWaypointButton = data.addWaypointButton;
+      this.managementTransaltion.add = data.add;
+      this.managementTransaltion.close = data.close;
+      console.log("data loaded", this.homeTranslations)
+    });
   }
 
   // returns the home translations object
@@ -39,5 +63,9 @@ export class ReadTranslateJsonService {
   // returns the list translations object
   getListTransaltions(): listTranslations {
     return this.listTranslation;
+  }
+
+  getManagementTranslations(): managementTranslations {
+    return this.managementTransaltion;
   }
 }
