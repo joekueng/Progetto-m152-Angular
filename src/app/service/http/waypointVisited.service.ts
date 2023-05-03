@@ -31,7 +31,7 @@ export class WaypointVisitedService {
   }
 
   createWaypoint(waypointvisited: WaypointsVisitedEntity) {
-    return this.http.post<WaypointsEntity>(WAYPOINT_VISITED, waypointvisited);
+    return this.http.post<WaypointsVisitedEntity>(WAYPOINT_VISITED, waypointvisited);
   }
 
   updateWaypoint(waypoint: WaypointsVisitedEntity, id: number) {
