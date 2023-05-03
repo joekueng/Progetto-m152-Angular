@@ -33,7 +33,7 @@ input {
 }
 
 .bg-image {
-  padding-top: 25%;
+  padding-top: 15%;
   background-image: url('src/assets/img/mountains.png');
   background-size: cover;
   background-repeat: no-repeat;
