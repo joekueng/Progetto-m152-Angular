@@ -23,7 +23,7 @@ export class ManagementComponent implements OnInit {
   showWaypointForm: boolean = false;
 
   newUser: UserEntity = {name: "", password: "", username: ""};
-  newLocation: LocationEntity = {lat: 0, location: "", lon: 0, region: ""};
+  newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
   newWaypoint: WaypointsEntity = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
   locations: LocationEntity[] | undefined;
@@ -31,7 +31,6 @@ export class ManagementComponent implements OnInit {
   users: UserEntity[] | undefined;
 
   translations: managementTranslations = {} as managementTranslations
-
 
   constructor(
     private route: ActivatedRoute,
@@ -57,7 +56,7 @@ export class ManagementComponent implements OnInit {
   }
 
   addUser(name: string, username: string, password: string) {
-    this.newUser = { name: name, username: username, password: password};
+    this.newUser = {name: name, username: username, password: password};
     this.userService.createUser(this.newUser).subscribe(user => {
       this.users?.push(user);
     });
@@ -66,6 +65,8 @@ export class ManagementComponent implements OnInit {
 
   addLocation(name: string, region: string, lat: number, lon: number) {
     this.newLocation = {location: name, region: region, lat: lat, lon: lon};
+    console.log("newLocation")
+    console.log(this.newLocation);
     this.locationService.createLocation(this.newLocation).subscribe(location => {
       this.locations?.push(location);
     });
@@ -73,7 +74,14 @@ export class ManagementComponent implements OnInit {
   }
 
   addWaypoint(name: string, lat: number, lon: number, description: string, image: string, locationName: string) {
-    this.newWaypoint = {description: description, img: image, lat: lat, locationName: locationName, lon: lon, name: name}
+    this.newWaypoint = {
+      description: description,
+      img: image,
+      lat: lat,
+      locationName: locationName,
+      lon: lon,
+      name: name
+    }
     this.waypointService.createWaypoint(this.newWaypoint).subscribe(waypoint => {
       this.waypoints?.push(waypoint);
     });
@@ -125,6 +133,4 @@ export class ManagementComponent implements OnInit {
     this.translations.add = await this.translateService.getData(this.translations.add, lang);
     this.translations.close = await this.translateService.getData(this.translations.close, lang);
   }
-
-  protected readonly String = String;
 }
