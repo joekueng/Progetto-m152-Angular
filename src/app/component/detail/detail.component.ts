@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
+import {WaypointService} from "../../service/http/waypoint.service"
 import * as qrcode from 'qrcode';
-
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
-  @ViewChild('myModal', { static: true }) myModal!: ElementRef<HTMLInputElement>;
+  @ViewChild('myModal', {static: true}) myModal!: ElementRef<HTMLInputElement>;
   private location: string | undefined;
   private id: number | undefined;
 
@@ -27,18 +27,28 @@ export class DetailComponent implements OnInit {
 
   cord: any;
 
+/*
   showNav = true;
+*/
   distance: number | undefined;
   displayedDistance = 0;
 
   img: any;
 
-  constructor(private route: ActivatedRoute , private positionService: positionService) {}
+  constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService) {
+  }
 
-  async ngOnInit(){
-    this.URLParams = this.route.params
+  async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.URLParams = params;
+    });
 
-    console.log(this.URLParams.location); // {location: "lugano", id: "1"}
+
+    console.log("params", this.URLParams.location); // {location: "lugano", id: "1"}
+
+    this.waypointService.getWaypoint(this.URLParams.location, this.URLParams.id).subscribe(waypoint => {
+      console.log("waypoint", waypoint)
+    });
 
     //this.URLParams = this.route.snapshot.url.slice(-2).map(segment => segment.path);
     console.log("getting your location: wait...");
@@ -52,29 +62,27 @@ export class DetailComponent implements OnInit {
     let intervalID = setInterval(() => {
       this.cord = this.positionService.getLocationWithoutPromise();
       this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.test.lat},${this.test.lng}`;
-      if (this.showNav) {
-        this.myModal.nativeElement.checked = false;
-        if (this.cord?.lat && this.cord?.lon) {
-          this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.test.lat, this.test.lng);
-          if (this.distance < 0.05) {
-            //this.showNav = false;
-            this.generateQR()
-            // implement this nex line in angular ts
-            this.myModal.nativeElement.checked = true;
-          }
-        } else {
-          this.distance = undefined;
+      this.myModal.nativeElement.checked = false;
+      if (this.cord?.lat && this.cord?.lon) {
+        this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.test.lat, this.test.lng);
+        if (this.distance < 0.05) {
+          this.generateQR()
+          // implement this nex line in angular ts
+          this.myModal.nativeElement.checked = true;
         }
-
       } else {
-        clearInterval(intervalID);
+        this.distance = undefined;
       }
     }, 1000);
   }
 
   async generateQRCode(url: string) {
     try {
-      const string = await qrcode.toString(url, { errorCorrectionLevel: 'H', margin: 1, color: { dark: '#000000FF', light: '#FFFFFFFF' } });
+      const string = await qrcode.toString(url, {
+        errorCorrectionLevel: 'H',
+        margin: 1,
+        color: {dark: '#000000FF', light: '#FFFFFFFF'}
+      });
       return string;
     } catch (error) {
       console.error(error);
@@ -87,7 +95,7 @@ export class DetailComponent implements OnInit {
       const image = new Image();
       image.src = imageUrl;
 
-      const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+      const svgBlob = new Blob([svgString], {type: 'image/svg+xml'});
       const svgUrl = URL.createObjectURL(svgBlob);
 
       image.onload = () => {
@@ -128,9 +136,6 @@ export class DetailComponent implements OnInit {
   }
 
 
-
-
-
   async generateQR() {
     console.log("generating QR code");
     console.log(this.URLParams.value);
@@ -157,9 +162,6 @@ export class DetailComponent implements OnInit {
     link.href = this.img;
     link.click();
   }
-
-
-
 
 
   /*async addQRCodeToImage(url: string, imagePath: string, outputPath: string): Promise<void> {
