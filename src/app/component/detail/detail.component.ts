@@ -23,6 +23,8 @@ export class DetailComponent implements OnInit {
     description: "Lorem ipsum"
   }
 
+  waypointInfo: any;
+
   embed: any;
 
   cord: any;
@@ -48,6 +50,8 @@ export class DetailComponent implements OnInit {
 
     this.waypointService.getWaypoint(this.URLParams.location, this.URLParams.id).subscribe(waypoint => {
       console.log("waypoint", waypoint)
+      this.waypointInfo = waypoint;
+      console.log("waypointInfo", this.waypointInfo.locationName)
     });
 
     //this.URLParams = this.route.snapshot.url.slice(-2).map(segment => segment.path);
@@ -61,7 +65,7 @@ export class DetailComponent implements OnInit {
     //set interval
     let intervalID = setInterval(() => {
       this.cord = this.positionService.getLocationWithoutPromise();
-      this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.test.lat},${this.test.lng}`;
+      this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.waypointInfo.lat},${this.waypointInfo.lon}`;
       this.myModal.nativeElement.checked = false;
       if (this.cord?.lat && this.cord?.lon) {
         this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.test.lat, this.test.lng);
@@ -158,40 +162,9 @@ export class DetailComponent implements OnInit {
 
   public downloadImage(): void {
     const link = document.createElement('a');
-    link.download = this.test.name;
+    link.download = this.waypointInfo.locationName;
     link.href = this.img;
     link.click();
   }
-
-
-  /*async addQRCodeToImage(url: string, imagePath: string, outputPath: string): Promise<void> {
-    // Generate QR code
-    const qrCode = await qrcode.toBuffer(url);
-
-    // Load input image using Sharp
-    const image = sharp(imagePath);
-
-    // Get input image dimensions
-    const { width, height } = await image.metadata();
-
-    // Resize QR code to 25% of input image height
-    const qrCodeHeight = Math.round(height * 0.25);
-    const qrCodeBuffer = await sharp(qrCode)
-      .resize(qrCodeHeight, qrCodeHeight)
-      .toBuffer();
-
-    // Composite QR code onto input image at bottom-right corner
-    await image.composite([
-      {
-        input: qrCodeBuffer,
-        gravity: 'southeast',
-        top: height - qrCodeHeight,
-        left: width - qrCodeHeight,
-      },
-    ]);
-
-    // Save output image to file
-    await image.toFile(outputPath);
-  }*/
 
 }

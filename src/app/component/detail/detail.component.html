@@ -1,10 +1,10 @@
 <div>
   <div class="flex flex-col md:flex-row  gap-0 m-5 h-full">
     <div class="card w-full h-full bg-base-100 shadow-2xl">
-      <figure><img src="assets/testDetail/igm.png" [alt]="test.name"/></figure>
+      <figure><img [src]="waypointInfo.img" [alt]="waypointInfo?.locationName"/></figure>
       <div class="card-body">
         <div class="flex justify-between items-center">
-          <h1 class="card-title font-extrabold">{{ test.name }}</h1>
+          <h1 class="card-title font-extrabold">{{ waypointInfo?.locationName }}</h1>
           <div class="font-extrabold text-end text-blue-500 flex items-center">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  width="19.9219" height="19.9316" *ngIf="!distance" class="mx-1">
@@ -23,11 +23,11 @@
             {{distance === undefined ? '' : distance}} Km
           </div>
         </div>
-        <p>{{ test.description }}</p>
+        <p>{{ waypointInfo.description }}</p>
       </div>
     </div>
     <div class="md:relative w-full flex items-center justify-center md:justify-start">
-      <iframe *ngIf="distance" class="md:absolute sm:w-full md:h-3/4 md:w-3/4 rounded-b-lg md:rounded-r-lg shadow-2xl border-2 items-center" height="300" frameborder=""
+      <iframe *ngIf="distance" class="md:absolute sm:w-full md:h-3/4 md:w-full md:rounded-r-2xl shadow-2xl border-2 items-center" height="300" frameborder=""
               style=""
               referrerpolicy="no-referrer-when-downgrade"
               [src]='embed | safe' allowfullscreen></iframe>
