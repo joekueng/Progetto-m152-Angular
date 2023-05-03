@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {WaypointService} from "../../service/http/waypoint.service"
+//import {waypointVisitedService} from "../../service/http/waypointVisited.service"
 import * as qrcode from 'qrcode';
 @Component({
   selector: 'app-detail',
@@ -43,6 +44,7 @@ export class DetailComponent implements OnInit {
   async ngOnInit() {
     this.route.params.subscribe(params => {
       this.URLParams = params;
+      console.log("params", params);
     });
 
 
@@ -68,9 +70,11 @@ export class DetailComponent implements OnInit {
       this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.waypointInfo.lat},${this.waypointInfo.lon}`;
       this.myModal.nativeElement.checked = false;
       if (this.cord?.lat && this.cord?.lon) {
-        this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.test.lat, this.test.lng);
+        this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.waypointInfo.lat, this.waypointInfo.lon);
         if (this.distance < 0.05) {
           this.generateQR()
+
+          //this.waypointVisitedService.createWaypointVisited()
           // implement this nex line in angular ts
           this.myModal.nativeElement.checked = true;
         }
@@ -143,13 +147,13 @@ export class DetailComponent implements OnInit {
   async generateQR() {
     console.log("generating QR code");
     console.log(this.URLParams.value);
-    let url = `http://localhost:4200/location/${this.URLParams.value.location}/${this.URLParams.value.id}`;
+    let url = `http://localhost:4200/location/${this.URLParams.location}/${this.URLParams.id}`;
 
     let qrCode = await this.generateQRCode(url);
 
     console.log(qrCode);
 
-    const imageUrl = 'assets/testDetail/img.jpg';
+    const imageUrl = this.waypointInfo.img;
 
     this.addSvgToImage(imageUrl, qrCode).then((outputImageUrl) => {
       this.img = outputImageUrl // Output the URL of the output image

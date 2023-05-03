@@ -38,7 +38,7 @@ export class positionService {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
           this.cord = {lat, lon};
-          console.log("cordinate: ", this.cord);
+          //console.log("cordinate: ", this.cord);
           resolve(this.cord);
         }, (error) => {
           reject(error);
@@ -54,7 +54,7 @@ export class positionService {
   getLocationWithoutPromise(): any {
     this.getLocation().then((cord) => {
       this.lastCord = cord;
-      console.log("lastCord service: ", this.lastCord);
+      //console.log("lastCord service: ", this.lastCord);
     });
     return this.lastCord;
   }
