@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {BehaviorSubject, distinctUntilChanged, fromEvent, Observable, Subject, Subscription} from "rxjs";
+import {distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
 import {ReadjsonService} from "../service/readjson.service";
 import {Router} from "@angular/router";
 import {TranslateService} from '../service/language/translate.service';
@@ -7,6 +7,7 @@ import {ReadTranslateJsonService} from "../service/language/readTranslateJson.se
 import {homeTranslations} from "../interface/translations";
 import {LocationService} from "../service/http/location.service";
 import {LocationEntity} from "../interface/LocationEntity";
+import {cookieService} from "../service/cookie.service";
 
 
 @Component({
@@ -16,11 +17,9 @@ import {LocationEntity} from "../interface/LocationEntity";
 })
 
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
-
   @ViewChild('myInput') myInput?: ElementRef;
 
-  public locationsPopup: Subject<LocationEntity[]> = new Subject<LocationEntity[]>()
-
+  username: string = '';
   subs: Subscription[] = [];
   backgroundColor: string | undefined;
   locations: LocationEntity[] = [];
@@ -31,6 +30,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   suggerimento: string = '';
   completamento: string = '';
   translations: homeTranslations = {} as homeTranslations;
+  public locationsPopup: Subject<LocationEntity[]> = new Subject<LocationEntity[]>()
 
 
   constructor(
@@ -38,14 +38,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private translateService: TranslateService,
     private readTranslationJsonService: ReadTranslateJsonService,
-    private locationService: LocationService
-  ){
+    private locationService: LocationService,
+    private cookieService: cookieService,
+  ) {
   }
 
   // Initializes the component and loads translations and locations
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getHomeTranslations();
-    console.log("translations loaded", this.translations)
+    console.log("translations loaded", this.translations);
+    this.username= this.cookieService.getUsername();
     this.locationService.getLocations()
       .subscribe(locations => {
         this.locations = locations;

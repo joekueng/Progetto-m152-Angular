@@ -6,10 +6,10 @@ import {ActivatedRoute} from "@angular/router";
 import {LocationService} from "../../service/http/location.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointService} from "../../service/http/waypoint.service";
-import {toNumbers} from "@angular/compiler-cli/src/version_helpers";
 import {managementTranslations} from "../../interface/translations";
 import {TranslateService} from "../../service/language/translate.service";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
+import {cookieService} from "../../service/cookie.service";
 
 @Component({
   selector: 'app-home',
@@ -18,6 +18,8 @@ import {ReadTranslateJsonService} from "../../service/language/readTranslateJson
 })
 
 export class ManagementComponent implements OnInit {
+
+  username: string = '';
   showUserForm: boolean = false;
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
@@ -39,11 +41,13 @@ export class ManagementComponent implements OnInit {
     private userService: UserService,
     private translateService: TranslateService,
     private readTranslationJsonService: ReadTranslateJsonService,
+    private cookieService: cookieService,
   ) {
   }
 
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getManagementTranslations();
+    this.username = this.cookieService.getUsername();
     this.locationService.getLocations().subscribe(locations => {
       this.locations = locations;
     });

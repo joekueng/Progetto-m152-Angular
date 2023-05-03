@@ -24,6 +24,7 @@
     "deepl": "^1.0.13",
     "geolib": "^3.3.3",
     "html-to-image": "^1.11.11",
+    "ngx-cookie-service": "^15.0.0",
     "nodemon": "^2.0.22",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",

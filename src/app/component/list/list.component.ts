@@ -8,6 +8,7 @@ import {LocationService} from "../../service/http/location.service";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
 import {WaypointService} from "../../service/http/waypoint.service"
+import {cookieService} from "../../service/cookie.service";
 
 @Component({
   selector: 'app-list',
@@ -15,6 +16,7 @@ import {WaypointService} from "../../service/http/waypoint.service"
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnChanges {
+  username: string = '';
   locationParams: string | undefined
   locations: LocationEntity[] | undefined;
   location: LocationEntity | undefined;
@@ -37,11 +39,13 @@ export class ListComponent implements OnInit, OnChanges {
     private readTranslationJsonService: ReadTranslateJsonService,
     private locationService: LocationService,
     private waypointService: WaypointService,
+    private cookieService: cookieService,
   ) {
   }
 
   async ngOnInit() {
     this.translations = this.readTranslationJsonService.getListTransaltions();
+    this.username =  this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
