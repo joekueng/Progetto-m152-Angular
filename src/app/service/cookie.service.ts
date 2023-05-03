@@ -19,8 +19,8 @@ export class cookieService {
 
   getUsername(): string {
     let username = this.coockieService.get('username');
-    if (username == null) {
-      this.router.navigate(['/login']);
+    if (username == '' || username == undefined) {
+      this.router.navigate(['/login']).then(r => console.log("redirect to login"));
       return '';
     } else {
       return username;

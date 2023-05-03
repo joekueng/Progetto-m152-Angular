@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {distinctUntilChanged, fromEvent, Subject, Subscription} from "rxjs";
-import {ReadjsonService} from "../service/readjson.service";
 import {Router} from "@angular/router";
 import {TranslateService} from '../service/language/translate.service';
 import {ReadTranslateJsonService} from "../service/language/readTranslateJson.service";
@@ -34,7 +33,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   constructor(
-    private readjsonService: ReadjsonService,
     private router: Router,
     private translateService: TranslateService,
     private readTranslationJsonService: ReadTranslateJsonService,
