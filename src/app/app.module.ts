@@ -10,6 +10,7 @@ import {FormsModule} from "@angular/forms";
 import { HttpClientModule} from "@angular/common/http";
 import { SafePipe } from './pipes/safe.pipe';
 import { ManagementComponent } from './component/management/management.component';
+import { LoginComponent } from './component/login/login.component';
 import {CookieService} from "ngx-cookie-service";
 
 @NgModule({
@@ -20,6 +21,7 @@ import {CookieService} from "ngx-cookie-service";
     DetailComponent,
     ManagementComponent,
     SafePipe,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
