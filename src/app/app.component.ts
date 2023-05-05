@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
 import {homeTranslations, listTranslations, managementTranslations} from "./interface/translations";
 import {TranslateService} from "./service/language/translate.service";
 import {ReadTranslateJsonService} from "./service/language/readTranslateJson.service";
+import {cookieService} from "./service/cookie.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent  implements OnInit{
+export class AppComponent implements OnInit {
   title = 'm-152';
 
   homeTranslations: homeTranslations = {} as homeTranslations;
@@ -19,7 +19,7 @@ export class AppComponent  implements OnInit{
 
 
   constructor(
-    private cookieService: CookieService,
+    private cookieService: cookieService,
     private router: Router,
     private translateService: TranslateService,
     private readTranslationJsonService: ReadTranslateJsonService,
@@ -33,10 +33,7 @@ export class AppComponent  implements OnInit{
   }
 
   clearAllCookies() {
-    const allCookies = this.cookieService.getAll();
-    for (const cookieName in allCookies) {
-      this.cookieService.delete(cookieName);
-    }
+    this.cookieService.deleteUsername();
     this.router.navigate(['/login']);
   }
 

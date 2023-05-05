@@ -97,6 +97,24 @@ export class ManagementComponent implements OnInit {
     this.showWaypointForm = false;
   }
 
+  deleteLocation(id: number) {
+    this.locationService.deleteLocation(id).subscribe(location => {
+      this.locations?.splice(this.locations?.indexOf(location), 1);
+    });
+  }
+
+  deleteWaypoint(id: number) {
+    this.waypointService.deleteWaypoint(id).subscribe(waypoint => {
+      this.waypoints?.splice(this.waypoints?.indexOf(waypoint), 1);
+    });
+  }
+
+  deleteUser(id: number) {
+    this.userService.deleteUser(id).subscribe(user => {
+      this.users?.splice(this.users?.indexOf(user), 1);
+    });
+  }
+
   openUserForm() {
     this.showUserForm = true;
   }
