@@ -30,7 +30,9 @@ export class UserService {
   }
 
   createUser(user: UserEntity) {
+    console.log("create "+user);
     return this.http.post<UserEntity>(USER, user);
+
   }
 
   updateUser(user: UserEntity, id: number) {

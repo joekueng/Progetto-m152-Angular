@@ -30,23 +30,22 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.cookieService.getUsername() != null) {
-      this.router.navigate(['/home']);
-    }
+
   }
 
-  createNewUser(username: string, password: string) {
+  createNewUser(createUser: UserEntity) {
+    console.log(createUser.username+" "+createUser.password);
     this.userService.getUsers().subscribe(users => {
       this.users = users;
       for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i].username == username) {
+        if (this.users[i].username == createUser.username) {
           this.errorCreateUser = true;
         }
       }
-      this.newUser.username = username;
-      this.newUser.password = password;
+      this.newUser.username = createUser.username;
+      this.newUser.password = createUser.password;
       this.userService.createUser(this.newUser).subscribe(user => {
-        this.cookieService.setUsername(username);
+        this.cookieService.setUsername(createUser.username);
         this.router.navigate(['/management']);
       });
     });
@@ -61,6 +60,14 @@ export class LoginComponent implements OnInit {
         this.errorLogin = true;
       }
     });
+  }
+
+  submit() {
+    if (this.login) {
+      this.loginFunction(this.newUser.username, this.newUser.password);
+    } else {
+      this.createNewUser(this.newUser);
+    }
   }
 
   switch() {
