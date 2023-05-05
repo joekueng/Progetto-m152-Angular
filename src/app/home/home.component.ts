@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Initializes the component and loads translations and locations
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getHomeTranslations();
-    console.log("translations loaded", this.translations);
     this.username= this.cookieService.getUsername();
     this.locationService.getLocations()
       .subscribe(locations => {
@@ -129,18 +128,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       const nomeLocation = encodeURIComponent(this.luogoSelezionato);
       this.router.navigate(['/location', nomeLocation]);
     }
-  }
-
-  // This async function is used to switch the language of the application.
-  // It takes a language code as input and updates the translations object with new translations for various UI elements.
-  // The getData() method of the translateService is called with the current translations and the new language code.
-  // The translateService returns the translated data which is then assigned to the corresponding properties of the translations object.
-  async switchLanguage(lang: string) {
-    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
-    this.translations.menuPlaces = await this.translateService.getData(this.translations.menuPlaces, lang);
-    this.translations.alertMessage = await this.translateService.getData(this.translations.alertMessage, lang);
-    this.translations.searchPlaceholder = await this.translateService.getData(this.translations.searchPlaceholder, lang);
-    this.translations.searchButton = await this.translateService.getData(this.translations.searchButton, lang);
   }
 }
 
