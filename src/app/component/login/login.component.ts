@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       this.newUser.password = createUser.password;
       this.userService.createUser(this.newUser).subscribe(user => {
         this.cookieService.setUsername(createUser.username);
-        this.router.navigate(['/management']);
+        this.router.navigate(['/home']);
       });
     });
   }
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
     this.userService.getUser(username).subscribe(user => {
       if (user.password == password) {
         this.cookieService.setUsername(username);
-        this.router.navigate(['/management']);
+        this.router.navigate(['/home']);
       } else {
         this.errorLogin = true;
       }

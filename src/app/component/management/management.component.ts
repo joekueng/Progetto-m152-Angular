@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserEntity} from "../../interface/UserEntity";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
-import {ActivatedRoute} from "@angular/router";
+import {Router} from "@angular/router";
 import {LocationService} from "../../service/http/location.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointService} from "../../service/http/waypoint.service";
@@ -35,7 +35,7 @@ export class ManagementComponent implements OnInit {
   translations: managementTranslations = {} as managementTranslations
 
   constructor(
-    private route: ActivatedRoute,
+    private route: Router,
     private locationService: LocationService,
     private waypointService: WaypointService,
     private userService: UserService,
@@ -48,6 +48,11 @@ export class ManagementComponent implements OnInit {
   ngOnInit(): void {
     this.translations = this.readTranslationJsonService.getManagementTranslations();
     this.username = this.cookieService.getUsername();
+    this.userService.getUser(this.username).subscribe(user => {
+      if (user.admin == false) {
+        this.route.navigate(['/home']);
+      }
+    });
     this.locationService.getLocations().subscribe(locations => {
       this.locations = locations;
     });
