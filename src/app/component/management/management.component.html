@@ -20,7 +20,6 @@
   </thead>
   <tbody>
   <tr *ngFor="let user of users">
-    <td>{{ user.name }}</td>
     <td>{{ user.username }}</td>
     <td>{{ user.password }}</td>
   </tr>
@@ -37,11 +36,7 @@
 <div class="overlay" [style.display]="showUserForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>{{translations.addUserButton}}</h2>
-    <form (submit)="addUser(newUser.name, newUser.username, newUser.password)">
-      <div>
-        <label for="name">{{translations.name}}:</label>
-        <input type="text" id="name" name="name" [(ngModel)]="newUser.name">
-      </div>
+    <form (submit)="addUser(newUser.username, newUser.password)">
       <div>
         <label for="username">{{translations.username}}:</label>
         <input type="text" id="username" name="username" [(ngModel)]="newUser.username">

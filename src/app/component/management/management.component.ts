@@ -24,7 +24,7 @@ export class ManagementComponent implements OnInit {
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
 
-  newUser: UserEntity = {name: "", password: "", username: ""};
+  newUser: UserEntity = { password: "", username: ""};
   newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
   newWaypoint: WaypointsEntity = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
@@ -59,8 +59,8 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addUser(name: string, username: string, password: string) {
-    this.newUser = {name: name, username: username, password: password};
+  addUser( username: string, password: string) {
+    this.newUser = { username: username, password: password};
     this.userService.createUser(this.newUser).subscribe(user => {
       this.users?.push(user);
     });
