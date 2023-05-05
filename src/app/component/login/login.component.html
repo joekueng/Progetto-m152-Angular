@@ -49,8 +49,8 @@
 
 
       <a (click)="switch()">
-        <span *ngIf="login">Register</span>
-        <span *ngIf="!login">Login</span>
+        <button class="btn-link" *ngIf="login">Register</button>
+        <button  class="btn-link" *ngIf="!login">Login</button>
       </a>
 
     </div>
