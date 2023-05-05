@@ -13,15 +13,17 @@
 <table>
   <thead>
   <tr>
-    <th>{{ translations.name }}</th>
-    <th>{{translations.username}}</th>
+    <th>{{ translations.username }}</th>
     <th>{{translations.password}}</th>
+    <th>admin</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let user of users">
     <td>{{ user.username }}</td>
     <td>{{ user.password }}</td>
+    <td *ngIf="user.admin==false">No</td>
+    <td *ngIf="user.admin==true">Yes</td>
   </tr>
   </tbody>
 </table>

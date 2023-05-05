@@ -117,6 +117,8 @@ export class ManagementComponent implements OnInit {
   }
 
   async switchLanguage(lang: string) {
+
+    // Man
     this.translations.users = await this.translateService.getData(this.translations.users, lang);
     this.translations.locations = await this.translateService.getData(this.translations.locations, lang);
     this.translations.waypoints = await this.translateService.getData(this.translations.waypoints, lang);
