@@ -35,8 +35,6 @@ export class ListComponent implements OnInit, OnChanges {
   constructor(
     private route: ActivatedRoute,
     private positionService: positionService,
-    private translateService: TranslateService,
-    private readTranslationJsonService: ReadTranslateJsonService,
     private locationService: LocationService,
     private waypointService: WaypointService,
     private cookieService: cookieService,
@@ -44,7 +42,6 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
-    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.username =  this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
@@ -94,13 +91,6 @@ export class ListComponent implements OnInit, OnChanges {
       this.positionCord = await this.positionService.getLocation();
       this.setDistance();
     }, 2000);
-  }
-
-  async switchLanguage(lang: string) {
-    this.translations.translate = await this.translateService.getData(this.translations.translate, lang);
-    this.translations.distance = await this.translateService.getData(this.translations.distance, lang);
-    this.translations.locationName = await this.translateService.getData(this.translations.locationName, lang);
-    this.translations.positionNotFoundErrorMessage = await this.translateService.getData(this.translations.positionNotFoundErrorMessage, lang);
   }
 
   private checkDataPopulated(): void {

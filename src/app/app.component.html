@@ -1,2 +1,12 @@
 <button (click)="clearAllCookies()">Logout</button>
+<div class="dropdown dropdown-hover" id="translate">
+  <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100"
+         id="translateLabel">{{homeTranslations.translate}}</label>
+  <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52" id="translateUl">
+    <li (click)="switchLanguage('DE')"><a>DE</a></li>
+    <li (click)="switchLanguage('FR')"><a>FR</a></li>
+    <li (click)="switchLanguage('IT')"><a>IT</a></li>
+    <li (click)="switchLanguage('EN')"><a>EN</a></li>
+  </ul>
+</div>
 <router-outlet></router-outlet>
