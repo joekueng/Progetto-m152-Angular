@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Router } from '@angular/router';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {WaypointService} from "../../service/http/waypoint.service"
@@ -39,7 +40,7 @@ export class DetailComponent implements OnInit {
   iframeLoded: boolean = false;
 
   constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService, private waypointVisitedService: WaypointVisitedService, private readTranslationJsonService: ReadTranslateJsonService,
-  private userService: UserService, private cookieService: CookieService) {
+  private userService: UserService, private cookieService: CookieService, private router: Router) {
 
   }
 
@@ -90,7 +91,6 @@ export class DetailComponent implements OnInit {
         if (this.distance < 0.05) {
           this.generateQR()
 
-          clearInterval(intervalID);
           // implement this nex line in angular ts
           this.myModal.nativeElement.checked = true;
           this.userService.getUser("tito").subscribe(user => {
@@ -100,6 +100,8 @@ export class DetailComponent implements OnInit {
             this.waypointVisitedService.createWaypoint(waypointVisited)
             }
           })
+        } else {
+          this.myModal.nativeElement.checked = false;
         }
       } else {
         this.distance = undefined;
@@ -198,6 +200,11 @@ export class DetailComponent implements OnInit {
     link.download = this.waypointInfo.locationName;
     link.href = this.img;
     link.click();
+  }
+
+  public closeModal(): void {
+    this.myModal.nativeElement.checked = false;
+    this.router.navigate(['/location/', this.URLParams.location]);
   }
 
 }
