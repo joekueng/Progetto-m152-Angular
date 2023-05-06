@@ -11,12 +11,15 @@ import {ReadTranslateJsonService} from "../../service/language/readTranslateJson
 import {CookieService} from "ngx-cookie-service";
 import {UserService} from "../../service/http/user.service";
 import {UserEntity} from "../../interface/UserEntity";
+import { trigger, state, transition, animate } from '@angular/animations';
+
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
+
 export class DetailComponent implements OnInit {
   @ViewChild('myModal', {static: true}) myModal!: ElementRef<HTMLInputElement>;
   private location: string | undefined;
@@ -38,6 +41,8 @@ export class DetailComponent implements OnInit {
   img: any;
 
   iframeLoded: boolean = false;
+
+  intervalID: any;
 
   constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService, private waypointVisitedService: WaypointVisitedService, private readTranslationJsonService: ReadTranslateJsonService,
   private userService: UserService, private cookieService: CookieService, private router: Router) {
@@ -82,7 +87,7 @@ export class DetailComponent implements OnInit {
 
   async checkDistanceTimer() {
     //set interval
-    let intervalID = setInterval(() => {
+     this.intervalID = setInterval(() => {
       this.cord = this.positionService.getLocationWithoutPromise();
       this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.waypointInfo?.lat},${this.waypointInfo?.lon}`;
       this.myModal.nativeElement.checked = false;
@@ -143,23 +148,51 @@ export class DetailComponent implements OnInit {
           canvas.height = image.height;
 
           ctx.drawImage(image, 0, 0);
-          const svgImage = new Image();
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-          svgImage.crossOrigin = 'anonymous';
-          svgImage.src = svgUrl;
+          let isAllWhite = true;
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            if (imageData.data[i] !== 255 || imageData.data[i + 1] !== 255 || imageData.data[i + 2] !== 255) {
+              isAllWhite = false;
+              break;
+            }
+          }
 
-          svgImage.onload = () => {
-            const x = image.width - (image.width * 0.2 + 5);
-            const y = image.height - (image.width * 0.2 + 5);
-            ctx.drawImage(svgImage, x, y, image.width * 0.2, image.width * 0.2);
+          if (isAllWhite) {
+            const svgImage = new Image();
+            svgImage.crossOrigin = 'anonymous';
+            svgImage.src = svgUrl;
 
-            const outputImageUrl = canvas.toDataURL('image/png');
-            resolve(outputImageUrl);
-          };
+            svgImage.onload = () => {
+              canvas.width = svgImage.width;
+              canvas.height = svgImage.height;
 
-          svgImage.onerror = () => {
-            reject('Error loading SVG');
-          };
+              ctx.drawImage(svgImage, 0, 0);
+              const outputImageUrl = canvas.toDataURL('image/png');
+              resolve(outputImageUrl);
+            };
+
+            svgImage.onerror = () => {
+              reject('Error loading SVG');
+            };
+          } else {
+            const svgImage = new Image();
+            svgImage.crossOrigin = 'anonymous';
+            svgImage.src = svgUrl;
+
+            svgImage.onload = () => {
+              const x = image.width - (image.width * 0.2 + 5);
+              const y = image.height - (image.width * 0.2 + 5);
+              ctx.drawImage(svgImage, x, y, image.width * 0.2, image.width * 0.2);
+
+              const outputImageUrl = canvas.toDataURL('image/png');
+              resolve(outputImageUrl);
+            };
+
+            svgImage.onerror = () => {
+              reject('Error loading SVG');
+            };
+          }
         };
 
         image.onerror = () => {
@@ -172,6 +205,8 @@ export class DetailComponent implements OnInit {
 
     return canvas.toDataURL('image/png');
   }
+
+
 
 
 
@@ -203,8 +238,10 @@ export class DetailComponent implements OnInit {
   }
 
   public closeModal(): void {
+    clearInterval(this.intervalID);
     this.myModal.nativeElement.checked = false;
     this.router.navigate(['/location/', this.URLParams.location]);
   }
+
 
 }
