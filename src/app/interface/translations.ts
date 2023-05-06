@@ -36,14 +36,16 @@ export interface managementTranslations {
 }
 
 export interface loginTranslations {
-  "login": string,
-  "register": string,
-  "username": string,
-  "password": string,
-  "usernamePlaceholder": string,
-  "passwordPlaceholder": string
+  "login": string;
+  "register": string;
+  "username": string;
+  "password": string;
+  "usernamePlaceholder": string;
+  "passwordPlaceholder": string;
+  "errorLogin": string;
+  "errorCreateUser": string;
 }
 
 export interface detailTranslations {
-  "congratulations": string
+  "congratulations": string;
 }

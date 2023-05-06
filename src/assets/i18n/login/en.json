@@ -4,5 +4,7 @@
   "username": "username",
   "password": "password",
   "usernamePlaceholder": "insert username",
-  "passwordPlaceholder": "insert password"
+  "passwordPlaceholder": "insert password",
+  "errorLogin": "Error: wrong username or password",
+  "errorCreateUser": "Error: username already exists"
 }
