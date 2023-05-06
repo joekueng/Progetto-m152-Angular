@@ -99,4 +99,8 @@ export class AppComponent implements OnInit {
     // Load Detail Page Translations
     this.detailTranslation.congratulations = await this.translateService.getData(this.detailTranslation.congratulations, lang);
   }
+
+  goHome() {
+    this.router.navigate(['/home']);
+  }
 }

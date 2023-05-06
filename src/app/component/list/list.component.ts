@@ -1,9 +1,7 @@
 import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {listTranslations} from "../../interface/translations";
-import {TranslateService} from "../../service/language/translate.service";
-import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
 import {LocationService} from "../../service/http/location.service";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";

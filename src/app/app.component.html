@@ -1,6 +1,6 @@
 <div class="button-container">
   <div class="dropdown dropdown-hover" id="translate">
-    <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100"
+    <label tabindex="0" class="btn m-1 bg-black border-neutral text-base-100 hover:bg-neutral hover:text-base-100"
            id="translateLabel">{{homeTranslations.translate}}</label>
     <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box w-52" id="translateUl">
       <li (click)="switchLanguage('DE')"><a>DE</a></li>
@@ -9,6 +9,13 @@
       <li (click)="switchLanguage('EN')"><a>EN</a></li>
     </ul>
   </div>
-  <button (click)="clearAllCookies()" class="btn btn-active btn-ghost" id="logout">Logout</button>
+  <div>
+    <button (click)="clearAllCookies()" class="btn btn-active btn-ghost hover:btn-error" id="logout">Logout</button>
+    <button (click)="goHome()"
+            class="btn gap-2 border-primary bg-secondary text-primary hover:bg-secondary hover:text-secondary hover:border-secondary hover:bg-primary" style="margin-right: 5px">
+      Home
+    </button>
+  </div>
+
 </div>
 <router-outlet></router-outlet>
