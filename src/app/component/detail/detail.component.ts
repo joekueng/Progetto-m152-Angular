@@ -2,10 +2,14 @@ import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {WaypointService} from "../../service/http/waypoint.service"
+import {WaypointVisitedService} from "../../service/http/waypointVisited.service"
 import {detailTranslations} from "../../interface/translations";
-//import {waypointVisitedService} from "../../service/http/waypointVisited.service"
 import * as qrcode from 'qrcode';
+import {WaypointsVisitedEntity} from "../../interface/WaypointsVisitedEntity";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
+import {CookieService} from "ngx-cookie-service";
+import {UserService} from "../../service/http/user.service";
+import {UserEntity} from "../../interface/UserEntity";
 
 @Component({
   selector: 'app-detail',
@@ -32,12 +36,11 @@ export class DetailComponent implements OnInit {
 
   img: any;
 
-  constructor(
-    private route: ActivatedRoute,
-    private positionService: positionService,
-    private waypointService: WaypointService,
-    private readTranslationJsonService: ReadTranslateJsonService,
-  ) {
+  iframeLoded: boolean = false;
+
+  constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService, private waypointVisitedService: WaypointVisitedService, private readTranslationJsonService: ReadTranslateJsonService,
+  private userService: UserService, private cookieService: CookieService) {
+
   }
 
   async ngOnInit() {
@@ -61,22 +64,42 @@ export class DetailComponent implements OnInit {
     this.cord = await this.positionService.getLocation();
     console.log("location: ", this.cord);
     this.checkDistanceTimer();
+    console.log(this.isIframeLoaded('map'))
   }
+
+  isIframeLoaded(iframeId: string): boolean {
+    const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
+    if (!iframe) {
+      throw new Error(`Iframe with ID ${iframeId} not found`);
+    } else if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   async checkDistanceTimer() {
     //set interval
     let intervalID = setInterval(() => {
       this.cord = this.positionService.getLocationWithoutPromise();
-      this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.waypointInfo.lat},${this.waypointInfo.lon}`;
+      this.embed = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBJL4FWmG032BG6KXxTb4faxpO_ccyaP3o&origin=${this.cord.lat},${this.cord.lon}&destination=${this.waypointInfo?.lat},${this.waypointInfo?.lon}`;
       this.myModal.nativeElement.checked = false;
-      if (this.cord?.lat && this.cord?.lon) {
+      if (this.cord && this.waypointInfo && this.cord?.lat && this.cord?.lon && this.waypointInfo?.lat && this.waypointInfo?.lon) {
         this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.waypointInfo.lat, this.waypointInfo.lon);
         if (this.distance < 0.05) {
           this.generateQR()
 
-          //this.waypointVisitedService.createWaypointVisited()
+          clearInterval(intervalID);
           // implement this nex line in angular ts
           this.myModal.nativeElement.checked = true;
+          this.userService.getUser("tito").subscribe(user => {
+            if (user.id !== undefined) {
+            let waypointVisited: WaypointsVisitedEntity = {userId: user.id , waypointId: this.waypointInfo.id}
+            console.log("waypointVisited", waypointVisited)
+            this.waypointVisitedService.createWaypoint(waypointVisited)
+            }
+          })
         }
       } else {
         this.distance = undefined;
@@ -97,67 +120,73 @@ export class DetailComponent implements OnInit {
       throw new Error('Error generating QR code');
     }
   }
+  async addSvgToImage(imageUrl: string, svgString: string): Promise<string> {
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+    image.src = imageUrl;
 
-  addSvgToImage(imageUrl: string, svgString: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      image.src = imageUrl;
+    const svgBlob = new Blob([svgString], {type: 'image/svg+xml'});
+    const svgUrl = URL.createObjectURL(svgBlob);
 
-      const svgBlob = new Blob([svgString], {type: 'image/svg+xml'});
-      const svgUrl = URL.createObjectURL(svgBlob);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Could not create canvas context');
+    }
 
-      image.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = image.width;
-        canvas.height = image.height;
+    try {
+      await new Promise((resolve, reject) => {
+        image.onload = () => {
+          canvas.width = image.width;
+          canvas.height = image.height;
 
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
           ctx.drawImage(image, 0, 0);
           const svgImage = new Image();
+
+          svgImage.crossOrigin = 'anonymous';
           svgImage.src = svgUrl;
 
           svgImage.onload = () => {
-            if (ctx && svgImage) {
-              const x = image.width - (image.width * 0.2 + 5);
-              const y = image.height - (image.width * 0.2 + 5);
-              ctx.drawImage(svgImage, x, y, image.width * 0.2, image.width * 0.2);
-              const outputImageUrl = canvas.toDataURL('image/png');
-              resolve(outputImageUrl);
-            } else {
-              reject('Error loading SVG');
-            }
+            const x = image.width - (image.width * 0.2 + 5);
+            const y = image.height - (image.width * 0.2 + 5);
+            ctx.drawImage(svgImage, x, y, image.width * 0.2, image.width * 0.2);
+
+            const outputImageUrl = canvas.toDataURL('image/png');
+            resolve(outputImageUrl);
           };
 
           svgImage.onerror = () => {
             reject('Error loading SVG');
           };
-        } else {
-          reject('Error creating canvas context');
-        }
-      };
+        };
 
-      image.onerror = () => {
-        reject('Error loading image');
-      };
-    });
+        image.onerror = () => {
+          reject('Error loading image');
+        };
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+    return canvas.toDataURL('image/png');
   }
+
 
 
   async generateQR() {
     console.log("generating QR code");
-    console.log(this.URLParams.value);
+    //console.log(this.URLParams.value);
     let url = `http://localhost:4200/location/${this.URLParams.location}/${this.URLParams.id}`;
 
     let qrCode = await this.generateQRCode(url);
 
-    console.log(qrCode);
+    //console.log(qrCode);
 
     const imageUrl = this.waypointInfo.img;
 
     this.addSvgToImage(imageUrl, qrCode).then((outputImageUrl) => {
       this.img = outputImageUrl // Output the URL of the output image
-      console.log(outputImageUrl);
+      //console.log(outputImageUrl);
     }).catch((error) => {
       console.error(error); // Handle any errors that occur
     });
