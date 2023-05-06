@@ -2,7 +2,7 @@
   <div class="max-w-md">
 
     <div class="bg-white px-6 py-8 rounded-lg shadow-md w-[400px]">
-      <div style="padding-bottom: 30px">
+      <div style="padding-bottom: 30px" *ngIf="errorLogin || errorCreateUser">
         <div class="alert alert-error shadow-lg">
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
@@ -10,38 +10,35 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span *ngIf="errorLogin">Username o password sbagliate</span>
-            <span *ngIf="errorCreateUser">Username già utilizzato</span>
-            <span>ciao</span>
+            <span *ngIf="errorLogin">{{ loginTranslation.errorLogin }}</span>
+            <span *ngIf="errorCreateUser">{{ loginTranslation.errorCreateUser }}</span>
           </div>
         </div>
       </div>
 
-      <h2 *ngIf="login" class="text-center text-2xl font-bold mb-8">Accedi</h2>
-      <h2 *ngIf="!login" class="text-center text-2xl font-bold mb-8">Registrati</h2>
+      <h2 *ngIf="login" class="text-center text-2xl font-bold mb-8">{{ loginTranslation.login }}</h2>
+      <h2 *ngIf="!login" class="text-center text-2xl font-bold mb-8">{{ loginTranslation.register }}</h2>
 
       <form (submit)="submit()">
 
         <div class="mb-4">
-          <label for="email" class="block text-gray-700 font-bold mb-2">Username</label>
-          <input type="text" id="email" name="email" placeholder="Inserisci username"
+          <label for="email" class="block text-gray-700 font-bold mb-2">{{ loginTranslation.register }}:</label>
+          <input type="text" id="email" name="email" placeholder="{{ loginTranslation.usernamePlaceholder }}"
                  class="w-full px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                  [(ngModel)]="newUser.username">
         </div>
 
         <div class="mb-4">
-          <label for="password" class="block text-gray-700 font-bold mb-2">Password:</label>
-          <input type="password" id="password" name="password" placeholder="Inserisci la tua password"
+          <label for="password" class="block text-gray-700 font-bold mb-2">{{ loginTranslation.login }}:</label>
+          <input type="password" id="password" name="password" placeholder="{{ loginTranslation.passwordPlaceholder }}"
                  class="w-full px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                  [(ngModel)]="newUser.password">
         </div>
 
-
         <div class="mb-4">
-          <button type="submit"
-                  class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary py-2 w-full">
-            <span *ngIf="login">Accedi</span>
-            <span *ngIf="!login">Registrati</span>
+          <button type="submit" class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary py-2 w-full">
+            <span *ngIf="login">{{ loginTranslation.login }}</span>
+            <span *ngIf="!login">{{ loginTranslation.register }}</span>
           </button>
         </div>
 
@@ -49,8 +46,8 @@
 
 
       <a (click)="switch()">
-        <button class="btn-link" *ngIf="login">Register</button>
-        <button  class="btn-link" *ngIf="!login">Login</button>
+        <button class="btn-link" *ngIf="login">{{ loginTranslation.register }}</button>
+        <button  class="btn-link" *ngIf="!login">{{ loginTranslation.login }}</button>
       </a>
 
     </div>

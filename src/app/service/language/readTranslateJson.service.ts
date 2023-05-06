@@ -1,6 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {homeTranslations, managementTranslations} from "../../interface/translations";
+import {
+  detailTranslations,
+  homeTranslations,
+  loginTranslations,
+  managementTranslations
+} from "../../interface/translations";
 import {listTranslations} from "../../interface/translations";
 
 @Injectable({
@@ -10,6 +15,8 @@ export class ReadTranslateJsonService {
   private homeTranslations: homeTranslations = {} as homeTranslations;  // declares a private object to hold the home translations
   private listTranslation: listTranslations = {} as listTranslations;  // declares a private object to hold the list translations
   private managementTransaltion: managementTranslations = {} as managementTranslations;  // declares a private object to hold the management translations
+  private loginTranslation: loginTranslations = {} as loginTranslations // declares a private object to hold the login translations
+  private detailTranslation: detailTranslations = {} as detailTranslations // declares a private object to hold the detail translations
 
   constructor(private http: HttpClient) {
     // loads the home translations from the assets file for the English language
@@ -19,7 +26,6 @@ export class ReadTranslateJsonService {
       this.homeTranslations.searchButton = data.searchButton;
       this.homeTranslations.searchPlaceholder = data.searchPlaceholder;
       this.homeTranslations.menuPlaces = data.menuPlaces;
-      console.log("data loaded", this.homeTranslations)
     });
 
     // loads the list translations from the assets file for the English language
@@ -28,7 +34,6 @@ export class ReadTranslateJsonService {
       this.listTranslation.distance = data.distance;
       this.listTranslation.locationName = data.locationName;
       this.listTranslation.positionNotFoundErrorMessage = data.positionNotFoundErrorMessage;
-      console.log("data loaded", this.homeTranslations)
     });
 
     this.http.get<managementTranslations>('assets/i18n/management/en.json').subscribe(data => {
@@ -51,7 +56,19 @@ export class ReadTranslateJsonService {
       this.managementTransaltion.addWaypointButton = data.addWaypointButton;
       this.managementTransaltion.add = data.add;
       this.managementTransaltion.close = data.close;
-      console.log("data loaded", this.homeTranslations)
+    });
+
+    this.http.get<loginTranslations>('assets/i18n/login/en.json').subscribe(data => {
+      this.loginTranslation.login = data.login;
+      this.loginTranslation.register = data.register;
+      this.loginTranslation.username = data.username;
+      this.loginTranslation.password = data.password;
+      this.loginTranslation.usernamePlaceholder = data.usernamePlaceholder;
+      this.loginTranslation.passwordPlaceholder = data.passwordPlaceholder;
+    });
+
+    this.http.get<detailTranslations>('assets/i18n/detail/en.json').subscribe(data => {
+      this.detailTranslation.congratulations = data.congratulations;
     });
   }
 
@@ -67,5 +84,13 @@ export class ReadTranslateJsonService {
 
   getManagementTranslations(): managementTranslations {
     return this.managementTransaltion;
+  }
+
+  getLoginTranslations(): loginTranslations{
+    return this.loginTranslation;
+  }
+
+  getDetailTranslations(): detailTranslations{
+    return this.detailTranslation;
   }
 }

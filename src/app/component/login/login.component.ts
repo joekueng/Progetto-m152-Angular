@@ -5,6 +5,7 @@ import {ReadTranslateJsonService} from "../../service/language/readTranslateJson
 import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
 import {UserEntity} from "../../interface/UserEntity";
+import {loginTranslations} from "../../interface/translations";
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
   login: boolean = true;
   errorCreateUser: boolean = false;
   errorLogin: boolean = false;
+  loginTranslation: loginTranslations = {} as loginTranslations;
 
   constructor(
     private router: Router,
@@ -30,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.loginTranslation = this.readTranslationJsonService.getLoginTranslations();
   }
 
   createNewUser(createUser: UserEntity) {

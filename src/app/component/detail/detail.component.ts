@@ -2,8 +2,11 @@ import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {WaypointService} from "../../service/http/waypoint.service"
+import {detailTranslations} from "../../interface/translations";
 //import {waypointVisitedService} from "../../service/http/waypointVisited.service"
 import * as qrcode from 'qrcode';
+import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -15,33 +18,30 @@ export class DetailComponent implements OnInit {
   private id: number | undefined;
 
   private URLParams: any;
-
-  test = {
-    name: 'SPAI',
-    cordinates: '46.2295425892837, 8.74425883677592',
-    lat: 46.2295425892837,
-    lng: 8.74425883677592,
-    description: "Lorem ipsum"
-  }
-
   waypointInfo: any;
-
   embed: any;
-
   cord: any;
 
-/*
-  showNav = true;
-*/
+  detailTranslations: detailTranslations = {} as detailTranslations;
+
+  /*
+    showNav = true;
+  */
   distance: number | undefined;
   displayedDistance = 0;
 
   img: any;
 
-  constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService) {
+  constructor(
+    private route: ActivatedRoute,
+    private positionService: positionService,
+    private waypointService: WaypointService,
+    private readTranslationJsonService: ReadTranslateJsonService,
+  ) {
   }
 
   async ngOnInit() {
+    this.detailTranslations = this.readTranslationJsonService.getDetailTranslations();
     this.route.params.subscribe(params => {
       this.URLParams = params;
       console.log("params", params);

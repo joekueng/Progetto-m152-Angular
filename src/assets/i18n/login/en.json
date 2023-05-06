@@ -1,0 +1,10 @@
+{
+  "login": "Log-in",
+  "register": "Register",
+  "username": "username",
+  "password": "password",
+  "usernamePlaceholder": "insert username",
+  "passwordPlaceholder": "insert password",
+  "errorLogin": "Error: wrong username or password",
+  "errorCreateUser": "Error: username already exists"
+}
