@@ -49,9 +49,15 @@ export class ManagementComponent implements OnInit {
     this.translations = this.readTranslationJsonService.getManagementTranslations();
     this.username = this.cookieService.getUsername();
     this.userService.getUser(this.username).subscribe(user => {
-      if (user.admin == false) {
-        this.route.navigate(['/home']);
+      if (user !== null) {
+        if (user.admin == false) {
+          this.route.navigate(['/home']);
+        }
+      }else {
+        this.cookieService.deleteUsername();
+        this.route.navigate(['/login']);
       }
+
     });
     this.locationService.getLocations().subscribe(locations => {
       this.locations = locations;
