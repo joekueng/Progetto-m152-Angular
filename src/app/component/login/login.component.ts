@@ -37,6 +37,10 @@ export class LoginComponent implements OnInit {
 
   createNewUser(createUser: UserEntity) {
     console.log(createUser.username+" "+createUser.password);
+    if (createUser.username == '' || createUser.password == '') {
+      this.errorCreateUser = true;
+      return;
+    }
     this.userService.getUsers().subscribe(users => {
       this.users = users;
       for (let i = 0; i < this.users.length; i++) {
@@ -55,9 +59,14 @@ export class LoginComponent implements OnInit {
 
   loginFunction(username: string, password: string) {
     this.userService.getUser(username).subscribe(user => {
-      if (user.password == password) {
-        this.cookieService.setUsername(username);
-        this.router.navigate(['/home']);
+      console.log(user);
+      if (user !== null) {
+        if (user.password == password) {
+          this.cookieService.setUsername(username);
+          this.router.navigate(['/home']);
+        }else {
+          this.errorLogin = true;
+        }
       } else {
         this.errorLogin = true;
       }
@@ -73,6 +82,8 @@ export class LoginComponent implements OnInit {
   }
 
   switch() {
+    this.errorCreateUser = false;
+    this.errorLogin = false;
     if (this.login) {
       this.login = false;
     } else {

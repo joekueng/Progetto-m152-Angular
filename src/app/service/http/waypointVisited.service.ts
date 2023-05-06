@@ -30,6 +30,10 @@ export class WaypointVisitedService {
     return this.http.get<WaypointsVisitedEntity[]>(GET_WAYPOINT_BY_USER + user);
   }
 
+  getWaypointByUserAndWaypoint(user: string, waypoint: number) {
+    return this.http.get<boolean>(GET_WAYPOINT_BY_USER + user + "/" + waypoint);
+  }
+
   createWaypoint(waypointvisited: WaypointsVisitedEntity) {
     return this.http.post<WaypointsVisitedEntity>(WAYPOINT_VISITED, waypointvisited);
   }
