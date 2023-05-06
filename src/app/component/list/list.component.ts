@@ -9,6 +9,8 @@ import {LocationEntity} from "../../interface/LocationEntity";
 import {WaypointsEntity} from "../../interface/WaypointsEntity";
 import {WaypointService} from "../../service/http/waypoint.service"
 import {cookieService} from "../../service/cookie.service";
+import {UserService} from "../../service/http/user.service";
+import {WaypointVisitedService} from "../../service/http/waypointVisited.service";
 
 @Component({
   selector: 'app-list',
@@ -16,6 +18,7 @@ import {cookieService} from "../../service/cookie.service";
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnChanges {
+  percentage: number = 0;
   username: string = '';
   locationParams: string | undefined
   locations: LocationEntity[] | undefined;
@@ -32,17 +35,20 @@ export class ListComponent implements OnInit, OnChanges {
 
   positionNotFound: boolean = false;
 
+
   constructor(
     private route: ActivatedRoute,
     private positionService: positionService,
     private locationService: LocationService,
     private waypointService: WaypointService,
+    private waypointVisitedService: WaypointVisitedService,
+    private userService: UserService,
     private cookieService: cookieService,
   ) {
   }
 
   async ngOnInit() {
-    this.username =  this.cookieService.getUsername();
+    this.username = this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
@@ -52,8 +58,9 @@ export class ListComponent implements OnInit, OnChanges {
         this.isNear = false;
         this.waypointService.getWaypoints(this.location.location).subscribe(waypoints => {
           this.waypoints = waypoints;
-          console.log("waypoints", this.waypoints)
-          this.setDistance()
+          console.log("waypoints", this.waypoints);
+          this.setDistance();
+          //this.setVisited();
         });
       }
 
@@ -63,9 +70,9 @@ export class ListComponent implements OnInit, OnChanges {
       console.log("locations", this.locations)
       this.setDistance()
     });
-
     this.getPosition();
     this.positionNotFoundFunction();
+
   }
 
 
@@ -120,5 +127,46 @@ export class ListComponent implements OnInit, OnChanges {
         }
       }
     }
+  }
+/*
+  private setVisited(): void {
+    if (this.username && this.waypoints) {
+      for (let i = 0; i < this.waypoints.length; i++) {
+        if (this.waypoints[i].id !== undefined) {
+          this.waypoints[i].visited == this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id);
+        }
+      }
+    }
+  }
+*/
+  /*
+    private setVisited(): void {
+      this.userService.getUser(this.username).subscribe((user: any) => {
+        if (this.waypoints && user.id) {
+          let userid: string = user.id.toString();
+          for (let i = 0; i < this.waypoints.length; i++) {
+            let waypoint: number;
+            if (this.waypoints[i].id!==undefined) {
+              waypoint = this.waypoints[i].id;
+            } else {
+              waypoint = 0;
+            }
+            this.waypointVisitedService.getWaypointByUserAndWaypoint(userid, waypoint).subscribe((waypointVisited: any) => {
+              if (waypointVisited) {
+                this.waypoints[i].visited = true;
+                this.setPercentage();
+              }
+            });
+          }
+        }
+      });
+    }
+
+  */
+
+  setPercentage()
+    :
+    void {
+    this.percentage = this.waypoints?.length ?? 0;
   }
 }
