@@ -94,9 +94,9 @@ export class DetailComponent implements OnInit {
           // implement this nex line in angular ts
           this.myModal.nativeElement.checked = true;
           this.userService.getUser("tito").subscribe(user => {
-            if (user.id !== undefined) {
-            let waypointVisited: WaypointsVisitedEntity = {userId: user.id , waypointId: this.waypointInfo.id}
-            console.log("waypointVisited", waypointVisited)
+            if (user?.id !== undefined) {
+              let waypointVisited: WaypointsVisitedEntity = {userId: user.id , waypointId: this.waypointInfo.id}
+              console.log("waypointVisited", waypointVisited)
             this.waypointVisitedService.createWaypoint(waypointVisited)
             }
           })
