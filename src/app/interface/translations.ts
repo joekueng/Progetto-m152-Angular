@@ -34,3 +34,16 @@ export interface managementTranslations {
   add: string;
   close: string;
 }
+
+export interface loginTranslations {
+  "login": string,
+  "register": string,
+  "username": string,
+  "password": string,
+  "usernamePlaceholder": string,
+  "passwordPlaceholder": string
+}
+
+export interface detailTranslations {
+  "congratulations": string
+}

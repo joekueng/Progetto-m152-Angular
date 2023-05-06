@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {homeTranslations, listTranslations, managementTranslations} from "./interface/translations";
+import {homeTranslations, listTranslations, loginTranslations, managementTranslations} from "./interface/translations";
 import {TranslateService} from "./service/language/translate.service";
 import {ReadTranslateJsonService} from "./service/language/readTranslateJson.service";
 import {cookieService} from "./service/cookie.service";
@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   homeTranslations: homeTranslations = {} as homeTranslations;
   listTranslations: listTranslations = {} as listTranslations;
   managementTranslation: managementTranslations = {} as managementTranslations;
+  loginTranslation: loginTranslations = {} as loginTranslations;
 
 
   constructor(
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
     this.homeTranslations = this.readTranslationJsonService.getHomeTranslations();
     this.listTranslations = this.readTranslationJsonService.getListTransaltions();
     this.managementTranslation = this.readTranslationJsonService.getManagementTranslations();
+    this.loginTranslation = this.readTranslationJsonService.getLoginTranslations();
   }
 
   clearAllCookies() {
@@ -75,5 +77,13 @@ export class AppComponent implements OnInit {
     this.managementTranslation.addWaypointButton = await this.translateService.getData(this.managementTranslation.addWaypointButton, lang);
     this.managementTranslation.add = await this.translateService.getData(this.managementTranslation.add, lang);
     this.managementTranslation.close = await this.translateService.getData(this.managementTranslation.close, lang);
+
+    // Load Login Page Translations
+    this.loginTranslation.username = await this.translateService.getData(this.loginTranslation.username, lang);
+    this.loginTranslation.password = await this.translateService.getData(this.loginTranslation.password, lang);
+    this.loginTranslation.login = await this.translateService.getData(this.loginTranslation.login, lang);
+    this.loginTranslation.register = await this.translateService.getData(this.loginTranslation.register, lang);
+    this.loginTranslation.usernamePlaceholder = await this.translateService.getData(this.loginTranslation.usernamePlaceholder, lang);
+    this.loginTranslation.passwordPlaceholder = await this.translateService.getData(this.loginTranslation.passwordPlaceholder, lang);
   }
 }

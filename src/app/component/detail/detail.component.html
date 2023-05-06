@@ -40,7 +40,7 @@
 
   <div class="modal modal-bottom sm:modal-middle" *ngIf="img">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">Congratulations you have discovred {{ test.name }}!</h3>
+      <h3 class="font-bold text-lg">{{ detailTranslations.congratulations }}: {{ waypointInfo.name }}!</h3>
       <img class="xl:max-w-md max-h-screen py-4 m-auto" [src]="img" *ngIf="img">
       <div class="modal-action">
         <label for="my-modal-6" class="btn bg-white hover:bg-blue-400" (click)="downloadImage()">
