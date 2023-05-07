@@ -64,6 +64,7 @@ export class AppComponent implements OnInit {
     this.listTranslations.distance = await this.translateService.getData(this.listTranslations.distance, lang);
     this.listTranslations.locationName = await this.translateService.getData(this.listTranslations.locationName, lang);
     this.listTranslations.positionNotFoundErrorMessage = await this.translateService.getData(this.listTranslations.positionNotFoundErrorMessage, lang);
+    this.listTranslations.waypointVisitedPercentage = await this.translateService.getData(this.listTranslations.waypointVisitedPercentage, lang);
 
     // Load Management Page Translations
     this.managementTranslation.users = await this.translateService.getData(this.managementTranslation.users, lang);

@@ -11,6 +11,7 @@ export interface listTranslations {
   locationName: string;
   distance: string;
   positionNotFoundErrorMessage: string;
+  waypointVisitedPercentage: string;
 }
 
 export interface managementTranslations {

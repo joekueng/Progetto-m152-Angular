@@ -45,8 +45,6 @@ h4 {
 }
 .right {
   width: 60%;
-  display: flex;
-  justify-content: center;
 }
 
 #radial {
@@ -56,4 +54,27 @@ h4 {
 .container2 {
   display: flex;
   flex-direction: row;
+}
+
+.radial-container{
+  display: flex;
+  justify-content: center;
+}
+
+#radialTitle{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#location-name{
+  display: flex;
+  flex-direction: row;
+}
+
+#check{
+  height: 100%;
+  align-self: center;
+  margin-left: 10px;
+  color: #519903;
 }
