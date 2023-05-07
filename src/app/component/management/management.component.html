@@ -5,7 +5,7 @@
     <th>{{ translations.username }}</th>
     <th>{{translations.password}}</th>
     <th>admin</th>
-    <th></th>
+    <th>Edit</th>
   </tr>
   </thead>
   <tbody>
@@ -14,7 +14,27 @@
     <td>{{ user.password }}</td>
     <td *ngIf="user.admin==false">No</td>
     <td *ngIf="user.admin==true">Yes</td>
-    <td> </td>
+    <td>
+      <div class="btn-container">
+        <button class="edit" (click)="openEditUserForm(user)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
+          </svg>
+        </button>
+
+        <button class="delete" (click)="deleteUser(user.id)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+          </svg>
+        </button>
+      </div>
+    </td>
   </tr>
   </tbody>
 </table>
@@ -29,7 +49,7 @@
 <div class="overlay" [style.display]="showUserForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>{{translations.addUserButton}}</h2>
-    <form (submit)="addUser(newUser.username, newUser.password)">
+    <form (submit)="formUser(newUser.username, newUser.password)">
       <div>
         <label for="username">{{translations.username}}:</label>
         <input type="text" id="username" name="username" [(ngModel)]="newUser.username">
@@ -38,7 +58,11 @@
         <label for="password">{{translations.password}}:</label>
         <input type="password" id="password" name="password" [(ngModel)]="newUser.password">
       </div>
-      <button type="submit">{{translations.addUserButton}}</button>
+      <button type="submit">
+        <span *ngIf="!edit">{{translations.addUserButton}}</span>
+        <span *ngIf="edit">{{translations.edit}}</span>
+
+      </button>
     </form>
     <button (click)="closeUserForm()">{{translations.close}}</button>
   </div>
@@ -52,6 +76,7 @@
     <th>{{translations.region}}</th>
     <th>{{translations.lat}}</th>
     <th>{{translations.lon}}</th>
+    <th>Edit</th>
   </tr>
   </thead>
   <tbody>
@@ -60,6 +85,27 @@
     <td>{{ location.region }}</td>
     <td>{{ location.lat }}</td>
     <td>{{ location.lon }}</td>
+    <td>
+      <div class="btn-container">
+        <button class="edit" (click)="openEditLocationForm(location)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
+          </svg>
+        </button>
+
+        <button class="delete" (click)="deleteLocation(location.location)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+          </svg>
+        </button>
+      </div>
+    </td>
   </tr>
   </tbody>
 </table>
@@ -74,7 +120,7 @@
 <div class="overlay" [style.display]="showLocationForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>{{translations.addLocationButton}}</h2>
-    <form (submit)="addLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
+    <form (submit)="formLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
       <div>
         <label for="location">{{translations.location}}:</label>
         <input type="text" id="location" name="location" [(ngModel)]="newLocation.location">
@@ -95,7 +141,10 @@
       </div>
 
 
-      <button type="submit">{{translations.addLocationButton}}</button>
+      <button type="submit">
+        <span *ngIf="!edit">{{translations.addLocationButton}}</span>
+        <span *ngIf="edit">{{translations.edit}}</span>
+      </button>
     </form>
     <button (click)="closeLocationForm()">{{translations.close}}</button>
   </div>
@@ -110,6 +159,7 @@
     <th>{{translations.lon}}</th>
     <th>{{translations.description}}</th>
     <th>{{translations.locationName}}</th>
+    <th>Edit</th>
   </tr>
   </thead>
   <tbody>
@@ -119,6 +169,27 @@
     <td>{{ waypoint.lon }}</td>
     <td>{{ waypoint.description }}</td>
     <td>{{ waypoint.locationName }}</td>
+    <td>
+      <div class="btn-container">
+        <button class="edit" (click)="openEditWaypointForm(waypoint)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
+          </svg>
+        </button>
+
+        <button class="delete" (click)="deleteWaypoint(waypoint.id)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor"
+               class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+          </svg>
+        </button>
+      </div>
+    </td>
   </tr>
   </tbody>
 </table>
@@ -134,7 +205,7 @@
   <div class="form-container">
     <h2>{{translations.addWaypointButton}}</h2>
     <form
-      (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.img, newWaypoint.locationName)">
+      (submit)="formWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.img, newWaypoint.locationName)">
       <div>
         <label for="waypointName">{{translations.name}}:</label>
         <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newWaypoint.name">
@@ -156,7 +227,7 @@
       </div>
 
       <div>
-        <label for="image">{{translations.image}} (Base64):</label>
+        <label for="image">{{translations.image}}: </label>
         <input type="text" id="image" name="image" [(ngModel)]="newWaypoint.img">
       </div>
 
@@ -167,9 +238,13 @@
         </select>
       </div>
 
-      <button type="submit">{{translations.addWaypointButton}}</button>
+      <button type="submit">
+        <span *ngIf="!edit">{{translations.addWaypointButton}}</span>
+        <span *ngIf="edit">{{translations.edit}}</span>
+      </button>
     </form>
-    <button (click)="closeWaypointForm()" >{{translations.close}}</button>
+    <button (click)="closeWaypointForm()">{{translations.close}}</button>
   </div>
 </div>
+
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserEntity} from "../../interface/UserEntity";
+import {newUser, UserEntity} from "../../interface/UserEntity";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {newWaypoint, WaypointsEntity} from "../../interface/WaypointsEntity";
 import {Router} from "@angular/router";
@@ -23,8 +23,10 @@ export class ManagementComponent implements OnInit {
   showUserForm: boolean = false;
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
+  edit: boolean = false;
+  id: number = 0;
 
-  newUser: UserEntity = { password: "", username: ""};
+  newUser: newUser = {password: "", username: ""};
   newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
   newWaypoint: newWaypoint = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
@@ -53,7 +55,7 @@ export class ManagementComponent implements OnInit {
         if (user.admin == false) {
           this.route.navigate(['/home']);
         }
-      }else {
+      } else {
         this.cookieService.deleteUsername();
         this.route.navigate(['/login']);
       }
@@ -70,12 +72,50 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addUser( username: string, password: string) {
-    this.newUser = { username: username, password: password};
+  formUser(username: string, password: string) {
+    if (this.edit) {
+      const user: UserEntity = {id: this.id, username: username, password: password};
+      this.editUser(user);
+      this.edit = false;
+    } else {
+      this.addUser(username, password);
+    }
+  }
+
+  formLocation(name: string, region: string, lat: number, lon: number) {
+    if (this.edit) {
+      const location: LocationEntity = {location: name, region: region, lat: lat, lon: lon};
+      this.editLocation(location);
+      this.edit = false;
+    } else {
+      this.addLocation(name, region, lat, lon);
+    }
+  }
+
+  formWaypoint(name: string, lat: number, lon: number, description: string, image: string, locationName: string) {
+    if (this.edit) {
+      const waypoint: WaypointsEntity = {
+        id: this.id,
+        name: name,
+        lat: lat,
+        lon: lon,
+        description: description,
+        img: image,
+        locationName: locationName
+      };
+      this.editWaypoint(waypoint);
+      this.edit = false;
+    } else {
+      this.addWaypoint(name, lat, lon, description, image, locationName);
+    }
+  }
+
+  addUser(username: string, password: string) {
+    this.newUser = {username: username, password: password};
     this.userService.createUser(this.newUser).subscribe(user => {
       this.users?.push(user);
     });
-    this.showUserForm = false;
+    this.closeUserForm();
   }
 
   addLocation(name: string, region: string, lat: number, lon: number) {
@@ -85,7 +125,7 @@ export class ManagementComponent implements OnInit {
     this.locationService.createLocation(this.newLocation).subscribe(location => {
       this.locations?.push(location);
     });
-    this.showLocationForm = false;
+    this.closeLocationForm()
   }
 
   addWaypoint(name: string, lat: number, lon: number, description: string, image: string, locationName: string) {
@@ -100,11 +140,11 @@ export class ManagementComponent implements OnInit {
     this.waypointService.createWaypoint(this.newWaypoint).subscribe(waypoint => {
       this.waypoints?.push(waypoint);
     });
-    this.showWaypointForm = false;
+    this.closeWaypointForm();
   }
 
-  deleteLocation(id: number) {
-    this.locationService.deleteLocation(id).subscribe(location => {
+  deleteLocation(location: string) {
+    this.locationService.deleteLocation(location).subscribe(location => {
       this.locations?.splice(this.locations?.indexOf(location), 1);
     });
   }
@@ -121,27 +161,71 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  openUserForm() {
-    this.showUserForm = true;
+  editLocation(location: LocationEntity) {
+    this.locationService.updateLocation(location).subscribe(location => {
+      this.locations?.splice(this.locations?.indexOf(location), 1, location);
+    });
+    this.closeLocationForm()
   }
 
-  closeUserForm() {
-    this.showUserForm = false;
+  editWaypoint(waypoint: WaypointsEntity) {
+    this.waypointService.updateWaypoint(waypoint, waypoint.id).subscribe(waypoint => {
+      this.waypoints?.splice(this.waypoints?.indexOf(waypoint), 1, waypoint);
+    });
+    this.closeWaypointForm()
   }
 
-  openLocationForm() {
+  editUser(user: UserEntity) {
+    this.userService.updateUser(user, user.id).subscribe(user => {
+      this.users?.splice(this.users?.indexOf(user), 1, user);
+    });
+    this.closeUserForm()
+  }
+
+  openEditLocationForm(location: LocationEntity) {
+    this.newLocation = location;
+    this.edit = true;
     this.showLocationForm = true;
   }
 
-  closeLocationForm() {
-    this.showLocationForm = false;
+  openEditWaypointForm(waypoint: WaypointsEntity) {
+    this.newWaypoint = waypoint;
+    this.id = waypoint.id;
+    this.edit = true;
+    this.showWaypointForm = true;
+  }
+
+  openEditUserForm(user: UserEntity) {
+    this.newUser = user;
+    this.id = user.id;
+    this.edit = true;
+    this.showUserForm = true;
+  }
+
+  openUserForm() {
+    this.showUserForm = true;
   }
 
   openWaypointForm() {
     this.showWaypointForm = true;
   }
 
+  openLocationForm() {
+    this.showLocationForm = true;
+  }
+
+  closeUserForm() {
+    this.showUserForm = false;
+    this.newUser = {username: '', password: ''};
+  }
+
+  closeLocationForm() {
+    this.showLocationForm = false;
+    this.newLocation = {location: '', region: '', lat: 0, lon: 0};
+  }
+
   closeWaypointForm() {
     this.showWaypointForm = false;
+    this.newWaypoint = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
   }
 }

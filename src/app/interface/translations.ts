@@ -11,6 +11,7 @@ export interface listTranslations {
   locationName: string;
   distance: string;
   positionNotFoundErrorMessage: string;
+  waypointVisitedPercentage: string;
 }
 
 export interface managementTranslations {
@@ -31,6 +32,7 @@ export interface managementTranslations {
   addUserButton: string;
   addLocationButton: string;
   addWaypointButton: string;
+  edit: string;
   add: string;
   close: string;
 }

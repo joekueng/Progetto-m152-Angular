@@ -44,6 +44,6 @@ export class WaypointService {
   }
 
   deleteWaypoint(id: number) {
-    return this.http.delete<WaypointsEntity>(WAYPOINT + id);
+    return this.http.delete<WaypointsEntity>(WAYPOINT+"/" + id);
   }
 }
