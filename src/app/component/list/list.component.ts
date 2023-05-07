@@ -9,6 +9,8 @@ import {WaypointService} from "../../service/http/waypoint.service"
 import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointVisitedService} from "../../service/http/waypointVisited.service";
+import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-list',
@@ -42,10 +44,12 @@ export class ListComponent implements OnInit, OnChanges {
     private waypointVisitedService: WaypointVisitedService,
     private userService: UserService,
     private cookieService: cookieService,
+    private readTranslationJsonService: ReadTranslateJsonService,
   ) {
   }
 
   async ngOnInit() {
+    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.username = this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
@@ -57,8 +61,8 @@ export class ListComponent implements OnInit, OnChanges {
         this.waypointService.getWaypoints(this.location.location).subscribe(waypoints => {
           this.waypoints = waypoints;
           console.log("waypoints", this.waypoints);
+          this.setVisited();
           this.setDistance();
-          //this.setVisited();
         });
       }
 
@@ -70,7 +74,7 @@ export class ListComponent implements OnInit, OnChanges {
     });
     this.getPosition();
     this.positionNotFoundFunction();
-
+    this.setDistance();
   }
 
 
@@ -126,17 +130,37 @@ export class ListComponent implements OnInit, OnChanges {
       }
     }
   }
-/*
+
   private setVisited(): void {
+    console.log("setVisited")
     if (this.username && this.waypoints) {
       for (let i = 0; i < this.waypoints.length; i++) {
-        if (this.waypoints[i].id !== undefined) {
-          this.waypoints[i].visited == this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id);
+        if (this.waypoints[i].id) {
+          this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id).subscribe((waypointVisited: any) => {
+            if (this.waypoints) {
+              this.waypoints[i].visited = waypointVisited;
+              console.log(this.waypoints[i].visited);
+              this.setPercentage();
+            }
+          });
         }
       }
     }
+
   }
-*/
+
+  /*
+    private setVisited(): void {
+      if (this.username && this.waypoints) {
+        for (let i = 0; i < this.waypoints.length; i++) {
+          if (this.waypoints[i].id !== undefined) {
+            this.waypoints[i].visited == this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id);
+          }
+        }
+      }
+    }
+  */
+
   /*
     private setVisited(): void {
       this.userService.getUser(this.username).subscribe((user: any) => {
@@ -162,9 +186,17 @@ export class ListComponent implements OnInit, OnChanges {
 
   */
 
-  setPercentage()
-    :
-    void {
-    this.percentage = this.waypoints?.length ?? 0;
+  setPercentage(): void {
+    if (this.waypoints) {
+      let count: number = 0;
+      for (let i = 0; i < this.waypoints.length; i++) {
+        if (this.waypoints[i].visited) {
+          count++;
+        }
+      }
+      this.percentage = parseFloat((count / this.waypoints.length * 100).toFixed(0));
+    }
+  console.log("percentage", this.percentage)
   }
+
 }
