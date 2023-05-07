@@ -34,6 +34,7 @@ export class ReadTranslateJsonService {
       this.listTranslation.distance = data.distance;
       this.listTranslation.locationName = data.locationName;
       this.listTranslation.positionNotFoundErrorMessage = data.positionNotFoundErrorMessage;
+      this.listTranslation.waypointVisitedPercentage = data.waypointVisitedPercentage;
     });
 
     this.http.get<managementTranslations>('assets/i18n/management/en.json').subscribe(data => {

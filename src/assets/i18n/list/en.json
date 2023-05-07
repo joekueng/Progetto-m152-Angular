@@ -2,5 +2,6 @@
   "translate": "Translate",
   "locationName": "Position not found",
   "distance": "Distance",
-  "positionNotFoundErrorMessage": "Could not retrieve position"
+  "positionNotFoundErrorMessage": "Could not retrieve position",
+  "waypointVisitedPercentage": "Percentage of waypoints visited"
 }

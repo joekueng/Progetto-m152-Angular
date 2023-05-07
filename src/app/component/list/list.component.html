@@ -24,8 +24,11 @@
   <div class="container2">
     <div class="left">
       <div *ngFor="let waypoint of waypoints, let i = index" class="row">
-        <h3>
+        <h3 id="location-name">
           <a class="link link-primary" href="location/{{location.location}}/{{waypoint.id}}"> {{waypoint.name}}</a>
+          <svg *ngIf="waypoint.visited" id="check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </h3>
         <div class="distance">
           <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}: {{waypoint.distance}} km</h4>
@@ -35,10 +38,14 @@
       </div>
     </div>
     <div class="right">
-      <div class="radial-progress text-primary" id="radial" style="--value:{{percentage}}; --size:12rem; --thickness: 1.5rem;">
+      <h3 id="radialTitle">{{translations.waypointVisitedPercentage}}</h3>
+      <div class="radial-container">
+        <div class="radial-progress text-primary" id="radial"
+             style="--value:{{percentage}}; --size:12rem; --thickness: 1.5rem;">
         <span style="font-size: 20pt">
           {{percentage}}%
         </span>
+        </div>
       </div>
     </div>
   </div>
