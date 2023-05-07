@@ -44,10 +44,12 @@ export class ListComponent implements OnInit, OnChanges {
     private waypointVisitedService: WaypointVisitedService,
     private userService: UserService,
     private cookieService: cookieService,
+    private readTranslationJsonService: ReadTranslateJsonService,
   ) {
   }
 
   async ngOnInit() {
+    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.username = this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
