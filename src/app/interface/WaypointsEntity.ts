@@ -1,5 +1,5 @@
 export interface WaypointsEntity {
-  id?: number;
+  id: number;
   name: string;
   lat: number;
   lon: number;
@@ -8,4 +8,12 @@ export interface WaypointsEntity {
   locationName: string;
   distance?: number;
   visited?: boolean;
+}
+export interface newWaypoint {
+  name: string;
+  lat: number;
+  lon: number;
+  description: string;
+  img: string;
+  locationName: string;
 }
