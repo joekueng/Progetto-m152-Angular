@@ -24,7 +24,7 @@ export class ManagementComponent implements OnInit {
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
 
-  newUser: UserEntity = { password: "", username: ""};
+  newUser: UserEntity = {password: "", username: ""};
   newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
   newWaypoint: newWaypoint = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
@@ -53,7 +53,7 @@ export class ManagementComponent implements OnInit {
         if (user.admin == false) {
           this.route.navigate(['/home']);
         }
-      }else {
+      } else {
         this.cookieService.deleteUsername();
         this.route.navigate(['/login']);
       }
@@ -70,8 +70,8 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addUser( username: string, password: string) {
-    this.newUser = { username: username, password: password};
+  addUser(username: string, password: string) {
+    this.newUser = {username: username, password: password};
     this.userService.createUser(this.newUser).subscribe(user => {
       this.users?.push(user);
     });
@@ -103,8 +103,8 @@ export class ManagementComponent implements OnInit {
     this.showWaypointForm = false;
   }
 
-  deleteLocation(id: number) {
-    this.locationService.deleteLocation(id).subscribe(location => {
+  deleteLocation(location: string) {
+    this.locationService.deleteLocation(location).subscribe(location => {
       this.locations?.splice(this.locations?.indexOf(location), 1);
     });
   }
@@ -119,6 +119,39 @@ export class ManagementComponent implements OnInit {
     this.userService.deleteUser(id).subscribe(user => {
       this.users?.splice(this.users?.indexOf(user), 1);
     });
+  }
+
+  editLocation(location: LocationEntity) {
+    this.locationService.updateLocation(location).subscribe(location => {
+      this.locations?.splice(this.locations?.indexOf(location), 1, location);
+    });
+  }
+
+  editWaypoint(waypoint: WaypointsEntity) {
+    this.waypointService.updateWaypoint(waypoint, waypoint.id).subscribe(waypoint => {
+      this.waypoints?.splice(this.waypoints?.indexOf(waypoint), 1, waypoint);
+    });
+  }
+
+  // editUser(user: UserEntity) {
+  //   this.userService.updateUser(user, user.id).subscribe(user => {
+  //     this.users?.splice(this.users?.indexOf(user), 1, user);
+  //   });
+  // }
+
+  openEditLocationForm(location: LocationEntity) {
+    this.newLocation = location;
+    this.showLocationForm = true;
+  }
+
+  openEditWaypointForm(waypoint: WaypointsEntity) {
+    this.newWaypoint = waypoint;
+    this.showWaypointForm = true;
+  }
+
+  openEditUserForm(user: UserEntity) {
+    this.newUser = user;
+    this.showUserForm = true;
   }
 
   openUserForm() {

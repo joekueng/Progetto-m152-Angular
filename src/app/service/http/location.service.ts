@@ -29,11 +29,11 @@ export class LocationService {
   }
 
   updateLocation(location: LocationEntity) {
-    return this.http.put<LocationEntity>(LOCATION, location);
+    return this.http.put<LocationEntity>(LOCATION+"/"+location.location, location);
   }
 
-  deleteLocation(id: number) {
-    return this.http.delete<LocationEntity>(LOCATION + id);
+  deleteLocation(location: string) {
+    return this.http.delete<LocationEntity>(LOCATION +"/"+ location);
   }
 
 }

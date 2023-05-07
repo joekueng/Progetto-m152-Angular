@@ -16,7 +16,7 @@
     <td *ngIf="user.admin==true">Yes</td>
     <td>
       <div class="btn-container">
-        <button class="edit">
+        <button class="edit" (click)="openEditUserForm(user)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -25,7 +25,7 @@
           </svg>
         </button>
 
-        <button class="delete">
+        <button class="delete" (click)="deleteUser(user.id)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -83,7 +83,7 @@
     <td>{{ location.lon }}</td>
     <td>
       <div class="btn-container">
-        <button class="edit">
+        <button class="edit" (click)="editLocation(location)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -92,7 +92,7 @@
           </svg>
         </button>
 
-        <button class="delete">
+        <button class="delete" (click)="deleteLocation(location.location)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -164,7 +164,7 @@
     <td>{{ waypoint.locationName }}</td>
     <td>
       <div class="btn-container">
-        <button class="edit">
+        <button class="edit" (click)="openEditWaypointForm(waypoint)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -173,7 +173,7 @@
           </svg>
         </button>
 
-        <button class="delete">
+        <button class="delete" (click)="deleteWaypoint(waypoint.id)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
