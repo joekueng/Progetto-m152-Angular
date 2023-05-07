@@ -17,17 +17,21 @@
   <h1>
     {{location.location}}
   </h1>
-  <div *ngFor="let waypoint of waypoints, let i = index" class="row">
-    <h3>
-      <a class="link link-primary" href="location/{{location.location}}/{{waypoint.id}}"> {{waypoint.name}}</a>
-    </h3>
-    <div class="distance">
-      <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}{{waypoint.distance}} km</h4>
-      <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
+  <div class="container2">
+    <div class="left">
+      <div *ngFor="let waypoint of waypoints, let i = index" class="row">
+        <h3>
+          <a class="link link-primary" href="location/{{location.location}}/{{waypoint.id}}"> {{waypoint.name}}</a>
+        </h3>
+        <div class="distance">
+          <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}{{waypoint.distance}} km</h4>
+          <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
+        </div>
+
+      </div>
     </div>
-
+    <div class="right">
+      <div class="radial-progress text-primary" style="--value:70; --size:12rem; --thickness: 1.5rem;"><span style="font-size: 20pt">70%</span></div>
+    </div>
   </div>
-
-  <div class="radial-progress text-primary" style="--value:70; --size:12rem; --thickness: 1.5rem;"><span style="font-size: 20pt">70%</span></div>
-
 </div>
