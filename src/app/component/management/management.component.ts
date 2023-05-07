@@ -165,18 +165,21 @@ export class ManagementComponent implements OnInit {
     this.locationService.updateLocation(location).subscribe(location => {
       this.locations?.splice(this.locations?.indexOf(location), 1, location);
     });
+    this.closeLocationForm()
   }
 
   editWaypoint(waypoint: WaypointsEntity) {
     this.waypointService.updateWaypoint(waypoint, waypoint.id).subscribe(waypoint => {
       this.waypoints?.splice(this.waypoints?.indexOf(waypoint), 1, waypoint);
     });
+    this.closeWaypointForm()
   }
 
   editUser(user: UserEntity) {
     this.userService.updateUser(user, user.id).subscribe(user => {
       this.users?.splice(this.users?.indexOf(user), 1, user);
     });
+    this.closeUserForm()
   }
 
   openEditLocationForm(location: LocationEntity) {
