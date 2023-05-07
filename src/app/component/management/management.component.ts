@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserEntity} from "../../interface/UserEntity";
 import {LocationEntity} from "../../interface/LocationEntity";
-import {WaypointsEntity} from "../../interface/WaypointsEntity";
+import {newWaypoint, WaypointsEntity} from "../../interface/WaypointsEntity";
 import {Router} from "@angular/router";
 import {LocationService} from "../../service/http/location.service";
 import {UserService} from "../../service/http/user.service";
@@ -26,7 +26,7 @@ export class ManagementComponent implements OnInit {
 
   newUser: UserEntity = { password: "", username: ""};
   newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
-  newWaypoint: WaypointsEntity = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
+  newWaypoint: newWaypoint = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
   locations: LocationEntity[] | undefined;
   waypoints: WaypointsEntity[] | undefined;

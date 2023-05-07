@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {WaypointsEntity} from "../../interface/WaypointsEntity";
+import {newWaypoint, WaypointsEntity} from "../../interface/WaypointsEntity";
 import {catchError, throwError} from "rxjs";
 
 const BASE_URL = "progetto152";
@@ -35,7 +35,7 @@ export class WaypointService {
     return this.http.get<WaypointsEntity>(GET_WAYPOINT_BY_ID + id);
   }
 
-  createWaypoint(waypoint: WaypointsEntity) {
+  createWaypoint(waypoint: newWaypoint) {
     return this.http.post<WaypointsEntity>(WAYPOINT, waypoint);
   }
 
