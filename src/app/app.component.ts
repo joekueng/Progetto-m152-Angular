@@ -84,6 +84,7 @@ export class AppComponent implements OnInit {
     this.managementTranslation.addLocationButton = await this.translateService.getData(this.managementTranslation.addLocationButton, lang);
     this.managementTranslation.addUserButton = await this.translateService.getData(this.managementTranslation.addUserButton, lang);
     this.managementTranslation.addWaypointButton = await this.translateService.getData(this.managementTranslation.addWaypointButton, lang);
+    this.managementTranslation.edit = await this.translateService.getData(this.managementTranslation.edit, lang);
     this.managementTranslation.add = await this.translateService.getData(this.managementTranslation.add, lang);
     this.managementTranslation.close = await this.translateService.getData(this.managementTranslation.close, lang);
 
