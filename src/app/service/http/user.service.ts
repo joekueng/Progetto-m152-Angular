@@ -48,7 +48,7 @@ export class UserService {
   }
 
   updateUser(user: UserEntity, id: number) {
-    return this.http.put<UserEntity>(USER + id, user);
+    return this.http.put<UserEntity>(USER + "/"+id, user);
   }
 
   deleteUser(id: number) {

@@ -49,7 +49,7 @@
 <div class="overlay" [style.display]="showUserForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>{{translations.addUserButton}}</h2>
-    <form (submit)="addUser(newUser.username, newUser.password)">
+    <form (submit)="formUser(newUser.username, newUser.password)">
       <div>
         <label for="username">{{translations.username}}:</label>
         <input type="text" id="username" name="username" [(ngModel)]="newUser.username">
@@ -83,7 +83,7 @@
     <td>{{ location.lon }}</td>
     <td>
       <div class="btn-container">
-        <button class="edit" (click)="editLocation(location)">
+        <button class="edit" (click)="openEditLocationForm(location)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
                class="w-6 h-6">
@@ -116,7 +116,7 @@
 <div class="overlay" [style.display]="showLocationForm ? 'block' : 'none'">
   <div class="form-container">
     <h2>{{translations.addLocationButton}}</h2>
-    <form (submit)="addLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
+    <form (submit)="formLocation(newLocation.location, newLocation.region, newLocation.lat ,newLocation.lon)">
       <div>
         <label for="location">{{translations.location}}:</label>
         <input type="text" id="location" name="location" [(ngModel)]="newLocation.location">
@@ -198,7 +198,7 @@
   <div class="form-container">
     <h2>{{translations.addWaypointButton}}</h2>
     <form
-      (submit)="addWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.img, newWaypoint.locationName)">
+      (submit)="formWaypoint(newWaypoint.name, newWaypoint.lat, newWaypoint.lon, newWaypoint.description, newWaypoint.img, newWaypoint.locationName)">
       <div>
         <label for="waypointName">{{translations.name}}:</label>
         <input type="text" id="waypointName" name="waypointName" [(ngModel)]="newWaypoint.name">
