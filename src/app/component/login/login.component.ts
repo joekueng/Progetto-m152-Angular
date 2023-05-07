@@ -4,7 +4,7 @@ import {TranslateService} from "../../service/language/translate.service";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
 import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
-import {UserEntity} from "../../interface/UserEntity";
+import {newUser, UserEntity} from "../../interface/UserEntity";
 import {loginTranslations} from "../../interface/translations";
 
 @Component({
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     this.loginTranslation = this.readTranslationJsonService.getLoginTranslations();
   }
 
-  createNewUser(createUser: UserEntity) {
+  createNewUser(createUser: newUser) {
     console.log(createUser.username+" "+createUser.password);
     if (createUser.username == '' || createUser.password == '') {
       this.errorCreateUser = true;

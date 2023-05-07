@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {UserEntity} from "../../interface/UserEntity";
+import {newUser, UserEntity} from "../../interface/UserEntity";
 import {catchError, of} from "rxjs";
 
 const BASE_URL = "progetto152";
@@ -41,7 +41,7 @@ export class UserService {
     return this.http.get<UserEntity>(GET_USER_BY_ID + "/" + id);
   }
 
-  createUser(user: UserEntity) {
+  createUser(user: newUser) {
     console.log("create " + user);
     return this.http.post<UserEntity>(USER, user);
 
@@ -52,6 +52,6 @@ export class UserService {
   }
 
   deleteUser(id: number) {
-    return this.http.delete<UserEntity>(USER + id);
+    return this.http.delete<UserEntity>(USER+"/" + id);
   }
 }

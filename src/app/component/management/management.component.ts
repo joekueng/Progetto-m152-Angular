@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserEntity} from "../../interface/UserEntity";
+import {newUser, UserEntity} from "../../interface/UserEntity";
 import {LocationEntity} from "../../interface/LocationEntity";
 import {newWaypoint, WaypointsEntity} from "../../interface/WaypointsEntity";
 import {Router} from "@angular/router";
@@ -24,7 +24,7 @@ export class ManagementComponent implements OnInit {
   showLocationForm: boolean = false;
   showWaypointForm: boolean = false;
 
-  newUser: UserEntity = {password: "", username: ""};
+  newUser: newUser = {password: "", username: ""};
   newLocation: LocationEntity = {location: "", lat: 0, lon: 0, region: ""};
   newWaypoint: newWaypoint = {description: "", img: "", lat: 0, locationName: "", lon: 0, name: ""};
 
@@ -133,11 +133,11 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  // editUser(user: UserEntity) {
-  //   this.userService.updateUser(user, user.id).subscribe(user => {
-  //     this.users?.splice(this.users?.indexOf(user), 1, user);
-  //   });
-  // }
+  editUser(user: UserEntity) {
+    this.userService.updateUser(user, user.id).subscribe(user => {
+      this.users?.splice(this.users?.indexOf(user), 1, user);
+    });
+  }
 
   openEditLocationForm(location: LocationEntity) {
     this.newLocation = location;
