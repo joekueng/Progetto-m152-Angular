@@ -28,7 +28,7 @@
           <a class="link link-primary" href="location/{{location.location}}/{{waypoint.id}}"> {{waypoint.name}}</a>
         </h3>
         <div class="distance">
-          <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}{{waypoint.distance}} km</h4>
+          <h4 *ngIf="waypoint.distance && !positionNotFound">{{translations.distance}}: {{waypoint.distance}} km</h4>
           <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
         </div>
 
