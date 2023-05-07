@@ -102,7 +102,9 @@ export class DetailComponent implements OnInit {
             if (user?.id !== undefined) {
               let waypointVisited: WaypointsVisitedEntity = {userId: user.id , waypointId: this.waypointInfo.id}
               console.log("waypointVisited", waypointVisited)
-            this.waypointVisitedService.createWaypoint(waypointVisited)
+              this.waypointVisitedService.createWaypoint(waypointVisited).subscribe(waypointVisited => {
+                console.log("waypointVisited request return", waypointVisited)
+              })
             }
           })
         } else {
