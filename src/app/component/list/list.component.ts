@@ -9,6 +9,7 @@ import {WaypointService} from "../../service/http/waypoint.service"
 import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointVisitedService} from "../../service/http/waypointVisited.service";
+import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
 
 @Component({
   selector: 'app-list',
@@ -42,10 +43,12 @@ export class ListComponent implements OnInit, OnChanges {
     private waypointVisitedService: WaypointVisitedService,
     private userService: UserService,
     private cookieService: cookieService,
+    private readTranslationJsonService: ReadTranslateJsonService,
   ) {
   }
 
   async ngOnInit() {
+    this.translations = this.readTranslationJsonService.getListTransaltions();
     this.username = this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
