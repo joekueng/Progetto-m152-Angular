@@ -32,6 +32,7 @@ export interface managementTranslations {
   addUserButton: string;
   addLocationButton: string;
   addWaypointButton: string;
+  edit: string;
   add: string;
   close: string;
 }

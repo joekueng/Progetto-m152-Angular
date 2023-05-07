@@ -55,6 +55,7 @@ export class ReadTranslateJsonService {
       this.managementTransaltion.addUserButton = data.addUserButton;
       this.managementTransaltion.addLocationButton = data.addLocationButton;
       this.managementTransaltion.addWaypointButton = data.addWaypointButton;
+      this.managementTransaltion.edit = data.edit;
       this.managementTransaltion.add = data.add;
       this.managementTransaltion.close = data.close;
     });
