@@ -35,5 +35,4 @@ export class LocationService {
   deleteLocation(location: string) {
     return this.http.delete<LocationEntity>(LOCATION +"/"+ location);
   }
-
 }
