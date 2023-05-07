@@ -8,7 +8,7 @@ import {detailTranslations} from "../../interface/translations";
 import * as qrcode from 'qrcode';
 import {WaypointsVisitedEntity} from "../../interface/WaypointsVisitedEntity";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
-import {CookieService} from "ngx-cookie-service";
+import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
 import {UserEntity} from "../../interface/UserEntity";
 import { trigger, state, transition, animate } from '@angular/animations';
@@ -45,7 +45,7 @@ export class DetailComponent implements OnInit {
   intervalID: any;
 
   constructor(private route: ActivatedRoute, private positionService: positionService, private waypointService: WaypointService, private waypointVisitedService: WaypointVisitedService, private readTranslationJsonService: ReadTranslateJsonService,
-  private userService: UserService, private cookieService: CookieService, private router: Router) {
+  private userService: UserService, private cookieService: cookieService, private router: Router) {
 
   }
 
@@ -95,10 +95,9 @@ export class DetailComponent implements OnInit {
         this.distance = this.positionService.getDistanceBetweenCoordinates(this.cord?.lat, this.cord?.lon, this.waypointInfo.lat, this.waypointInfo.lon);
         if (this.distance < 0.05) {
           this.generateQR()
-
           // implement this nex line in angular ts
           this.myModal.nativeElement.checked = true;
-          this.userService.getUser("tito").subscribe(user => {
+          this.userService.getUser(this.cookieService.getUsername()).subscribe(user => {
             if (user?.id !== undefined) {
               let waypointVisited: WaypointsVisitedEntity = {userId: user.id , waypointId: this.waypointInfo.id}
               console.log("waypointVisited", waypointVisited)
