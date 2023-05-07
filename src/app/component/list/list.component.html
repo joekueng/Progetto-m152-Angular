@@ -9,7 +9,7 @@
           <a class="link link-primary" href="location/{{locations.location}}">{{locations.location}}</a>
         </h3>
         <div class="distance">
-          <h4 *ngIf="locations.distance && !positionNotFound">{{translations.distance}}{{locations.distance}} km</h4>
+          <h4 *ngIf="locations.distance && !positionNotFound">{{translations.distance}}: {{locations.distance}} km</h4>
           <h4 *ngIf="positionNotFound">{{translations.positionNotFoundErrorMessage}}</h4>
         </div>
       </div>
