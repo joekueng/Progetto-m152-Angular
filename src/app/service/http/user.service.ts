@@ -18,10 +18,10 @@ export class UserService {
   ) {
   }
 
+// get all users
   getUsers() {
     return this.http.get<UserEntity[]>(USER);
   }
-
 
   getUser(username: string) {
     return this.http.get<UserEntity>(USER + "/" + username).pipe(
@@ -34,8 +34,6 @@ export class UserService {
       })
     );
   }
-
-
 
   getUserById(id: number) {
     return this.http.get<UserEntity>(GET_USER_BY_ID + "/" + id);
