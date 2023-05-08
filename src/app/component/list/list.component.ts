@@ -1,5 +1,5 @@
 import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {positionService} from "../../service/position.service";
 import {listTranslations} from "../../interface/translations";
 import {LocationService} from "../../service/http/location.service";
@@ -10,7 +10,6 @@ import {cookieService} from "../../service/cookie.service";
 import {UserService} from "../../service/http/user.service";
 import {WaypointVisitedService} from "../../service/http/waypointVisited.service";
 import {ReadTranslateJsonService} from "../../service/language/readTranslateJson.service";
-import {filter} from "rxjs";
 
 @Component({
   selector: 'app-list',
@@ -18,21 +17,16 @@ import {filter} from "rxjs";
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnChanges {
+
   percentage: number = 0;
   username: string = '';
   locationParams: string | undefined
   locations: LocationEntity[] | undefined;
   location: LocationEntity | undefined;
-
   waypoints: WaypointsEntity[] | undefined;
-
   positionCord: any;
-
   isNear: boolean = true;
-
-
   translations: listTranslations = {} as listTranslations
-
   positionNotFound: boolean = false;
 
 
@@ -49,15 +43,19 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
+    // get translations
     this.translations = this.readTranslationJsonService.getListTransaltions();
+    // get username by cookie
     this.username = this.cookieService.getUsername();
     this.route.params.subscribe(params => {
       this.locationParams = params['location'];
     });
+    // get location by locationParams
     this.locationService.getLocation(this.locationParams ?? "").subscribe(location => {
       this.location = location;
       if (this.location.location != null || this.location.location != undefined) {
         this.isNear = false;
+        // get waypoints by location
         this.waypointService.getWaypoints(this.location.location).subscribe(waypoints => {
           this.waypoints = waypoints;
           console.log("waypoints", this.waypoints);
@@ -65,29 +63,35 @@ export class ListComponent implements OnInit, OnChanges {
           this.setDistance();
         });
       }
-
     });
+    // get locations
     this.locationService.getLocations().subscribe(locations => {
       this.locations = locations;
       console.log("locations", this.locations)
       this.setDistance()
     });
+    // get position of user
     this.getPosition();
+    // set percentage of visited waypoints
     this.positionNotFoundFunction();
+    // set distance between user and waypoints
     this.setDistance();
   }
 
-
+  // set percentage of visited waypoints
   positionNotFoundFunction() {
     if (!this.positionNotFound) {
-      setTimeout(() => {
+      setInterval(() => {
         if (!this.positionCord) {
           this.positionNotFound = true;
+        }else {
+          this.positionNotFound = false;
         }
       }, 5000);
     }
   }
 
+  // check if positionCord is changed
   ngOnChanges(changes: SimpleChanges) {
     if (changes['positionCord'] && (changes['positionCord'])) {
       console.log("onChanges")
@@ -95,6 +99,7 @@ export class ListComponent implements OnInit, OnChanges {
     }
   }
 
+  // get position of user
   getPosition(): any {
     setInterval(async () => {
       this.positionCord = await this.positionService.getLocation();
@@ -102,21 +107,7 @@ export class ListComponent implements OnInit, OnChanges {
     }, 2000);
   }
 
-  private checkDataPopulated(): void {
-    if (this.locations && this.location) {
-      console.log("Dati popolati correttamente:", this.locations, this.location);
-      for (let i = 0; i < this.locations.length; i++) {
-        if (this.locations[i].location === this.locationParams) {
-          this.location = this.locations[i];
-          console.log("Location trovata:", this.location);
-          this.isNear = false;
-          this.setDistance();
-          break;
-        }
-      }
-    }
-  }
-
+  // set distance between user and waypoints
   private setDistance(): void {
     if (this.waypoints) {
       for (let i = 0; i < this.waypoints.length; i++) {
@@ -131,6 +122,7 @@ export class ListComponent implements OnInit, OnChanges {
     }
   }
 
+  // set visited waypoints by user
   private setVisited(): void {
     console.log("setVisited")
     if (this.username && this.waypoints) {
@@ -139,53 +131,15 @@ export class ListComponent implements OnInit, OnChanges {
           this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id).subscribe((waypointVisited: any) => {
             if (this.waypoints) {
               this.waypoints[i].visited = waypointVisited;
-              console.log(this.waypoints[i].visited);
               this.setPercentage();
             }
           });
         }
       }
     }
-
   }
 
-  /*
-    private setVisited(): void {
-      if (this.username && this.waypoints) {
-        for (let i = 0; i < this.waypoints.length; i++) {
-          if (this.waypoints[i].id !== undefined) {
-            this.waypoints[i].visited == this.waypointVisitedService.getWaypointByUserAndWaypoint(this.username, this.waypoints[i].id);
-          }
-        }
-      }
-    }
-  */
-
-  /*
-    private setVisited(): void {
-      this.userService.getUser(this.username).subscribe((user: any) => {
-        if (this.waypoints && user.id) {
-          let userid: string = user.id.toString();
-          for (let i = 0; i < this.waypoints.length; i++) {
-            let waypoint: number;
-            if (this.waypoints[i].id!==undefined) {
-              waypoint = this.waypoints[i].id;
-            } else {
-              waypoint = 0;
-            }
-            this.waypointVisitedService.getWaypointByUserAndWaypoint(userid, waypoint).subscribe((waypointVisited: any) => {
-              if (waypointVisited) {
-                this.waypoints[i].visited = true;
-                this.setPercentage();
-              }
-            });
-          }
-        }
-      });
-    }
-
-  */
-
+  // set percentage of visited waypoints by user
   setPercentage(): void {
     if (this.waypoints) {
       let count: number = 0;
@@ -196,7 +150,5 @@ export class ListComponent implements OnInit, OnChanges {
       }
       this.percentage = parseFloat((count / this.waypoints.length * 100).toFixed(0));
     }
-  console.log("percentage", this.percentage)
   }
-
 }

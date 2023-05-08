@@ -32,9 +32,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // get login translations
     this.loginTranslation = this.readTranslationJsonService.getLoginTranslations();
   }
 
+  // create new user
   createNewUser(createUser: newUser) {
     console.log(createUser.username+" "+createUser.password);
     if (createUser.username == '' || createUser.password == '') {
@@ -57,6 +59,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // login function
   loginFunction(username: string, password: string) {
     this.userService.getUser(username).subscribe(user => {
       console.log(user);
@@ -73,6 +76,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // submit function
   submit() {
     if (this.login) {
       this.loginFunction(this.newUser.username, this.newUser.password);
@@ -81,6 +85,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // switch between login and create user
   switch() {
     this.errorCreateUser = false;
     this.errorLogin = false;
