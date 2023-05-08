@@ -1,9 +1,1 @@
-.button-container{
-    display: flex;
-    justify-content: space-between;
-}
 
-#logout{
-  justify-self: flex-end;
-  margin: 5px;
-}

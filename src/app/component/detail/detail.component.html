@@ -8,7 +8,7 @@
             [src]='embed | safe' allowfullscreen></iframe>
     <img *ngIf="!embed" [src]="waypointInfo?.img ? waypointInfo.img : '/assets/testDetail/img.png'" alt="" class="my-auto w-screen opacity-5">
   </div>
-    <div *ngIf="embed && !this.myModal.checked" class="card bg-white sm:w-fit md:w-3/4 lg:w-1/4  m-4 p-2 z-10 absolute bottom-0 bg-gray-100 bg-opacity-65 backdrop-filter backdrop-blur-lg border-2 border-gray-300 shadow-4xl rounded-sm overflow-y-auto pointer-events-auto">
+    <div *ngIf="embed && !this.myModal.checked" class="card bg-white sm:w-fit md:w-3/4 lg:w-2/4  m-4 p-2 z-10 absolute bottom-0 bg-gray-100 bg-opacity-65 backdrop-filter backdrop-blur-lg border-2 border-gray-300 shadow-4xl rounded-sm overflow-y-auto pointer-events-auto">
       <figure><img [src]="waypointInfo?.img ? waypointInfo.img : '/assets/testDetail/img.png'"
                    [alt]="waypointInfo?.locationName ? waypointInfo.locationName : ''"/></figure>
       <div class="card-body">
