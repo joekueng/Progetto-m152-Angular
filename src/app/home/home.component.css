@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-input {
+/*input {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@ input {
   align-items: center;
   align-content: center;
   gap: 20px;
-}
+}*/
 
 .bg-image {
   padding-top: 15%;

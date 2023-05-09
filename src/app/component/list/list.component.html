@@ -18,9 +18,11 @@
 </div>
 
 <div *ngIf="!isNear && location && waypoints" class="container">
-  <h1>
-    {{location.location}}
-  </h1>
+  <div class="flex-row flex-nowrap">
+    <h1>
+      {{location.location}}
+    </h1>
+  </div>
   <div class="container2">
     <div class="left">
       <div *ngFor="let waypoint of waypoints, let i = index" class="row">

@@ -1,0 +1,10 @@
+.bg-image {
+  padding-top: 15%;
+  background-image: url('src/assets/img/mountains.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 94vh;
+  display: flex;
+  flex-direction: column;
+}

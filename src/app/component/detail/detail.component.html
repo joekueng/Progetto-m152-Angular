@@ -54,12 +54,12 @@
   <input type="checkbox" id="my-modal-6" class="modal-toggle" #myModal/>
 
   <div class="modal modal-bottom sm:modal-middle" *ngIf="img">
-    <div class="modal-box">
+    <div class="modal-box rounded-sm">
       <h3 class="font-bold text-lg">Congratulations you have
         discovred {{ waypointInfo?.name ? waypointInfo.name : '' }}!</h3>
       <img class="xl:max-w-md max-h-screen py-4 m-auto" [src]="img" *ngIf="img">
       <div class="modal-action">
-        <button for="my-modal-6" class="btn bg-white hover:bg-blue-400" (click)="downloadImage()">
+        <button for="my-modal-6" class="btn bg-white hover:bg-blue-400 rounded-sm" (click)="downloadImage()">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                width="17.334" height="23.4863">
             <g>
@@ -68,7 +68,7 @@
             </g>
           </svg>
         </button>
-        <button class="btn btn-primary" (click)="closeModal()">OK</button>
+        <button class="btn btn-primary rounded-sm" (click)="closeModal()">OK</button>
       </div>
     </div>
   </div>

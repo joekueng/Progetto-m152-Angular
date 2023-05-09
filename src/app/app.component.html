@@ -1,26 +1,27 @@
-<div class="button-container sticky z-50 flex gap-1 justify-end p-2">
-  <div class="dropdown dropdown-hover" id="translate">
-    <label tabindex="0" class="btn bg-black border-neutral text-base-100 hover:bg-neutral hover:text-base-100"
-           id="translateLabel">{{homeTranslations.translate}}</label>
-    <ul tabindex="0" class="dropdown-content menu mt-1 shadow rounded-box w-52 bg-base-100" id="translateUl">
-      <li (click)="switchLanguage('DE')"><a>DE</a></li>
-      <li (click)="switchLanguage('FR')"><a>FR</a></li>
-      <li (click)="switchLanguage('IT')"><a>IT</a></li>
-      <li (click)="switchLanguage('EN')"><a>EN</a></li>
-    </ul>
+<div class="button-container sticky z-40 flex justify-end p-2">
+  <div class="bg-white p-2 rounded-sm flex gap-1 shadow-md">
+    <div class="dropdown dropdown-hover" id="translate">
+      <label tabindex="0" class="btn bg-black border-neutral text-base-100 hover:bg-neutral hover:text-base-100 rounded-sm"
+             id="translateLabel">{{homeTranslations.translate}}</label>
+      <ul tabindex="0" class="dropdown-content menu mt-3 shadow-2xl rounded-sm w-52 bg-base-100" id="translateUl">
+        <li (click)="switchLanguage('DE')"><a>DE</a></li>
+        <li (click)="switchLanguage('FR')"><a>FR</a></li>
+        <li (click)="switchLanguage('IT')"><a>IT</a></li>
+        <li (click)="switchLanguage('EN')"><a>EN</a></li>
+      </ul>
+    </div>
+    <button (click)="goHome()"
+            class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary rounded-sm">
+      <br>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+           class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+      </svg>
+      <br>
+
+    </button>
+    <button (click)="clearAllCookies()" class="btn bg-black text-base-100 hover:btn-error rounded-sm" id="logout">Logout</button>
   </div>
-  <button (click)="goHome()"
-          class="btn gap-2 border-primary bg-primary text-secondary hover:bg-secondary hover:text-primary hover:border-primary">
-    <br>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-         class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
-    </svg>
-    <br>
-
-  </button>
-  <button (click)="clearAllCookies()" class="btn btn-active hover:btn-error" id="logout">Logout</button>
-
 </div>
 <router-outlet></router-outlet>
