@@ -30,11 +30,12 @@ h4 {
   flex-direction: column;
 }
 
-#translate{
+#translate {
   position: absolute;
   right: 0;
 }
-#translateUl{
+
+#translateUl {
   position: absolute;
   right: 0;
 }
@@ -43,6 +44,7 @@ h4 {
   width: 40%;
   margin-right: 20px;
 }
+
 .right {
   width: 60%;
 }
@@ -56,25 +58,31 @@ h4 {
   flex-direction: row;
 }
 
-.radial-container{
+.radial-container {
   display: flex;
   justify-content: center;
 }
 
-#radialTitle{
+#radialTitle {
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
 }
 
-#location-name{
+#location-name {
   display: flex;
   flex-direction: row;
 }
 
-#check{
+#check {
   height: 100%;
   align-self: center;
   margin-left: 10px;
   color: #519903;
+}
+
+#fixdijoeaintuitopercolpadititochearrivaallultimo {
+  width: 128px;
+  height: 15px;
+  position: absolute;
 }
